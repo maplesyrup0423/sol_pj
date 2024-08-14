@@ -1,7 +1,7 @@
 {
     "host": "localhost",
     "port": "3306",
-    "user": "sol",
+    "user": "root",
     "password": "soldesk903!!",
     "database": "sol"
 }
