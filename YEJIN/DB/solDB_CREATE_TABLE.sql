@@ -116,27 +116,29 @@ CREATE TABLE withdrawalUserlog (
 -- -----------------BOARD------------------
 -- ----------------------------------------
 -- ----------------------------------------
-
+/* NOT NULL 지정, DEFAULT값 추가 
+    TINYINT 디스플레이 폭 지정 삭제
+    modiDate에 ON UPDATE CURRENT_TIMESTAMP 추가*/
 
 create table board_info_table(
    board_info_id INT  primary key,
-   board_info_name VARCHAR(1024) not null
+   board_info_name VARCHAR(1024) NOT NULL
 );
 
 
 CREATE TABLE posts(
    post_id INT PRIMARY KEY AUTO_INCREMENT,
-   post_text VARCHAR(1024),
-   post_file1 VARCHAR(1024),
-   post_file2 VARCHAR(1024),
-   post_file3 VARCHAR(1024),
-   post_file4 VARCHAR(1024),
+   post_text VARCHAR(1024)NOT NULL,
+   post_file1 VARCHAR(1024) DEFAULT NULL,
+   post_file2 VARCHAR(1024) DEFAULT NULL,
+   post_file3 VARCHAR(1024) DEFAULT NULL,
+   post_file4 VARCHAR(1024) DEFAULT NULL,
    user_no INT,
-   createDate DATETIME,
-   modiDate DATETIME,
+   createDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+   modiDate DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
    board_info_id INT,
-   isDeleted TINYINT(1),
-   views INT,
+   isDeleted TINYINT DEFAULT 0,
+   views INT DEFAULT 0,
    likes_count INT DEFAULT 0,
    foreign key (user_no) references User(user_no),
    foreign key (board_info_id) references board_info_table(board_info_id)
@@ -155,12 +157,12 @@ CREATE TABLE post_likes (
 CREATE TABLE comments (
     comment_id INT PRIMARY KEY AUTO_INCREMENT, 
     post_id INT,
-    parent_comment_id INT,
-    comment_text VARCHAR(1024),
+    parent_comment_id INT DEFAULT NULL,
+    comment_text VARCHAR(1024) NOT NULL,
     user_no INT,
-    createDate DATETIME,
-    modiDate DATETIME,
-    isDeleted TINYINT(1),
+    createDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    modiDate DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+    isDeleted TINYINT DEFAULT 0,
     likes_count INT DEFAULT 0,
     foreign key (post_id) references posts(post_id),
     FOREIGN KEY (parent_comment_id) REFERENCES Comments(comment_id),
@@ -185,6 +187,7 @@ CREATE TABLE comment_likes (
 -- ----------------------------------------
 -- ----------------------------------------
 -- 기존 데이터에서 ' 삭제
+-- ChatRoomUser 테이블 last_active_at 컬럼 null 불가 -> 허용 
 
 CREATE TABLE ChatRoom (
    room_id varchar(256) NOT NULL,
@@ -197,7 +200,7 @@ CREATE TABLE ChatRoomUser (
    user_no int NOT NULL,
    role varchar(256) NULL,
    joined_at datetime NOT NULL,
-   last_active_at datetime NOT NULL,
+   last_active_at datetime  NULL,
    PRIMARY KEY (room_id, user_no),
    FOREIGN KEY (room_id) REFERENCES ChatRoom(room_id),
    FOREIGN KEY (user_no) REFERENCES user(user_no)
