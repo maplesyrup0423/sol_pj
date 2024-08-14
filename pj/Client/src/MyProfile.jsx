@@ -4,7 +4,6 @@ import discordImage from "./img/discord.png";
 function MyProfile() {
     const userName = "임요한";
     const url = discordImage;
-    const userIntro = "안녕하세요 잘부탁드립니다.";
     return (
         <div className="profileCard">
             <header>
@@ -20,10 +19,7 @@ function MyProfile() {
                         <div className="userName">{userName}</div>
                     </div>
                 </div>
-                <div className="introContent">
-                    <div className="intro">자기소개</div>
-                    <div className="userIntro">{userIntro}</div>
-                </div>
+                <div className="introContent">자기소개</div>
             </div>
         </div>
     );

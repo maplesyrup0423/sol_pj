@@ -1,21 +1,20 @@
 import "./LeftNav.css";
+import BoardInfo from "./BoardInfo";
+import ProfileCard from "./ProfileCard";
 
 function LeftNav() {
     return (
         <div class="sidebar">
-            <h2>My Sidebar</h2>
             <ul>
                 <li>
-                    <a href="#home">Home</a>
+                    <button><img src="" alt="로고 이미지" />로고를 누르면 새로고침</button>
                 </li>
                 <li>
-                    <a href="#services">Services</a>
+                    <BoardInfo/>
                 </li>
+
                 <li>
-                    <a href="#about">About</a>
-                </li>
-                <li>
-                    <a href="#contact">Contact</a>
+                    <a href="#profileCard"><ProfileCard /></a>
                 </li>
             </ul>
         </div>

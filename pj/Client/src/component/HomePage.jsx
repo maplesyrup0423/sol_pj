@@ -1,5 +1,7 @@
 import "./HomePage.css";
-import LeftNav from "./LeftNav";
+import LeftNav from "./left/LeftNav.jsx";
+import RightNav from "./right/RightNav.jsx";
+import CenterContent from "./center/CenterContent.jsx";
 
 function HomePage() {
     return (
@@ -8,9 +10,13 @@ function HomePage() {
                 <LeftNav />
             </div>
 
-            <div className="center">중앙 화면</div>
+            <div className="center">
+                <CenterContent />
+            </div>
 
-            <div className="rightNav">오른쪽 바</div>
+            <div className="rightNav">
+                <RightNav />
+            </div>
         </div>
     );
 }
