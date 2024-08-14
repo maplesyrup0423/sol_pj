@@ -4,10 +4,9 @@ npm run start 명령어를 사용해도 실행되지 않았다.
 npm update 를 입력한 뒤 다시 시도하니 작동되었다.
 
 --서버 엑세스 디나이 문제--
-CREATE USER 'root'@'%' identified by 'soldesk903!!';
-ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'soldesk903!!';
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
-DROP USER 'root'@'localhost';
+CREATE USER 'sol'@'%' identified by 'soldesk903!!';
+ALTER USER 'sol'@'%' IDENTIFIED WITH mysql_native_password BY 'soldesk903!!';
+GRANT ALL PRIVILEGES ON *.* TO 'sol'@'%';
 FLUSH PRIVILEGES;
 유저의 권한 설정을 변경해주고 옛날 root 계정을 삭제한다.
 
