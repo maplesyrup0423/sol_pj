@@ -1,4 +1,4 @@
-import "./Feed.css";
+import "./feed.css";
 
 function Feed() {
     return (
