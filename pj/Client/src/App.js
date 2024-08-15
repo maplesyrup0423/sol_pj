@@ -1,7 +1,7 @@
 import "./App.css";
 import React, { useState, useEffect } from "react";
 import TestComponent from "./test/TestComponent";
-import MyProfile from "./MyProfile";
+import MyProfile from "./component/mypage/MyProfile";
 import HomePage from "./component/HomePage"
 
 function App() {
@@ -26,8 +26,8 @@ function App() {
                   ))
                 : ""} */}
             {/* 내정보 프로필 카드의 미리보기 */}
-            {/*<MyProfile />*/}
-            <HomePage />
+            {<MyProfile />}
+            {/* <HomePage /> */}
         </div>
     );
 }
