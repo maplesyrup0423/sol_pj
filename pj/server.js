@@ -1,17 +1,24 @@
-//각 모듈 호출 정리
 const express = require("express");
 const bodyParser = require("body-parser");
-const socketIo = require("socket.io");
+const http = require('http');
+const cors = require("cors");
 const mysql = require("mysql");
 const fs = require('fs');
-const http = require('http');
+const socketIo = require("socket.io");
+const setupChatModule = require('./socket');
 
-//Express, HTTP 서버 생성후 socket.io와 연결
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server);
 
-//database.json에서 DB정보 받아와서 mysql연결
+app.use(cors({
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+    credentials: true
+}));
+
+app.use(bodyParser.json());
+
+// DB 연결 설정
 const data = fs.readFileSync("./database.json");
 const conf = JSON.parse(data);
 const conn = mysql.createConnection({
@@ -20,16 +27,29 @@ const conn = mysql.createConnection({
     user: conf.user,
     password: conf.password,
     database: conf.database
-  });
-  conn.connect();
+});
 
+conn.connect((err) => {
+    if (err) {
+        console.error('DB 연결 오류:', err);
+    } else {
+        console.log('DB 연결 성공');
+    }
+});
 
-//서버 포트 5000번
+// Socket.IO 설정
+const io = socketIo(server, {
+    cors: {
+      origin: "http://localhost:3000",
+      methods: ["GET", "POST"],
+      credentials: true
+    }
+});
+
+// 채팅 모듈 설정 (Socket.IO 이벤트 및 채팅 관련 API 엔드포인트)
+setupChatModule(app, io, conn);
+
 const port = process.env.PORT || 5000;
+server.listen(port, () => console.log(`서버 동작중 ${port}`));
 
-
-  //서버 시작시 콘솔 + 포트번호 출력
-  app.listen(port, () => console.log(`서버 동작중 ${port}`));
-
-  // 서버 동작 확인 (http://localhost:5000/)
-  
+module.exports = app;
