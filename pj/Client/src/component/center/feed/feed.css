@@ -1,0 +1,85 @@
+.feed-container {
+    background-color: #1a1a1a; /* Dark background */
+    color: #fff; /* White text color */
+    /*padding: 20px;*/
+    /*border-radius: 10px;*/
+    width: 400px; /* Set width similar to the image */
+    margin: 0 auto; /* Center the feed */
+    font-family: Arial, sans-serif;
+}
+
+.feed-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.user-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-name {
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.user-id {
+    color: #ccc; /* Light gray for ID */
+}
+
+.post-date {
+    color: #ccc; /* Light gray for date */
+}
+
+.feed-image {
+    margin: 15px 0;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.feed-image img {
+    width: 100%;
+    display: block;
+    border-radius: 15px;
+}
+
+.feed-text {
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.feed-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.like-comment {
+    display: flex;
+    align-items: center;
+}
+
+.icon {
+    margin-right: 8px;
+}
+
+.like-icon, .comment-icon {
+    color: #ff5a5a; /* Red color for like icon */
+}
+
+.share-icons {
+    display: flex;
+    align-items: center;
+}
+
+.share-icon, .send-icon, .more-icon {
+    margin-left: 10px;
+}

@@ -1,5 +1,5 @@
 import "./FeedMain.css";
-
+import Feed from "./Feed";
 function FeedMain() {
     return (
         <div class="feed_main">
@@ -12,7 +12,7 @@ function FeedMain() {
             </div>
 
             <div class="feed">
-                피드
+                <Feed/>
             </div>
             
         </div>
