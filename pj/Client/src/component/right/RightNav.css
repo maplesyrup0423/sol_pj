@@ -1,0 +1,8 @@
+.rsidebar {
+    width: 27%;
+    background-color: #6d6d6d;
+    color: white;
+    position: fixed;
+    height: 100%;
+    padding-top: 20px;
+}

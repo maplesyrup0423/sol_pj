@@ -1,5 +1,4 @@
-import React from 'react';
-import './feed.css';
+import "./Feed.css";
 
 function Feed() {
     return (
@@ -14,7 +13,7 @@ function Feed() {
             </div>
 
             <div className="feed-image">
-                <img src="screenshot.jpg" alt="img" />
+                <img src="screenshot.jpg" alt="Screenshot" />
             </div>
 
             <div className="feed-text">

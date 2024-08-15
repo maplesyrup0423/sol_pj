@@ -2,7 +2,7 @@ import "./RightNav.css";
 
 function RightNav() {
     return (
-        <div class="">
+        <div className="rsidebar">
             <h2>My Sidebar</h2>
             <ul>
                 <li>

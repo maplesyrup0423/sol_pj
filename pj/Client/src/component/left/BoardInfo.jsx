@@ -4,7 +4,7 @@ import More from "./More.jsx"
 
 function BoardInfo() {
     return (
-        <div class="GameInfo">
+        <div className="GameInfo">
             <ul>
                 {/*보드네임 부분은 반복, 모어는 안반복 */}
                 <BoardName/>

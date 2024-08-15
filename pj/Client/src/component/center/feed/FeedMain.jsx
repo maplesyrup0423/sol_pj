@@ -2,16 +2,16 @@ import "./FeedMain.css";
 import Feed from "./Feed";
 function FeedMain() {
     return (
-        <div class="feed_main">
-            <div class="order">
+        <div className="feed_main">
+            <div className="order">
                 인기 / 최신
             </div>
 
-            <div class="posting">
+            <div className="posting">
                 글쓰기 부분
             </div>
 
-            <div class="feed">
+            <div className="feed">
                 <Feed/>
             </div>
             
