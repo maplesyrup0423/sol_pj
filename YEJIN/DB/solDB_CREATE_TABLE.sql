@@ -119,13 +119,14 @@ CREATE TABLE withdrawalUserlog (
 /* NOT NULL 지정, DEFAULT값 추가 
     TINYINT 디스플레이 폭 지정 삭제
     modiDate에 ON UPDATE CURRENT_TIMESTAMP 추가*/
-
+-- 게시판 종류
 create table board_info_table(
    board_info_id INT  primary key,
-   board_info_name VARCHAR(1024) NOT NULL
+   board_info_name VARCHAR(1024) NOT NULL,
+   board_img VARCHAR(1024)
 );
 
-
+-- 게시글
 CREATE TABLE posts(
    post_id INT PRIMARY KEY AUTO_INCREMENT,
    post_text VARCHAR(1024)NOT NULL,
@@ -144,6 +145,7 @@ CREATE TABLE posts(
    foreign key (board_info_id) references board_info_table(board_info_id)
 );
 
+-- 게시글 좋아요
 CREATE TABLE post_likes (
     p_like_id INT PRIMARY KEY AUTO_INCREMENT,
     post_id INT,
@@ -153,7 +155,7 @@ CREATE TABLE post_likes (
     FOREIGN KEY (user_no) REFERENCES User(user_no) 
 );
 
-
+-- 댓글
 CREATE TABLE comments (
     comment_id INT PRIMARY KEY AUTO_INCREMENT, 
     post_id INT,
@@ -168,7 +170,7 @@ CREATE TABLE comments (
     FOREIGN KEY (parent_comment_id) REFERENCES Comments(comment_id),
     foreign key (user_no) references User(user_no)
 );
-
+-- 댓글 좋아요
 CREATE TABLE comment_likes (
     c_like_id INT PRIMARY KEY AUTO_INCREMENT,
     comment_id INT,
@@ -178,7 +180,39 @@ CREATE TABLE comment_likes (
     FOREIGN KEY (user_no) REFERENCES User(user_no) 
 );
 
+-- 게시글 백업 테이블
+CREATE TABLE posts_backup (
+    backup_id INT PRIMARY KEY AUTO_INCREMENT,
+    original_post_id INT,
+    post_text VARCHAR(1024),
+    post_file1 VARCHAR(1024),
+    post_file2 VARCHAR(1024),
+    post_file3 VARCHAR(1024),
+    post_file4 VARCHAR(1024),
+    user_no INT,
+    createDate DATETIME,
+    modiDate DATETIME,
+    board_info_id INT,
+    isDeleted TINYINT,
+    views INT,
+    likes_count INT,
+    backup_date DATETIME DEFAULT CURRENT_TIMESTAMP
+);
 
+-- 댓글 백업 테이블
+CREATE TABLE comments_backup (
+    backup_id INT PRIMARY KEY AUTO_INCREMENT,
+    original_comment_id INT,
+    post_id INT,
+    parent_comment_id INT,
+    comment_text VARCHAR(1024),
+    user_no INT,
+    createDate DATETIME,
+    modiDate DATETIME,
+    isDeleted TINYINT,
+    likes_count INT,
+    backup_date DATETIME DEFAULT CURRENT_TIMESTAMP
+);
 
 
 -- ----------------------------------------
