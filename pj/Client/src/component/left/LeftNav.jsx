@@ -4,7 +4,7 @@ import ProfileCard from "./ProfileCard";
 
 function LeftNav() {
     return (
-        <div class="sidebar">
+        <div className="sidebar">
             <ul>
                 <li>
                     <button><img src="" alt="로고 이미지" />로고를 누르면 새로고침</button>
