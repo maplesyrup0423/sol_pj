@@ -6,3 +6,13 @@
     height: 100%;
     padding-top: 20px;
 }
+
+.rsidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.rsidebar ul li {
+    padding: 10px 20px;
+    text-align: left;
+}

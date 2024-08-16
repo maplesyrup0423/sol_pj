@@ -1,21 +1,24 @@
 import "./RightNav.css";
+import SearchBox from "./SearchBox";
+import Notice from "./Notice";
+import Messenger from "./Messenger";
+import Footer from "./Footer";
 
 function RightNav() {
     return (
         <div className="rsidebar">
-            <h2>My Sidebar</h2>
             <ul>
                 <li>
-                    <a href="#Search">Search</a>
+                    <SearchBox />
                 </li>
                 <li>
-                    <a href="#Alarm">Alarm</a>
+                    <Notice />
                 </li>
                 <li>
-                    <a href="#about">Messenger</a>
+                    <Messenger/>
                 </li>
                 <li>
-                    <a href="#Footer">Footer</a>
+                    <Footer/>
                 </li>
             </ul>
         </div>
