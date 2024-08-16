@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import TestComponent from "./test/TestComponent";
 import MyProfile from "./component/mypage/MyProfile";
 import HomePage from "./component/HomePage"
+import Chat from './Chat/Chat';
 
 function App() {
     const [testComponent, seTestComponent] = useState([]);
@@ -17,6 +18,7 @@ function App() {
             .then((res) => seTestComponent(res))
             .catch((err) => console.log(err));
     }, []);
+    
 
     return (
         <div className="App">
@@ -30,6 +32,7 @@ function App() {
             {/* <HomePage /> */}
         </div>
     );
+ 
 }
 
 export default App;
