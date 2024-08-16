@@ -1,64 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import io from 'socket.io-client';
-import axios from 'axios';
-import ChatList from './ChatList';
-import ChatRoom from './ChatRoom';
-import './App.css';
+import "./App.css";
+import React, { useState, useEffect } from "react";
+import TestComponent from "./test/TestComponent";
+import MyProfile from "./component/mypage/MyProfile";
+import HomePage from "./component/HomePage"
 
-const socket = io('http://localhost:5000');
+import Home from './Home';
+import Chat from './Chat/Chat';
 
 function App() {
-  const [chatRooms, setChatRooms] = useState([]);
-  const [currentRoom, setCurrentRoom] = useState(null);
-  const [userId, setUserId] = useState(Date.now()); // 임시 사용자 ID
+    const [testComponent, seTestComponent] = useState([]);
 
-  useEffect(() => {
-    fetchChatRooms();
-  }, []);
+    useEffect(() => {
+        const callApi = async () => {
+            const response = await fetch("/api/test");
+            const body = await response.json();
+            return body;
+        };
+        callApi()
+            .then((res) => seTestComponent(res))
+            .catch((err) => console.log(err));
+    }, []);
+    
 
-  const fetchChatRooms = async () => {
-    try {
-      const response = await axios.get('http://localhost:5000/chatrooms');
-      setChatRooms(response.data);
-    } catch (error) {
-      console.error('채팅방 목록 불러오기 실패:', error);
-    }
-  };
-
-  const createChatRoom = async (roomName) => {
-    try {
-      const response = await axios.post('http://localhost:5000/chatrooms', { room_name: roomName });
-      setChatRooms([...chatRooms, response.data]);
-    } catch (error) {
-      console.error('채팅방 생성 실패:', error);
-    }
-  };
-
-  const joinChatRoom = async (roomId) => {
-    try {
-      await axios.post(`http://localhost:5000/chatrooms/${roomId}/join`, { user_no: userId });
-      setCurrentRoom(roomId);
-      socket.emit('join room', roomId);
-    } catch (error) {
-      console.error('채팅방 참가 실패:', error);
-    }
-  };
-
-  return (
-    <div className="App">
-      <div className="chat-container">
-        {currentRoom ? (
-          <ChatRoom roomId={currentRoom} userId={userId} socket={socket} onBack={() => setCurrentRoom(null)} />
-        ) : (
-          <ChatList
-            chatRooms={chatRooms}
-            onCreateRoom={createChatRoom}
-            onJoinRoom={joinChatRoom}
-          />
-        )}
-      </div>
-    </div>
-  );
+    return (
+        <div className="App">
+            {/* {testComponent
+                ? testComponent.map((u) => (
+                      <TestComponent key={u.user_no} {...u} />
+                  ))
+                : ""} */}
+            {/* 내정보 프로필 카드의 미리보기 */}
+            {<MyProfile />}
+            {/* <HomePage /> */}
+        </div>
+    );
+ 
 }
 
 export default App;
