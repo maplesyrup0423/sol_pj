@@ -26,8 +26,8 @@ function App() {
                   ))
                 : ""} */}
             {/* 내정보 프로필 카드의 미리보기 */}
-            {<MyProfile />}
-            {/* <HomePage /> */}
+            {<MyProfile />} 
+            {/* { <HomePage /> } */}
         </div>
     );
 }
