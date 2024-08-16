@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 // DB 연결 설정
 const data = fs.readFileSync("./database.json");
 const conf = JSON.parse(data);
-const mysql = require("mysql");
+
 const conn = mysql.createConnection({
     host: conf.host,
     port: conf.port,
