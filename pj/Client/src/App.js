@@ -1,7 +1,8 @@
 import "./App.css";
 import React, { useState, useEffect } from "react";
 import TestComponent from "./test/TestComponent";
-import MyProfile from "./MyProfile";
+import MyProfile from "./component/mypage/MyProfile";
+import HomePage from "./component/HomePage"
 
 function App() {
     const [testComponent, seTestComponent] = useState([]);
@@ -19,13 +20,14 @@ function App() {
 
     return (
         <div className="App">
-            {testComponent
+            {/* {testComponent
                 ? testComponent.map((u) => (
                       <TestComponent key={u.user_no} {...u} />
                   ))
-                : ""}
+                : ""} */}
             {/* 내정보 프로필 카드의 미리보기 */}
-            <MyProfile />
+            {<MyProfile />}
+            {/* <HomePage /> */}
         </div>
     );
 }

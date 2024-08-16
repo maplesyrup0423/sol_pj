@@ -1,0 +1,49 @@
+[board_info_table 테이블] 게시판 종류
+board_info_id //pk 게시판넘버
+board_info_name // 게시판 이름
+
+--------------------------------------
+
+[posts 테이블]//게시글
+post_id  // (pk) 게시글 넘버
+post_text // 게시글 내용
+post_file1 // 파일1
+post_file2 // 파일2
+post_file3 // 파일3
+post_file4 // 파일4
+user_no // 글쓴이
+createDate // 글 작성일
+modiDate // 글 수정일 기본값 null
+board_info_id // 어느 게시판인지 
+isDeleted // 삭제 여부 기본0, 삭제시 1
+views // 조회수
+likes_count // 좋아요 수
+
+--------------------------------------
+
+[post_likes 게시판]
+p_like_id // 게시글 좋아요 넘버
+post_id // 어느 게시글인가
+user_no // 좋아요 누른 사람
+like_date // 좋아요 누른 날짜
+
+--------------------------------------
+
+[comments 게시판] 댓글,대댓글
+comment_id // 댓글 넘버 pk
+post_id//어느 게시글인지
+parent_comment_id//부모 댓글 넘버 (대댓글의 경우 사용, 댓글의 경우 null)
+comment_text//댓글 내용
+user_no//댓글쓴이
+createDate//작성일
+modiDate//수정일
+isDeleted//삭제여부
+likes_count//좋아요 수
+
+--------------------------------------
+
+[comment_likes 게시판]
+c_like_id // 댓글 좋아요 넘버
+comment_id // 어느 댓글인가
+user_no // 좋아요 누른 사람
+like_date // 좋아요 누른 날짜
