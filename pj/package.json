@@ -13,8 +13,7 @@
     "http-proxy-middleware": "^3.0.0",
     "mysql": "^2.18.1",
     "nodemon": "^3.1.4",
-    "react-scripts": "^5.0.1",
-    "socket.io": "^4.7.5"
+    "react-scripts": "^5.0.1"
   },
   "devDependencies": {
     "concurrently": "^4.1.2"

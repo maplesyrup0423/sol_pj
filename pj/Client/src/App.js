@@ -3,8 +3,6 @@ import React, { useState, useEffect } from "react";
 import TestComponent from "./test/TestComponent";
 import MyProfile from "./component/mypage/MyProfile";
 import HomePage from "./component/HomePage"
-
-import Home from './Home';
 import Chat from './Chat/Chat';
 
 function App() {
