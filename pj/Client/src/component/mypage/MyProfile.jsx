@@ -4,17 +4,18 @@ import Savebtn from "../utilButton/Savebtn";
 import Closebtn from "../utilButton/Closebtn";
 
 function MyProfile() {
+    // 이 부분 서버에서 가져와야 할듯?
     const userName = "임요한";
     const url = discordImage;
     return (
         <div className="profileCard">
             <header>
                 <div className="quitBox">
-                <Closebtn/>
-                </div> 
+                    <Closebtn />
+                </div>
                 <span>프로필 수정</span>
                 <div className="save">
-                    <Savebtn/>
+                    <Savebtn />
                 </div>
             </header>
             <div className="cardMain">
