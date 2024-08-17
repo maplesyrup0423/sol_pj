@@ -24,12 +24,12 @@ function MainContent() {
         <div className="App">
             {/* /chat 경로가 아니면 MyProfile 컴포넌트를 호출 */}
             {/* myProfile 모습이 필요할 때만 주석 해제하면됨 */}
-            {/* <MyProfile /> */}
+            { <MyProfile /> }
             {/* {location.pathname !== "/chat" && <MyProfile />} */}
 
             {/* 라우팅 처리 */}
             <Routes>
-                <Route path="/" element={<HomePage />} />
+                {/* <Route path="/" element={<HomePage />} /> */}
                 <Route path="/chat" element={<Chat />} />
             </Routes>
         </div>
