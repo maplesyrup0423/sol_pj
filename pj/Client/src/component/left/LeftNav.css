@@ -1,16 +1,12 @@
 .sidebar {
     width: 23%;
-    background-color: #6d6d6d;
+    background-color: #1a1a1a;
     color: white;
     position: fixed;
     height: 100%;
     padding-top: 20px;
 }
 
-.sidebar h2 {
-    text-align: center;
-    padding-bottom: 20px;
-}
 
 .sidebar ul {
     list-style-type: none;
@@ -30,4 +26,15 @@
 
 .sidebar ul li a:hover {
     background-color: #575757;
+}
+
+.logoCon {
+    text-align: center;
+}
+
+.logoButton {
+    background-color: #fae100;
+    width: 200px;
+    height: 80px;
+    border-radius: 0%;
 }

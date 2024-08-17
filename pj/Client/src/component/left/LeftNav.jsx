@@ -7,7 +7,9 @@ function LeftNav() {
         <div className="sidebar">
             <ul>
                 <li>
-                    <button><img src="" alt="로고 이미지" />로고를 누르면 새로고침</button>
+                    <div className="logoCon">
+                    <button className="logoButton"><img src="" alt="로고 이미지" />로고를 누르면 새로고침</button>
+                    </div>
                 </li>
                 <li>
                     <BoardInfo/>

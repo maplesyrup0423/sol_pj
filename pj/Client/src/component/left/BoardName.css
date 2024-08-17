@@ -1,0 +1,19 @@
+.gameContainer{
+    width: 200px;
+    height: 35px;
+    line-height: 50px;
+    vertical-align: middle;
+    display: flex;
+}
+
+.gameInfo.gameImg{
+    margin-right: 10px;
+    border: 2px solid #fae100;
+    width: 30px;
+    height: 30px;
+}
+
+.gameInfo.gameTitle{
+    width: 100px;
+    height: 30px;
+}
