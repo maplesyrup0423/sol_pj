@@ -1,5 +1,7 @@
 import "./MyProfile.css";
 import discordImage from "./img/discord.png";
+import Savebtn from "../utilButton/Savebtn";
+import Closebtn from "../utilButton/Closebtn";
 
 function MyProfile() {
     const userName = "임요한";
@@ -7,9 +9,13 @@ function MyProfile() {
     return (
         <div className="profileCard">
             <header>
-                <div className="quitBox">X</div>
+                <div className="quitBox">
+                <Closebtn/>
+                </div> 
                 <span>프로필 수정</span>
-                <div className="save">저장</div>
+                <div className="save">
+                    <Savebtn/>
+                </div>
             </header>
             <div className="cardMain">
                 <div className="main1">
