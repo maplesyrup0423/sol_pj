@@ -3,8 +3,10 @@ import "./BoardName.css";
 function BoardName() {
     return (
         <li>
-            <div><img src="" alt="" />이미지</div>
-            <div>게임제목</div>
+            <div className="gameContainer">
+                <div className="gameInfo gameImg"><img src="" alt="" /></div>
+                <div className="gameInfo gameTitle"> &nbsp; 게임제목</div>
+            </div>
         </li>
     );
 }
