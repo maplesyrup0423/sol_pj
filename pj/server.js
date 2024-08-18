@@ -60,3 +60,6 @@ module.exports = app;
 // boardInfo 라우트 모듈을 가져와서 사용
 const boardInfoRoutes = require("./controllers/boardInfo");
 app.use(boardInfoRoutes(conn));
+
+//images폴더를 정적 파일 제공으로 지정
+app.use("/images", express.static("./images"));

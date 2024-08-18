@@ -12,6 +12,10 @@
     width: 30px;
     height: 30px;
 }
+.gameInfo.gameImg > img{
+height: 30px;
+width: 30px;
+}
 
 .gameInfo.gameTitle{
     width: 100px;
