@@ -8,7 +8,7 @@
 
 .gameInfo.gameImg{
     margin-right: 10px;
-    border: 2px solid #fae100;
+    /* border: 2px solid #fae100; */
     width: 30px;
     height: 30px;
 }
