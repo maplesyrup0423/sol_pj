@@ -58,5 +58,5 @@ server.listen(port, () => console.log(`서버 동작중 ${port}`));
 module.exports = app;
 
 // boardInfo 라우트 모듈을 가져와서 사용
-const boardInfoRoutes = require("./boardInfo");
+const boardInfoRoutes = require("./controllers/boardInfo");
 app.use(boardInfoRoutes(conn));
