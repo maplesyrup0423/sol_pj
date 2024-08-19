@@ -30,12 +30,17 @@
 }
 
 .logoCon {
-  text-align: center;
+  text-align: left;
 }
 
 .logoButton {
-  background-color: #fae100;
-  width: 200px;
-  height: 80px;
-  border-radius: 0%;
+  text-align: left;
+  background-color: #000000;
+  border: none;
+  width: 280px;
+  height: 40px;
+}
+.logo {
+  width: 30px;
+  height: 30px;
 }
