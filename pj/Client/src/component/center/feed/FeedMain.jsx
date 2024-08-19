@@ -1,6 +1,7 @@
 import "./FeedMain.css";
 import Feed from "./Feed";
 import Feeds from "./Feeds";
+import Writing from "./Writing";
 
 function FeedMain() {
   return (
@@ -14,7 +15,10 @@ function FeedMain() {
         </div>
       </div>
 
-      <div className="posting">글쓰기 부분</div>
+      <div className="posting">
+        {/* 글쓰기 부분 */}
+        <Writing />
+      </div>
 
       <div className="feed">
         {/* <Feed/> */}
