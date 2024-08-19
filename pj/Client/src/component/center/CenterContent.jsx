@@ -1,5 +1,5 @@
 import "./CenterContent.css";
-import FeedMain from  "./feed/FeedMain.jsx"
+import FeedMain from "./feed/FeedMain.jsx";
 
 function CenterContent() {
     return (
