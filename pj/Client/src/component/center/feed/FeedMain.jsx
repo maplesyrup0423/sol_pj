@@ -1,5 +1,6 @@
 import "./FeedMain.css";
 import Feed from "./Feed";
+import Feeds from "./Feeds";
 function FeedMain() {
     return (
         <div className="feed_main">
@@ -12,7 +13,8 @@ function FeedMain() {
             </div>
 
             <div className="feed">
-                <Feed/>
+                {/* <Feed/> */}
+                <Feeds/>
             </div>
             
         </div>
