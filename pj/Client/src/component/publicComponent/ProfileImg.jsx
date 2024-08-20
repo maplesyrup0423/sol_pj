@@ -1,10 +1,10 @@
 import React from "react";
 
-function ProfileImg() {
+function ProfileImg(props) {
   return (
     // 임시이미지
     <img
-      src="https://cdn.pixabay.com/photo/2020/05/17/20/21/cat-5183427_1280.jpg"
+      src={props.image_url}
       alt="프로필 이미지"
       style={{
         width: "50px",
