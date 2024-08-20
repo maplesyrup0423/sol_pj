@@ -49,3 +49,12 @@ import discordImage from "./img/discord.png";
 >
     Delete
 </button>
+
+
+--axios post,get 요청이 되지 않던 문제--
+const response = await axios.post(
+                "http://localhost:5000/myProfile",
+                user
+            );
+이 코드에서 localhost:3000번을 썼었는데 우리가 서버에 연결을 할 땐 5000번을 사용하는걸 잊고 있었다.
+5000으로 바꾸니 연결이 잘된다. 휴!

@@ -2,12 +2,51 @@ import "./MyProfile.css";
 import discordImage from "./img/discord.png";
 import Savebtn from "../utilButton/Savebtn";
 import Closebtn from "../utilButton/Closebtn";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
-function MyProfile(props) {
-    // 이 부분 서버에서 가져와야 할듯?
-    console.log(props.body);
-    const userName = "임요한";
-    const url = discordImage;
+function MyProfile() {
+    // 유저 정보를 상태로 관리
+    const [user, setUser] = useState({
+        nickname: "",
+        image_url: discordImage,
+        introduce: "",
+    });
+
+    useEffect(() => {
+        // 서버에서 유저 정보를 가져오는 함수
+        const fetchUserProfile = async () => {
+            try {
+                const response = await axios.get(
+                    "http://localhost:3000/login",
+                    {
+                        params: {
+                            username: "", // 현재 로그인한 유저의 아이디를 여기에 전달
+                        },
+                    }
+                );
+
+                const data = response.data;
+
+                if (data.success) {
+                    setUser({
+                        userName: data.user.nickname,
+                        image_url:
+                            "/assets/" + data.user.image_url || discordImage, // 이미지가 없을 경우 기본 이미지 사용
+                        introduce:
+                            data.user.introduction || "자기소개가 없습니다.",
+                    });
+                } else {
+                    alert("유저 정보를 가져올 수 없습니다.");
+                }
+            } catch (error) {
+                console.error("유저 정보를 가져오는 중 오류 발생:", error);
+            }
+        };
+
+        fetchUserProfile();
+    }, []);
+
     return (
         <div className="profileCard">
             <header>
@@ -21,13 +60,17 @@ function MyProfile(props) {
             </header>
             <div className="cardMain">
                 <div className="main1">
-                    <img className="userImage" src={url} alt="userImage" />
+                    <img
+                        className="userImage"
+                        src={user.image_url}
+                        alt="userImage"
+                    />
                     <div className="nameContent">
                         <div className="name">이름</div>
-                        <div className="userName">{userName}</div>
+                        <div className="userName">{user.nickname}</div>
                     </div>
                 </div>
-                <div className="introContent">자기소개</div>
+                <div className="introContent">{user.introduce}</div>
             </div>
         </div>
     );

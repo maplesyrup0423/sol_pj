@@ -1,6 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Sans+KR:wght@700&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap");
 
 /* body {
+.log-container {
+    width: 100%;
     font-family: "Noto Sans KR", sans-serif;
     font-optical-sizing: auto;
     font-weight: 700;
@@ -11,12 +13,16 @@
     align-items: center;
     min-height: 100vh;
 } */
+}
 .log-wrapper {
   width: 420px;
   background: rgb(211, 147, 73);
   color: #ffffff;
   padding: 30px 40px;
   border-radius: 10px;
+    color: #ffffff;
+    padding: 30px 40px;
+    border-radius: 10px;
 }
 .log-wrapper h1 {
   font-size: 40px;
@@ -25,8 +31,10 @@
 .log-wrapper .input-box {
   position: relative;
   width: 100%;
-  height: 50px;
-  margin: 30px 0;
+    position: relative;
+    width: 100%;
+    height: 50px;
+    margin: 30px 0;
 }
 .input-box input {
   width: 95%;
