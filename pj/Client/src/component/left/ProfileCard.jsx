@@ -1,8 +1,10 @@
+import React from "react";
 import "./ProfileCard.css";
 import ProfileImg from "../publicComponent/ProfileImg";
 import { IoIosMore } from "react-icons/io";
 
-function ProfileCard() {
+function ProfileCard(props) {
+  //console.log("ProfileCard props:", props);
   return (
     <div>
       <table className="mainProfileTable">
@@ -10,10 +12,10 @@ function ProfileCard() {
           <tr>
             <td rowSpan="2">
               {/*프로필 사진 */}
-              <ProfileImg />
+              <ProfileImg image_url={props.image_url} />
             </td>{" "}
             <td className="profileName">
-              <span>임예진</span>
+              <span>{props.nickname}</span>
             </td>
             <td rowSpan={2}>
               {/*프로필 자세히 */}
@@ -23,7 +25,7 @@ function ProfileCard() {
 
           <tr>
             <td className="profileId">
-              <span>@yejin</span>
+              <span>@{props.user_id}</span>
             </td>
           </tr>
         </tbody>

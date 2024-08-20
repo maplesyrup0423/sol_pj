@@ -2,7 +2,7 @@ import "./LeftNav.css";
 import BoardInfo from "./BoardInfo";
 import ProfileCard from "./ProfileCard";
 
-function LeftNav() {
+function LeftNav({ myInfo }) {
   return (
     <div className="sidebar">
       <ul>
@@ -24,7 +24,16 @@ function LeftNav() {
 
         <li>
           <a href="#profileCard">
-            <ProfileCard />
+            {myInfo.length > 0 ? (
+              <ProfileCard
+                user_no={myInfo[0].user_no}
+                nickname={myInfo[0].nickname}
+                image_url={myInfo[0].image_url}
+                user_id={myInfo[0].user_id}
+              />
+            ) : (
+              <h5>로그인 해주세욤</h5>
+            )}
           </a>
         </li>
       </ul>
