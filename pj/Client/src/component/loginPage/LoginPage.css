@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Sans+KR:wght@700&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap");
 
-body {
+/* body {
     font-family: "Noto Sans KR", sans-serif;
     font-optical-sizing: auto;
     font-weight: 700;
@@ -10,7 +10,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-}
+} */
 .log-wrapper {
     width: 420px;
     background: rgb(211, 147, 73);
