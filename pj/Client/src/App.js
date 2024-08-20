@@ -9,6 +9,7 @@ import MyProfile from "./component/mypage/MyProfile";
 import HomePage from "./component/HomePage";
 import Chat from "./Chat/Chat";
 import LoginPage from "./component/loginPage/LoginPage";
+import IntroPage from "./component/loginPage/IntroPage";
 function App() {
     return (
         <Router>
@@ -19,7 +20,6 @@ function App() {
 
 function MainContent() {
     const location = useLocation();
-
     return (
         <div className="App">
             {/* /chat 경로가 아니면 MyProfile 컴포넌트를 호출 */}
@@ -32,6 +32,8 @@ function MainContent() {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/chat" element={<Chat />} />
                 <Route path="/login" element={<LoginPage />} />
+                <Route path="/intro" element={<IntroPage />} />
+                <Route path="/myProfile" element={<MyProfile />} />
             </Routes>
         </div>
     );

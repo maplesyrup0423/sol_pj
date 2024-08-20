@@ -3,8 +3,9 @@ import discordImage from "./img/discord.png";
 import Savebtn from "../utilButton/Savebtn";
 import Closebtn from "../utilButton/Closebtn";
 
-function MyProfile() {
+function MyProfile(props) {
     // 이 부분 서버에서 가져와야 할듯?
+    console.log(props.body);
     const userName = "임요한";
     const url = discordImage;
     return (
