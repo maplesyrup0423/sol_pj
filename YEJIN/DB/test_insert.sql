@@ -14,6 +14,11 @@ INSERT INTO board_info_table VALUES(4,'발로란트','http://localhost:5000/imag
 commit;
 DELETE FROM board_info_table WHERE board_info_id=4;
 
+INSERT INTO UserProfile VALUES(1,1,'체르','https://cdn.pixabay.com/photo/2013/05/30/18/21/cat-114782_1280.jpg','무엇을 해야 할까요?');
+INSERT INTO UserProfile VALUES(2,2,'맹','https://cdn.pixabay.com/photo/2014/03/29/09/17/cat-300572_1280.jpg','자기소개');
+DELETE FROM UserProfile WHERE profile_no=1;
+-- -----------------------------------------
+
 INSERT INTO posts VALUES(null,'내용1','이미지1','이미지2','이미지3','이미지4',1,NOW(),null,1,0,0,0);
 INSERT INTO posts VALUES(null,'내용2','이미지1',null,null,NULL,2,NOW(),null,1,0,0,0);
 INSERT INTO posts VALUES(null,'내용3',NULL,NULL,NULL,NULL,3,NOW(),null,2,0,0,0);
