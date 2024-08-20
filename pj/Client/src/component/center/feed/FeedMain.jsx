@@ -16,12 +16,15 @@ function FeedMain(props) {
       </div>
 
       <div className="posting">
-        {/* 글쓰기 부분 */}
+        {/* 글쓰기 부분 
+        todo DB insert문 만들기*/}
         <Writing image_url={props.image_url} />
       </div>
 
       <div className="feed">
-        {/* <Feed/> */}
+        {/* 피드부분
+          todo 게시판DB 받아오기 현재 하드코딩
+        */}
         <Feeds />
         <Feeds />
       </div>
