@@ -1,84 +1,96 @@
-@import url("https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Sans+KR:wght@700&display=swap");
-.login-board {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    font-family: "Gowun Dodum", sans-serif;
-}
-.log-container {
-    color: #323232;
-    text-align: center;
-    width: 100%;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-image: url(https://images.pexels.com/photos/3945652/pexels-photo-3945652.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1);
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-}
-.log-container h1 {
+@import url("https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Sans+KR:wght@700&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap");
+
+body {
+    font-family: "Noto Sans KR", sans-serif;
+    font-optical-sizing: auto;
     font-weight: 700;
-    font-size: 5rem;
-    /* box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.15); */
-    background-color: transparent;
-    border-radius: 10px;
-}
-.log-container p {
-    padding: 1rem;
-    max-width: 600px;
-}
-.log-container a {
-    padding: 1px 50px 17px;
-    display: inline-block;
-    text-decoration: none;
-    background-color: #323232;
-    border-radius: 30px;
-    color: white;
-    font-size: 70px;
-}
-
-.log-container a:hover {
-    background-color: #222;
-    color: lightblue;
-}
-
-.log-container-second {
-    background-image: url(https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1);
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    height: 950px;
+    font-style: normal;
+    background: rgb(31, 32, 31);
     display: flex;
     justify-content: center;
-    flex-direction: row;
-    gap: 2.5rem;
     align-items: center;
+    min-height: 100vh;
 }
-.log-card {
-    background-color: white;
-    width: 300px;
-    height: 500px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    text-align: center;
+.log-wrapper {
+    width: 420px;
+    background: rgb(211, 147, 73);
+    color: #ffffff;
+    padding: 30px 40px;
     border-radius: 10px;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.35);
-
-    transition: all 0.3s ease;
 }
-.log-card:hover {
-    transform: scale(1.1);
+.log-wrapper h1 {
+    font-size: 40px;
+    text-align: center;
 }
-.log-card .log-info img {
-    width: 90%;
-    height: 200px;
-    background-size: cover;
-    background-position: center;
-    margin-top: 20px;
-    border-radius: 15px;
+.log-wrapper .input-box {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    margin: 30px 0;
+}
+.input-box input {
+    width: 95%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 40px;
+    font-size: 16px;
+    margin-left: 5px;
+    padding: 0 5px 0 20px;
+    color: #fff;
+}
+.log-wrapper .input-box input::placeholder {
+    color: #fff;
+}
+.log-wrapper .input-box .icon {
+    position: absolute;
+    right: 1px;
+    top: 50%;
+    transform: translateY(-40%);
+    font-size: 16px;
+}
+.log-wrapper button {
+    width: 100%;
+    height: 45px;
+    background: #fff;
+    border: none;
+    outline: none;
+    border-radius: 40px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    font-size: 20px;
+    color: #333;
+    font-weight: 700;
+}
+.log-wrapper .register-link {
+    text-align: center;
+    font-size: 16px;
+    margin: 20px 0 15px;
+}
+.register-link p a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+}
+.register-link p a:hover {
+    text-decoration: underline;
+}
+.remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    margin: -15px 0 15px;
+}
+.remember-forgot label input {
+    accent-color: #fff;
+    margin-right: 4px;
+}
+.remember-forgot a {
+    color: #fff;
+    text-decoration: none;
+}
+.remember-forgot a:hover {
+    text-decoration: underline;
 }

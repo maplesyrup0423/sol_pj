@@ -1,101 +1,94 @@
 import "./LoginPage.css";
+import React, { useState } from "react";
+import { FaUser, FaLock } from "react-icons/fa";
+import axios from "axios";
 
 function LoginPage() {
+    //아이디와 비밀번호 스테이트
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+
+    //로그인 버튼 누르면 실행되는 함수
+    const submitHandler = async (e) => {
+        //공백값 방지함수
+        e.preventDefault();
+
+        //사용자정보가 많을시 폼데이터로 모아서 전달 가능(지금은 안씀)
+        // const formData = new FormData(e.target);
+        // const payload = Object.fromEntries(formData);
+
+        const user = { username, password };
+        console.log("아이디 : ", user.username);
+        console.log("비밀번호 : ", user.password);
+
+        //서버로 데이터 전송
+        try {
+            //이거 시발 왜안됨? 요청이 보내지지가 않아 병123신같음
+            const response = await axios.post(
+                "http://localhost:3000/myProfile",
+                user
+            );
+
+            if (response.status === 200) {
+                console.log("로그인 성공:", response.data);
+                // 로그인 성공 시 추가 작업 수행
+            } else {
+                console.error("로그인 실패:", response.statusText);
+            }
+        } catch (error) {
+            //왜 맨날 여기로 오냐고 ㅋㅋ
+            console.error("로그인 요청 중 오류 발생:", error.message);
+        }
+    };
+    function nameInputChange(e) {
+        setUsername(e.target.value);
+    }
+    function passInputChange(e) {
+        setPassword(e.target.value);
+    }
     return (
-        <div className="login-board">
-            <div className="log-container">
-                <h1>프로젝트 소개</h1>
-                <p>
-                    C'est la vie, as they say L-O-V-E evidently, see every song
-                    has a sequel Never same, everything but the name, all fresh
-                    just like back then, how we do everyday C'est la vie, as
-                    they say L-O-V-E eloquently, see every dream has a part two
-                    Never same, you got to keep it tight, always just like back
-                    then, now hear me out Once together, now where do we go,
-                    dear divine I pray that you keep watching over us From the
-                    heavens where light is the nucleus To this space filled with
-                    darkness and negative matter Anti-gravity pull is what I
-                    would rather, feel when I leave this shell eventually
-                </p>
-                <a href="/">start</a>
-            </div>
-            <div className="blank"></div>
-            <div className="log-container-second">
-                <div className="log-card">
-                    <div className="log-info">
-                        <img src="/assets/courses.png" alt="" />
-                        <h3>Courses</h3>
-                        <p>
-                            This perfection says, "You are my man". This
-                            perfection says, "You are my man". This perfection
-                            says, "Ain't nobody, ain't nobody, ain't nobody
-                            else". This perfection says, "No, nobody
-                            Serendipity".
-                        </p>
-                    </div>
-                    <a href="/">Lrearn More</a>
+        <div className="log-wrapper">
+            <form onSubmit={submitHandler}>
+                <h1>Login</h1>
+                <div className="input-box">
+                    <input
+                        type="text"
+                        placeholder="Username"
+                        required
+                        value={username}
+                        onChange={nameInputChange}
+                        name="username"
+                    />
+                    <FaUser className="icon" />
                 </div>
-                <div className="log-card">
-                    <div className="log-info">
-                        <img src="/assets/team.png" alt="" />
-                        <h3>Team</h3>
-                        <p>
-                            This perfection says, "You are my man". This
-                            perfection says, "You are my man". This perfection
-                            says, "Ain't nobody, ain't nobody, ain't nobody
-                            else". This perfection says, "No, nobody
-                            Serendipity".
-                        </p>
-                    </div>
-                    <a href="/">Lrearn More</a>
+                <div className="input-box">
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        required
+                        value={password}
+                        onChange={passInputChange}
+                        name="password"
+                    />
+                    <FaLock className="icon" />
                 </div>
-                <div className="log-card">
-                    <div className="log-info">
-                        <img src="/assets/contact.png" alt="" />
-                        <h3>Contact Us</h3>
-                        <p>
-                            This perfection says, "You are my man". This
-                            perfection says, "You are my man". This perfection
-                            says, "Ain't nobody, ain't nobody, ain't nobody
-                            else". This perfection says, "No, nobody
-                            Serendipity".
-                        </p>
-                    </div>
-                    <a href="/">Lrearn More</a>
+
+                <div className="remember-forgot">
+                    <label>
+                        <input type="checkbox" />
+                        아이디 기억하기
+                    </label>
+                    <a href="/">비밀번호를 잃어버렸습니까?</a>
                 </div>
-            </div>
-            <div className="log-blank-2">
-                <div className="log-footer">
-                    <div className="log-column">
-                        <h3>Services</h3>
-                        <ul>
-                            <li>
-                                <a href="/">Email Marketing</a>
-                            </li>
-                            <li>
-                                <a href="/">campaigns</a>
-                            </li>
-                            <li>
-                                <a href="/">Branding</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div className="log-column">
-                        <h3>About</h3>
-                        <ul>
-                            <li>
-                                <a href="/">Our Story</a>
-                            </li>
-                            <li>
-                                <a href="/">Benifits</a>
-                            </li>
-                            <li>
-                                <a href="/">Careers</a>
-                            </li>
-                        </ul>
-                    </div>
+
+                <button type="submit">로그인</button>
+
+                <div className="register-link">
+                    <p>
+                        계정이 없으신가요? <a href="/">가입하기</a>
+                    </p>
                 </div>
-            </div>
+            </form>
         </div>
     );
 }
