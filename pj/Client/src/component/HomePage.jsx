@@ -23,11 +23,15 @@ function HomePage() {
   return (
     <div className="container">
       <div className="leftNav">
-        <LeftNav myInfo={myInfo} />
+        {myInfo.length > 0 ? <LeftNav myInfo={myInfo} /> : ""}
       </div>
 
       <div className="center">
-        <CenterContent image_url={myInfo[0].image_url} />
+        {myInfo.length > 0 ? (
+          <CenterContent image_url={myInfo[0].image_url} />
+        ) : (
+          ""
+        )}
       </div>
 
       <div className="rightNav">
