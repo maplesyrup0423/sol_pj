@@ -27,7 +27,7 @@ function HomePage() {
       </div>
 
       <div className="center">
-        <CenterContent />
+        <CenterContent image_url={myInfo[0].image_url} />
       </div>
 
       <div className="rightNav">

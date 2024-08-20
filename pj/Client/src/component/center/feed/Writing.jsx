@@ -2,14 +2,14 @@ import React from "react";
 import ProfileImg from "../../publicComponent/ProfileImg";
 import "./Writing.css";
 import BasicButton from "../../publicComponent/BasicButton";
-function Writing() {
+function Writing(props) {
   return (
     <div className="writingArea">
       <table className="Wtable">
         <tbody>
           <tr>
             <td className="ProfileImg">
-              <ProfileImg />
+              <ProfileImg image_url={props.image_url} />
             </td>
             <td className="">
               <textarea

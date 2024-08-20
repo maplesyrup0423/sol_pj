@@ -3,7 +3,7 @@ import Feed from "./Feed";
 import Feeds from "./Feeds";
 import Writing from "./Writing";
 
-function FeedMain() {
+function FeedMain(props) {
   return (
     <div className="feed_main">
       <div className="order">
@@ -17,7 +17,7 @@ function FeedMain() {
 
       <div className="posting">
         {/* 글쓰기 부분 */}
-        <Writing />
+        <Writing image_url={props.image_url} />
       </div>
 
       <div className="feed">
