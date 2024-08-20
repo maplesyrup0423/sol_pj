@@ -4,7 +4,7 @@ import ProfileImg from "../publicComponent/ProfileImg";
 import { IoIosMore } from "react-icons/io";
 
 function ProfileCard(props) {
-  console.log("ProfileCard props:", props);
+  //console.log("ProfileCard props:", props);
   return (
     <div>
       <table className="mainProfileTable">
