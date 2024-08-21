@@ -1,16 +1,18 @@
 import "./Notice.css";
+import { FaRegBell } from "react-icons/fa";
+import { FaRegBookmark } from "react-icons/fa";
 
 function Notice() {
     return (
         <div className="notice">
-            <div>
-                <img src="" alt="알림" />
-                <span>알림</span>
-                <span>3</span>
+            <div className="notice_alert">
+                <div className="alert_icon"><FaRegBell className="FaRegBell" /></div>
+                <div className="alert_text">알림</div>
+                <div className="alert_number">3</div>
             </div>
-            <div>
-                <img src="" alt="북마크" />
-                <span>북마크</span>
+            <div className="notice_bookMark">
+                <div className="bookMark_icon"><FaRegBookmark className="FaRegBookmark" /></div>
+                <div className="bookMark_text">북마크</div>
             </div>
         </div>
     );

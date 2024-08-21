@@ -1,0 +1,70 @@
+.notice {
+    width: 250px;
+    height: 120px;
+    border: 1px solid whitesmoke;
+    border-radius: 30px;
+    padding: 15px;
+}
+
+.notice_alert {
+
+    width: 240px;
+    height: 50px;
+    margin-bottom: 10px;
+    line-height: 50px;
+    display: flex;
+    
+}
+
+.alert_icon {
+    line-height: 50px;
+    
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.FaRegBell {
+    width: 30px;
+    height: 30px;
+    margin-top: 10px;
+    /* color: #a7d41e; */
+}
+
+.alert_text {
+    width: 40px;
+}
+
+.alert_number {
+    
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    /* border: 1px solid red;
+        border-radius: 50%;
+    background-color: #fae100; */
+    
+    
+}
+
+.notice_bookMark {
+
+    width: 240px;
+    height: 50px;
+    line-height: 50px;
+    display: flex;
+}
+
+.bookMark_icon {
+    line-height: 50px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.FaRegBookmark {
+    width: 30px;
+    height: 30px;
+    margin-top: 10px;
+}
+
+
+
