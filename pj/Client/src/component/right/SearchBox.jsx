@@ -1,10 +1,31 @@
+import React, { useState } from 'react';
 import "./SearchBox.css";
+import { BiSearch } from "react-icons/bi";
+
+
 
 function SearchBox() {
+    const [inputText, setInputText] = useState('');
+
+    const activeButton = () => {
+        //버튼 클릭 이벤트
+        alert(`${inputText} 검색!`); //임시
+    }
+    //엔터키 입력 했을 때 버튼 이벤트 실행
+    const activeEnter = (e) => {
+        if(e.key === 'Enter'){
+            activeButton();
+        }
+    }
+    
+    
     return (
         <div className="searchBox">
-            <input type="text" />
-            <button><img src="" alt="검색" /></button>
+            <input className="searchInput" type="text" placeholder= "검색"
+                    onChange={(e) => setInputText(e.target.value)}
+                    onKeyDown={(e) => activeEnter(e)} />
+        
+            <button onClick={activeButton}><BiSearch /></button>
         </div>
     );
 }
