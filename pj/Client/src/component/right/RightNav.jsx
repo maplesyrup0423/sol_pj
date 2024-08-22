@@ -15,7 +15,7 @@ function RightNav() {
                     <Notice />
                 </li>
                 <li>
-                    <Messenger/>
+                    <Messenger/> {/* 반복 */}
                 </li>
                 <li>
                     <Footer/>

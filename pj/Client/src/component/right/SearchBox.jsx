@@ -25,7 +25,7 @@ function SearchBox() {
                     onChange={(e) => setInputText(e.target.value)}
                     onKeyDown={(e) => activeEnter(e)} />
         
-            <button onClick={activeButton}><BiSearch /></button>
+            <button className='searchButton' onClick={activeButton}><BiSearch className='searchButton_icon' /></button>
         </div>
     );
 }
