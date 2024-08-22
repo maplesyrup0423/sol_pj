@@ -8,7 +8,7 @@ function Notice() {
             <div className="notice_alert">
                 <div className="alert_icon"><FaRegBell className="FaRegBell" /></div>
                 <div className="alert_text">알림</div>
-                <div className="alert_number">3</div>
+                <div className="alert_number"><span>3</span></div>
             </div>
             <div className="notice_bookMark">
                 <div className="bookMark_icon"><FaRegBookmark className="FaRegBookmark" /></div>
