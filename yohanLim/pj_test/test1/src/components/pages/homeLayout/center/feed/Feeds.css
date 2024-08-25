@@ -1,0 +1,57 @@
+.feed-container {
+  background-color: black;
+  width: 100%;
+  padding: 5px;
+  box-sizing: border-box;
+  border-bottom: 1px solid white;
+}
+.moreA {
+  text-decoration: none; /* 링크의 밑줄 제거 */
+  color: inherit; /* 링크의 색상 제거 */
+}
+.feedImg1 {
+  width: 470px;
+  height: 320px;
+  border-radius: 30px;
+  object-fit: cover;
+}
+.feed-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.user-info {
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
+.user-id {
+  margin-left: 5px;
+}
+.user-name {
+  font-weight: bold;
+  margin-left: 5px;
+}
+.moreA {
+  display: flex;
+  align-items: center;
+}
+
+.feed-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.share-icons {
+  display: flex;
+  align-items: center;
+}
+.feed-text {
+  margin-bottom: 15px;
+  font-size: 20px;
+}
+.like-comment {
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
