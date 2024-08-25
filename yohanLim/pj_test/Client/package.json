@@ -1,5 +1,5 @@
 {
-    "name": "test1",
+    "name": "client",
     "private": true,
     "version": "0.0.0",
     "type": "module",
