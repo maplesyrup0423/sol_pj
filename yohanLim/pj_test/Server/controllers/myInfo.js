@@ -4,7 +4,7 @@ const router = express.Router();
 // 로그인한 유저의 user_no을 이용해서 닉네임, 프로필 이미지, 유저번호, 유저 아이디 가져오기
 //! 현재 로그인한 유저 판별이 불가능하기에 user_no이 1인 유저 정보를 가져와서 테스트 함
 module.exports = (conn) => {
-  router.get("/api/myInfo", (req, res) => {
+  router.get("/myInfo", (req, res) => {
     const userNo = 1;
     conn.query(
       "select nickname, image_url, u.user_no, u.user_id from user u join userprofile up on u.user_no=up.user_no where u.user_no=?",

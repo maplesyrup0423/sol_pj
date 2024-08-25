@@ -4,7 +4,7 @@ const router = express.Router();
 // post DB값 받아오기
 //todo 지금은 board_info_id=1인 게시판 정보 받아옴. 추후 게시판별로 받아와야함
 module.exports = (conn) => {
-  router.get("/api/post", (req, res) => {
+  router.get("/post", (req, res) => {
     const board_info_id = 1;
     conn.query(
       "select p.post_id, p.post_text, p.post_file1, p.post_file2, p.post_file3, p.post_file4, p.user_no, p.createDate," +

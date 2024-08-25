@@ -10,7 +10,7 @@ export default defineConfig({
       "/api": {
         target: "http://localhost:5000", // 백엔드 서버 주소
         changeOrigin: true, // 서버의 origin 변경
-        //rewrite: (path) => path.replace(/^\/api/, ""), // '/api'를 제거
+        rewrite: (path) => path.replace(/^\/api/, ""), // '/api'를 제거
       },
     },
   },
