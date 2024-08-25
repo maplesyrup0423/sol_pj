@@ -1,0 +1,60 @@
+.profileCard {
+    width: 750px;
+    height: 400px;
+    border: solid 1px black;
+    border-radius: 10px;
+    background-color: #000;
+}
+header {
+    margin-top: 10px;
+    display: flex;
+    padding: 20px;
+    font-size: large;
+    color: white;
+}
+header span {
+    margin-left: 10px;
+}
+header .save {
+    width: 75px;
+    margin-left: auto;
+    border: solid 1px #FFCD19;
+    background-color: #FFCD19;
+    color: black;
+    border-radius: 32px;
+    text-align: center;
+}
+.cardMain {
+    padding: 20px;
+}
+.cardMain .main1 {
+    display: flex;
+}
+.userImage {
+    overflow: hidden;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+.nameContent {
+    margin-left: 50px;
+    width: 70%;
+    border-radius: 20px;
+    border: 1px solid white;
+    color: #8B8B8B;
+    text-align: left;
+}
+.name{
+    padding: 5px;
+}
+.userName{
+    color: white;
+}
+.introContent {
+    height: 140px;
+    margin-top: 20px;
+    border: 1px solid white;
+    border-radius: 20px;
+    color: #8B8B8B;
+    text-align: left;
+}
