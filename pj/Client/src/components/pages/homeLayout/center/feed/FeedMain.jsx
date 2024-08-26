@@ -8,7 +8,7 @@ function FeedMain(props) {
 
   useEffect(() => {
     const postCallApi = async () => {
-      //유저 번호, 아이디, 프로필사진, 닉네임 받아옴
+      //post 데이터 받아옴
       const response = await fetch("/api/post");
       const body = await response.json();
       console.log(body); // 서버 응답 확인용

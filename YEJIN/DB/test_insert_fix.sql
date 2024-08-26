@@ -43,4 +43,5 @@ select * from posts;
 INSERT INTO post_files VALUES (NULL, 1,'https://cdn.pixabay.com/photo/2020/11/26/11/48/cat-5778777_1280.jpg',NOW());
 INSERT INTO post_files VALUES (NULL, 9,'https://cdn.pixabay.com/photo/2019/08/20/21/21/cat-4419763_1280.jpg',NOW());
 INSERT INTO post_files VALUES (NULL, 9,'https://cdn.pixabay.com/photo/2018/09/15/08/14/cat-3678858_1280.jpg',NOW());
+
 select * from post_files;
