@@ -7,11 +7,12 @@ module.exports = (conn) => {
   router.get("/post", (req, res) => {
     const board_info_id = 1;
     conn.query(
-      "select p.post_id, p.post_text, p.post_file1, p.post_file2, p.post_file3, p.post_file4, p.user_no, p.createDate," +
-        "p.modiDate, p.isDeleted, p.views, p.likes_count, up.nickname, up.image_url, u.user_id from user u " +
+      "select p.post_id, p.post_text, p.user_no, p.createDate, " +
+        "p.modiDate, p.isDeleted, p.views, up.nickname, up.image_url, u.user_id from user u " +
         "join userprofile up on u.user_no=up.user_no " +
         "join posts p on p.user_no=u.user_no " +
-        "where p.board_info_id=? ORDER BY post_id DESC",
+        "where p.board_info_id=1 and  p.isDeleted=0 " +
+        "ORDER BY p.createDate DESC; ",
       [board_info_id],
       (err, rows, fields) => {
         if (err) {
