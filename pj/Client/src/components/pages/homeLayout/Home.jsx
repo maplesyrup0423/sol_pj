@@ -6,7 +6,6 @@ import { useState, useEffect } from "react";
 
 function HomePage() {
   const [myInfo, setMyInfo] = useState([]);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     const myInfoCallApi = async () => {
@@ -32,7 +31,6 @@ function HomePage() {
         }
       } catch (err) {
         console.error("Fetch error:", err);
-        setError(err.message);
         return [];
       }
     };
@@ -44,8 +42,6 @@ function HomePage() {
 
   return (
     <div className="container">
-      {error && <p className="error">Error: {error}</p>}
-
       <div className="leftNav">
         {myInfo.length > 0 && <LeftNav myInfo={myInfo} />}
       </div>
