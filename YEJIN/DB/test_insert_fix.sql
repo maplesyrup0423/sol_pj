@@ -18,11 +18,12 @@ INSERT INTO UserProfile VALUES(6,6,'요이커','https://cdn.pixabay.com/photo/20
 select * from UserProfile;
 
 -- 게시판
-INSERT INTO board_info_table VALUES(1,'리그 오브 레전드','http://localhost:5000/images/board_img/League of Legends.png');
-INSERT INTO board_info_table VALUES(2,'로스트 아크','http://localhost:5000/images/board_img/LOST ARK.png');
-INSERT INTO board_info_table VALUES(3,'배틀 그라운드','http://localhost:5000/images/board_img/PUBG BATTLEGROUNDS.png');
-INSERT INTO board_info_table VALUES(4,'발로란트','http://localhost:5000/images/board_img/VALORANT.png');
+INSERT INTO board_info_table VALUES(1,'리그 오브 레전드','/League of Legends.png');
+INSERT INTO board_info_table VALUES(2,'로스트 아크','LOST ARK.png');
+INSERT INTO board_info_table VALUES(3,'배틀 그라운드','PUBG BATTLEGROUNDS.png');
+INSERT INTO board_info_table VALUES(4,'발로란트','VALORANT.png');
 select * from board_info_table;
+
 -- 게시글
 INSERT INTO posts VALUES (NULL, 'This is a sample post 1', 1, NOW(), NULL, 1, 0, 0);
 INSERT INTO posts VALUES (NULL, 'This is a sample post 2', 2, NOW(), NULL, 2, 0, 0);
@@ -43,5 +44,4 @@ select * from posts;
 INSERT INTO post_files VALUES (NULL, 1,'https://cdn.pixabay.com/photo/2020/11/26/11/48/cat-5778777_1280.jpg',NOW());
 INSERT INTO post_files VALUES (NULL, 9,'https://cdn.pixabay.com/photo/2019/08/20/21/21/cat-4419763_1280.jpg',NOW());
 INSERT INTO post_files VALUES (NULL, 9,'https://cdn.pixabay.com/photo/2018/09/15/08/14/cat-3678858_1280.jpg',NOW());
-
 select * from post_files;
