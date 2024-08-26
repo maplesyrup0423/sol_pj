@@ -130,19 +130,23 @@ create table board_info_table(
 CREATE TABLE posts(
    post_id INT PRIMARY KEY AUTO_INCREMENT,
    post_text VARCHAR(1024)NOT NULL,
-   post_file1 VARCHAR(1024) DEFAULT NULL,
-   post_file2 VARCHAR(1024) DEFAULT NULL,
-   post_file3 VARCHAR(1024) DEFAULT NULL,
-   post_file4 VARCHAR(1024) DEFAULT NULL,
    user_no INT,
    createDate DATETIME DEFAULT CURRENT_TIMESTAMP,
    modiDate DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
    board_info_id INT,
    isDeleted TINYINT DEFAULT 0,
    views INT DEFAULT 0,
-   likes_count INT DEFAULT 0,
    foreign key (user_no) references User(user_no),
    foreign key (board_info_id) references board_info_table(board_info_id)
+);
+
+-- 게시글 파일 테이블 
+CREATE TABLE post_files (
+   file_id INT PRIMARY KEY AUTO_INCREMENT,
+   post_id INT,
+   file_path VARCHAR(1024) NOT NULL,
+   upload_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+   FOREIGN KEY (post_id) REFERENCES posts(post_id) 
 );
 
 -- 게시글 좋아요
@@ -165,7 +169,6 @@ CREATE TABLE comments (
     createDate DATETIME DEFAULT CURRENT_TIMESTAMP,
     modiDate DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
     isDeleted TINYINT DEFAULT 0,
-    likes_count INT DEFAULT 0,
     foreign key (post_id) references posts(post_id),
     FOREIGN KEY (parent_comment_id) REFERENCES Comments(comment_id),
     foreign key (user_no) references User(user_no)
@@ -180,39 +183,48 @@ CREATE TABLE comment_likes (
     FOREIGN KEY (user_no) REFERENCES User(user_no) 
 );
 
+-- 파일 백업 테이블
+-- CREATE TABLE post_files_backup (
+--     backup_id INT PRIMARY KEY AUTO_INCREMENT,
+--     file_id INT,
+--     post_id INT,
+--     file_path VARCHAR(1024),
+--     delete_date DATETIME DEFAULT CURRENT_TIMESTAMP, 
+--     original_upload_date DATETIME 
+-- );
 -- 게시글 백업 테이블
-CREATE TABLE posts_backup (
-    backup_id INT PRIMARY KEY AUTO_INCREMENT,
-    original_post_id INT,
-    post_text VARCHAR(1024),
-    post_file1 VARCHAR(1024),
-    post_file2 VARCHAR(1024),
-    post_file3 VARCHAR(1024),
-    post_file4 VARCHAR(1024),
-    user_no INT,
-    createDate DATETIME,
-    modiDate DATETIME,
-    board_info_id INT,
-    isDeleted TINYINT,
-    views INT,
-    likes_count INT,
-    backup_date DATETIME DEFAULT CURRENT_TIMESTAMP
-);
+-- CREATE TABLE posts_backup (
+--     backup_id INT PRIMARY KEY AUTO_INCREMENT,
+--     original_post_id INT,
+--     post_text VARCHAR(1024),
+--     post_file1 VARCHAR(1024),
+--     post_file2 VARCHAR(1024),
+--     post_file3 VARCHAR(1024),
+--     post_file4 VARCHAR(1024),
+--     user_no INT,
+--     createDate DATETIME,
+--     modiDate DATETIME,
+--     board_info_id INT,
+--     isDeleted TINYINT,
+--     views INT,
+--     likes_count INT,
+--     backup_date DATETIME DEFAULT CURRENT_TIMESTAMP
+-- );
 
 -- 댓글 백업 테이블
-CREATE TABLE comments_backup (
-    backup_id INT PRIMARY KEY AUTO_INCREMENT,
-    original_comment_id INT,
-    post_id INT,
-    parent_comment_id INT,
-    comment_text VARCHAR(1024),
-    user_no INT,
-    createDate DATETIME,
-    modiDate DATETIME,
-    isDeleted TINYINT,
-    likes_count INT,
-    backup_date DATETIME DEFAULT CURRENT_TIMESTAMP
-);
+-- CREATE TABLE comments_backup (
+--     backup_id INT PRIMARY KEY AUTO_INCREMENT,
+--     original_comment_id INT,
+--     post_id INT,
+--     parent_comment_id INT,
+--     comment_text VARCHAR(1024),
+--     user_no INT,
+--     createDate DATETIME,
+--     modiDate DATETIME,
+--     isDeleted TINYINT,
+--     likes_count INT,
+--     backup_date DATETIME DEFAULT CURRENT_TIMESTAMP
+-- );
 
 
 -- ----------------------------------------
