@@ -14,7 +14,7 @@ module.exports = (conn) => {
         " LEFT JOIN post_files pf ON p.post_id = pf.post_id" +
         " LEFT JOIN User u ON p.user_no = u.user_no" +
         " LEFT JOIN UserProfile up ON u.user_no = up.user_no" +
-        " WHERE p.board_info_id = 1 and  p.isDeleted=0" +
+        " WHERE p.board_info_id = ? and  p.isDeleted=0" +
         " GROUP BY p.post_id, p.post_text, p.user_no, p.createDate, p.modiDate, p.views, u.user_id, up.nickname, up.image_url" +
         " ORDER BY p.createDate DESC",
       [board_info_id],
