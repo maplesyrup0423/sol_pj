@@ -11,7 +11,7 @@ function HomePage() {
   useEffect(() => {
     const myInfoCallApi = async () => {
       try {
-        const response = await fetch("/api/myInfo");
+        const response = await fetch("/api/userProfileInfo");
 
         // 응답 상태 확인
         if (!response.ok) {
