@@ -24,7 +24,6 @@ JSX에서의 컴포넌트 사용: <MyProfile />처럼 컴포넌트 이름을 대
 
 --image url 경로 지정 문제--
 이미지 경로를 상대경로로 지정했는데 적용되지 않는 문제는 몇 가지 원인으로 인해 발생할 수 있습니다. 주요 원인과 그에 대한 해결 방법은 다음과 같습니다.
-
 1. 이미지 파일의 경로 확인
 ./img/discord.png 경로가 올바른지 확인하세요. 해당 경로는 MyProfile 컴포넌트 파일이 위치한 디렉토리를 기준으로 상대경로를 나타냅니다.
 만약 MyProfile.js 파일이 src 폴더 안에 있고, img 폴더가 public 폴더나 다른 디렉토리에 위치해 있다면 경로를 수정해야 합니다.
@@ -39,3 +38,23 @@ src 폴더 내부에 있는 이미지를 로드할 때는 import를 사용하여
 javascript
 코드 복사
 import discordImage from "./img/discord.png";
+
+--button onClick issue--
+코드에서 deleteTask, moveTaskUp, moveTaskDown 함수가 예상치 못하게 실행되는 이유는 onClick 이벤트 핸들러에 함수를 호출하는 식으로 작성되었기 때문입니다. 즉, onClick={deleteTask(index)}는 deleteTask 함수를 바로 호출해서 그 결과를 onClick에 전달하는 형태입니다. 이 경우, 해당 함수는 렌더링 중에 바로 실행됩니다.
+
+올바른 방식은 deleteTask, moveTaskUp, moveTaskDown 함수를 화살표 함수로 감싸서, 버튼이 클릭될 때까지 함수가 호출되지 않도록 하는 것입니다.
+<button
+    className="delete-button"
+    onClick={() => deleteTask(index)}
+>
+    Delete
+</button>
+
+
+--axios post,get 요청이 되지 않던 문제--
+const response = await axios.post(
+                "http://localhost:5000/myProfile",
+                user
+            );
+이 코드에서 localhost:3000번을 썼었는데 우리가 서버에 연결을 할 땐 5000번을 사용하는걸 잊고 있었다.
+5000으로 바꾸니 연결이 잘된다. 휴!

@@ -1,0 +1,35 @@
+/* 버튼 사이즈 */
+/* .bigButton {
+  border: none;
+  width: 100px;
+  height: 30px;
+} */
+
+.mediumButton {
+  border: none;
+  width: 85px;
+  height: 30px;
+  border-radius: 30px;
+}
+
+/* .smallButton {
+  border: none;
+  width: 100px;
+  height: 30px;
+} */
+
+/* 버튼 색 */
+.yellowButton {
+  background-color: #ffcd19;
+  color: white;
+}
+
+.blackButton {
+  background-color: black;
+  color: white;
+}
+
+.whiteButton {
+  background-color: white;
+  color: black;
+}
