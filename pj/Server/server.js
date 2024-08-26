@@ -7,6 +7,7 @@ const fs = require("fs");
 const socketIo = require("socket.io");
 const setupChatModule = require("./socket");
 const path = require("path");
+require("dotenv").config();
 
 const app = express();
 const server = http.createServer(app);
