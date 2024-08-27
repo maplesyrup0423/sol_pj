@@ -2,23 +2,25 @@ import "./FeedMain.css";
 import Feeds from "./Feeds";
 import Writing from "./Writing";
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 
 function FeedMain({ myInfo }) {
-  const [post, setPost] = useState([]);
+  const { boardId } = useParams(); // URL 파라미터로 게시판 ID 가져오기
+  const [data, setData] = useState([]);
+  const [, setCurrentBoardId] = useState(boardId || 1);
 
   useEffect(() => {
-    const postCallApi = async () => {
-      //post 데이터 받아옴
-      const response = await fetch("/api/post");
-      const body = await response.json();
-      console.log(body); // 서버 응답 확인용
-      return body;
-    };
-    postCallApi()
-      .then((res) => setPost(res))
-      .catch((err) => console.log(err));
-  }, []);
-  console.log("post:", post);
+    // boardId가 변경될 때만 API 호출
+    const id = boardId || 1;
+    setCurrentBoardId(id);
+
+    fetch(`/api/post?board_info_id=${boardId}`) // 게시판 ID를 사용하여 데이터 요청
+      .then((response) => response.json())
+      .then((data) => setData(data))
+      .catch((error) => console.error("Error fetching data:", error));
+  }, [boardId]);
+  console.log("data :", data);
+
   return (
     <div className="feed_main">
       <div className="order">
@@ -33,15 +35,15 @@ function FeedMain({ myInfo }) {
       <div className="posting">
         {/* 글쓰기 부분 
         todo DB insert문 만들기*/}
-        <Writing myInfo={myInfo} />
+        {myInfo.length > 0 ? <Writing myInfo={myInfo} /> : "로딩"}
       </div>
 
       <div className="feed">
         {/* 피드부분
           todo 게시판DB 받아오기 현재 하드코딩
         */}
-        {post.length > 0 ? (
-          post.map((p) => <Feeds key={p.post_id} {...p} />)
+        {data.length > 0 ? (
+          data.map((p) => <Feeds key={p.post_id} {...p} />)
         ) : (
           <h1>Loading...</h1>
         )}
