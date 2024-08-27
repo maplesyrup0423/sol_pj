@@ -12,7 +12,6 @@ function BoardInfo() {
     const callApi = async () => {
       const response = await fetch("/api/boardInfo");
       const body = await response.json();
-      console.log(body); // 서버 응답 확인용
       return body;
     };
 

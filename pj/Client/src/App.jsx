@@ -9,6 +9,8 @@ import UserProfile from "./components/pages/homeLayout/center/UserProfile/UserPr
 import { useState, useEffect } from "react";
 
 function App() {
+  // !로그인 회원 정보는 나중에 토큰으로 변경 예정
+  //! 지금까지 제작한 컴포넌트들의 값을 위해 최상단에 임시 하드코딩함
   const [myInfo, setMyInfo] = useState([]);
   useEffect(() => {
     const myInfoCallApi = async () => {

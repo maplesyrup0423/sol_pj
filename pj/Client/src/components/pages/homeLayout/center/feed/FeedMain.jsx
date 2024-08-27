@@ -5,21 +5,18 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 function FeedMain({ myInfo }) {
-  const { boardId } = useParams(); // URL 파라미터로 게시판 ID 가져오기
+  const { boardId: paramBoardId } = useParams(); // URL 파라미터로 게시판 ID 가져오기
+  //! 메인 화면 첫 페이지에 보여줄 개사판 1번으로 하드코딩
+  //todo 추후 유저가 선택한 게시판 중 가장 높은 id 번호로 지정되게 수정 예정
+  const boardId = paramBoardId || 1; // boardId가 undefined일 때 기본값 1 설정
   const [data, setData] = useState([]);
-  const [, setCurrentBoardId] = useState(boardId || 1);
 
   useEffect(() => {
-    // boardId가 변경될 때만 API 호출
-    const id = boardId || 1;
-    setCurrentBoardId(id);
-
     fetch(`/api/post?board_info_id=${boardId}`) // 게시판 ID를 사용하여 데이터 요청
       .then((response) => response.json())
       .then((data) => setData(data))
       .catch((error) => console.error("Error fetching data:", error));
   }, [boardId]);
-  console.log("data :", data);
 
   return (
     <div className="feed_main">
