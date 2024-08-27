@@ -5,7 +5,7 @@ import LoginPage, { action as loginAction } from "./components/pages/Login";
 import IntroPage from "./components/pages/IntroLayout/Intro";
 import HomePage from "./components/pages/homeLayout/Home";
 import FeedMain from "./components/pages/homeLayout/center/feed/FeedMain";
-import UserProfile from "./components/pages/homeLayout/center/feed/UserProfile";
+import UserProfile from "./components/pages/homeLayout/center/UserProfile/UserProfile";
 import { useState, useEffect } from "react";
 
 function App() {
