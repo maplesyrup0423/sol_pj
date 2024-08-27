@@ -25,7 +25,11 @@ main {
 .pic {
   width: 120px;
   height: 120px;
-  background-color: red;
+}
+
+img {
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
 }
 
@@ -47,8 +51,14 @@ main {
   border-radius: 50px;
   width: 150px;
   height: 50px;
-  font-size: 24px;
-  color: #ffcd19;
+
   justify-content: center;
   align-items: center;
+}
+
+button {
+  font-size: 24px;
+  color: #ffcd19;
+  background-color: inherit;
+  border: none;
 }

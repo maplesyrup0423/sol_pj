@@ -1,5 +1,6 @@
 import "./UserProfile.css";
 import BackArrow from "../../../../utills/buttons/BackArrow";
+import BasicButton from "../../../../utills/buttons/BasicButton";
 
 function UserProfile({ myInfo }) {
   console.log("myInfo : ", myInfo);
@@ -17,15 +18,18 @@ function UserProfile({ myInfo }) {
       </header>
       <main>
         <div className="userPic">
-          <div className="pic">&nbsp;</div>
-          {/* <img src={props.image_url} alt="" /> */}
+          <div className="pic">
+            <img src={myInfo[0].image_url} alt="" />
+          </div>
         </div>
         <div className="userInfo">
           <div className="name">{myInfo[0].nickname}</div>
           <div className="nickName">@{myInfo[0].user_id}</div>
           <div className="introduce">{myInfo[0].introduce}</div>
         </div>
-        <div className="editProfile">프로필수정</div>
+        <div className="editProfile">
+          <BasicButton btnText="프로필수정" />
+        </div>
       </main>
     </>
   );
