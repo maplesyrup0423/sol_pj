@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./Intro.css";
 
 function IntroPage() {
@@ -5,8 +6,8 @@ function IntroPage() {
         <div className="intro-board">
             <div className="intro-container">
                 <h1>프로젝트 소개</h1>
-                <p>소개소개소개소개소개12312313소개소개 ㅎㅎ</p>
-                <a href="/">start</a>
+                {/* <p>소개소개소개소개소개12312313소개소개 ㅎㅎ</p> */}
+                <Link to="/login">start</Link>
             </div>
             <div className="blank"></div>
             <div className="intro-container-second">
