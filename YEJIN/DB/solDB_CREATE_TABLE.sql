@@ -264,6 +264,13 @@ CREATE TABLE ChatMessage (
    FOREIGN KEY (user_no) REFERENCES user(user_no)
 );
 
+-- 인증용 토큰 저장용
+create table refreshTokens(
+user_no int not null,
+token varchar(256) not null,
+foreign key(user_no) references user(user_no)
+);
+
 
 
 
