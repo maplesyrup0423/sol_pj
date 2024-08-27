@@ -1,0 +1,54 @@
+header {
+  display: flex;
+  align-items: center;
+  padding: 20px 0 20px 0;
+}
+
+.backArrow {
+  width: 50px;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.nickName {
+  color: gray;
+}
+
+main {
+  padding: 20px 20px 20px 0;
+  display: flex;
+}
+
+.pic {
+  width: 120px;
+  height: 120px;
+  background-color: red;
+  border-radius: 50%;
+}
+
+.userInfo {
+  padding: 20px;
+}
+
+.introduce {
+  margin-top: 10px;
+  font-size: 18px;
+}
+
+.editProfile {
+  position: absolute;
+  right: 50px;
+  margin: 20px;
+  display: flex;
+  border: 3px solid #ffcd19;
+  border-radius: 50px;
+  width: 150px;
+  height: 50px;
+  font-size: 24px;
+  color: #ffcd19;
+  justify-content: center;
+  align-items: center;
+}
