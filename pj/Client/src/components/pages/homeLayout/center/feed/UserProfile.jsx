@@ -19,7 +19,7 @@ function UserProfile({ myInfo }) {
       <main>
         <div className="userPic">
           <div className="pic">
-            <img src={myInfo[0].image_url} alt="" />
+            <img src={myInfo[0].image_url} alt="" className="proImg" />
           </div>
         </div>
         <div className="userInfo">
