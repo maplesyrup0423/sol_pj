@@ -1,12 +1,13 @@
 USE sol;
 -- 유저
-INSERT INTO User VALUES(1,'예진');
-INSERT INTO User VALUES(2,'일진');
-INSERT INTO User VALUES(3,'한결');
-INSERT INTO User VALUES(4,'유한');
-INSERT INTO User VALUES(5,'주영');
-INSERT INTO User VALUES(6,'요한');
+INSERT INTO User VALUES(1,'Maple2423');
+INSERT INTO User VALUES(2,'xxzz9978');
+INSERT INTO User VALUES(3,'gksruf1414');
+INSERT INTO User VALUES(4,'Uhan');
+INSERT INTO User VALUES(5,'JYP');
+INSERT INTO User VALUES(6,'LIMJ2022');
 select * from User;
+-- update User set user_id='LIMJ2022' where user_no=6;
 
 -- 유저 프로필
 INSERT INTO UserProfile VALUES(1,1,'체르','https://cdn.pixabay.com/photo/2013/05/30/18/21/cat-114782_1280.jpg','무엇을 해야 할까요?');
