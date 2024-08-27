@@ -35,6 +35,8 @@ INSERT INTO posts VALUES (NULL, 'This is a sample post 7', 1, NOW(), NULL, 3, 0,
 INSERT INTO posts VALUES (NULL, 'This is a sample post 8', 2, NOW(), NULL, 4, 0, 0);
 INSERT INTO posts VALUES (NULL, 'This is a sample post 9', 3, NOW(), NULL, 1, 0, 0);
 INSERT INTO posts VALUES (NULL, 'This is a sample post 10', 4, NOW(), NULL, 2, 0, 0);
+INSERT INTO posts VALUES (NULL, 'img test post', 1, NOW(), NULL, 1, 0, 0);
+
 select * from posts;
 -- DELETE FROM posts WHERE post_id=2;
 -- SHOW TABLE STATUS LIKE 'posts';
@@ -44,4 +46,7 @@ select * from posts;
 INSERT INTO post_files VALUES (NULL, 1,'https://cdn.pixabay.com/photo/2020/11/26/11/48/cat-5778777_1280.jpg',NOW());
 INSERT INTO post_files VALUES (NULL, 9,'https://cdn.pixabay.com/photo/2019/08/20/21/21/cat-4419763_1280.jpg',NOW());
 INSERT INTO post_files VALUES (NULL, 9,'https://cdn.pixabay.com/photo/2018/09/15/08/14/cat-3678858_1280.jpg',NOW());
+INSERT INTO post_files VALUES (NULL, 11,'https://cdn.pixabay.com/photo/2023/12/28/14/09/cat-8474233_1280.png',NOW());
+INSERT INTO post_files VALUES (NULL, 11,'https://cdn.pixabay.com/photo/2021/10/27/19/09/cat-6748193_1280.jpg',NOW());
+INSERT INTO post_files VALUES (NULL, 11,'https://cdn.pixabay.com/photo/2022/12/05/05/20/cat-7635983_1280.png',NOW());
 select * from post_files;
