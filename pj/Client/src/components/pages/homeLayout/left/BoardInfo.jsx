@@ -5,8 +5,6 @@ import More from "./More.jsx";
 import axios from "axios";
 
 function BoardInfo() {
-  //const titles = ['1번', '2번', '3번', '4번', '5번'];
-  //const gameList = titles.map((title, index) => <BoardName/>);
   const [boardName, setBoardName] = useState([]);
 
   useEffect(() => {
@@ -25,8 +23,6 @@ function BoardInfo() {
   return (
     <div className="GameInfo">
       <ul>
-        {/*보드네임 부분은 반복, 모어는 안반복 */}
-        {/* {gameList} */}
         {boardName.length > 0 ? (
           boardName.map((bn) => (
             <BoardName
@@ -39,7 +35,6 @@ function BoardInfo() {
         ) : (
           <h1>Loading...</h1>
         )}
-        {/* <BoardName/> */}
         <More />
       </ul>
     </div>

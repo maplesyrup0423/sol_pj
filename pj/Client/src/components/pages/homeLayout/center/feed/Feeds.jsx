@@ -69,7 +69,6 @@ function Feeds(props) {
       </div>
       <div className="feed-CreationDate">
         {/* 작성일/조회수 등 상세 정보 */}
-        {/* <span>오후 4:07 </span>•<span> 2024-08-19 </span>│ */}
         <span> {props.createDate}</span>
         <span> 조회수 {props.views}</span>
       </div>
@@ -81,9 +80,6 @@ function Feeds(props) {
           <AiOutlineHeart size="30" />
           <span> &nbsp;{props.likes_count} &nbsp; </span>
           <IoChatbubbleOutline size="30" />
-          {/* todo 댓글수는 따로 comments 테이블 카운트
-          좋아요도 post에 항목 없애고 따로 카운트
-          아니면 둘다 post에 넣을지 고민하기 */}
           <span> &nbsp;5 </span>
         </div>
         <div className="share-icons">

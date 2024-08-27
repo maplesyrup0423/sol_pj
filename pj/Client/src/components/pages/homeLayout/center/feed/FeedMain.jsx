@@ -46,9 +46,6 @@ function FeedMain({ myInfo }) {
       </div>
 
       <div className="feed">
-        {/* 피드부분
-          todo 게시판DB 받아오기 현재 하드코딩
-        */}
         {data.length > 0 ? (
           data.map((p) => <Feeds key={p.post_id} {...p} />)
         ) : (

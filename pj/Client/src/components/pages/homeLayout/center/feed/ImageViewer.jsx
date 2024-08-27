@@ -1,4 +1,4 @@
-import "./ImageViewer.css"; // 모달을 위한 CSS
+import "./ImageViewer.css";
 
 const ImageViewer = ({ images, currentIndex, onClose, onChangeImage }) => {
   const prevImage = () => {

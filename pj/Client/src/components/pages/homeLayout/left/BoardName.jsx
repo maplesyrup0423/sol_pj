@@ -1,5 +1,5 @@
 import "./BoardName.css";
-import { NavLink } from "react-router-dom"; // NavLink를 가져옵니다.
+import { NavLink } from "react-router-dom";
 
 function BoardName(props) {
   return (
