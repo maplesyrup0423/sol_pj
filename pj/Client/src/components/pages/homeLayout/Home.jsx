@@ -39,7 +39,7 @@ function HomePage() {
       .then((res) => setMyInfo(res))
       .catch((err) => console.log(err));
   }, []);
-
+  console.log("myInfo : ", myInfo);
   return (
     <div className="container">
       <div className="leftNav">
@@ -47,7 +47,7 @@ function HomePage() {
       </div>
 
       <div className="center">
-        {myInfo.length > 0 && <CenterContent image_url={myInfo[0].image_url} />}
+        {myInfo.length > 0 && <CenterContent myInfo={myInfo} />}
       </div>
 
       <div className="rightNav">
