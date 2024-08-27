@@ -59,42 +59,7 @@ server.listen(port, () => console.log(`서버 동작중 ${port}`));
 
 module.exports = app;
 
-//로그인 시도하면 불러오고 싶은 함수.
-app.post("/login", (req, res) => {
-  //요청시 보내준 유저 정보
-  const { username, password } = req.body;
-  // user 테이블의 데이터를 가져오는 쿼리
-  const query = `SELECT u.user_id, f.nickname, f.image_url, p.password, f.introduce 
-        FROM user u 
-        JOIN userprofile f ON u.user_no = f.user_no 
-        JOIN password p ON u.user_no = p.user_no
-        WHERE u.user_id = ? AND p.password = ?`;
 
-  conn.query(query, [username, password], (err, results) => {
-    if (err) {
-      console.error("쿼리 실행 오류:", err);
-    } else if (results.length > 0) {
-      console.log("로그인 성공 : ", results[0].user_id);
-      // 로그인 성공
-      res.json({
-        success: true,
-        message: "로그인 성공!",
-        user: {
-          user_id: results[0].user_id,
-          nickname: results[0].nickname,
-          image_url: results[0].image_url,
-          introduce: results[0].introduce,
-        },
-        redirectUrl: "http://localhost:3000/myProfile",
-      });
-    } else {
-      res.status(401).json({
-        success: false,
-        message: "아이디, 비밀번호 오류! 설정해둔 아이디랑 비번 확인햇!",
-      });
-    }
-  });
-});
 
 // 라우트 모듈을 가져와서 사용
 const boardInfoRoutes = require("./controllers/boardInfo");
@@ -103,6 +68,8 @@ const UserProfile = require("./controllers/userProfile");
 app.use(UserProfile(conn));
 const PostRoutes = require("./controllers/post");
 app.use(PostRoutes(conn));
+const authentication = require("./controllers/authentication");
+app.use(authentication(conn));
 
 // 'images' 디렉토리의 경로를 절대 경로로 설정
 // __dirname은 현재 파일이 위치한 디렉토리의 경로를 반환
