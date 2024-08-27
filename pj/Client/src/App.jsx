@@ -27,6 +27,7 @@ function App() {
 
     myInfoCallApi();
   }, []);
+
   const router = createBrowserRouter([
     {
       path: "/",

@@ -35,7 +35,11 @@ function FeedMain({ myInfo }) {
       <div className="posting">
         {/* 글쓰기 부분 
         todo DB insert문 만들기*/}
-        {myInfo.length > 0 ? <Writing myInfo={myInfo} /> : "로딩"}
+        {myInfo.length > 0 ? (
+          <Writing myInfo={myInfo} boardId={boardId} />
+        ) : (
+          "로딩"
+        )}
       </div>
 
       <div className="feed">
