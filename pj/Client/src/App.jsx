@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import "./App.css";
-import LoginPage from "./components/pages/Login";
+import LoginPage, { action as loginAction } from "./components/pages/Login";
 import IntroPage from "./components/pages/Intro";
 import HomePage from "./components/pages/homeLayout/Home";
 
@@ -14,6 +14,7 @@ function App() {
         {
             path: "/login",
             element: <LoginPage />,
+            action: loginAction,
         },
         {
             path: "/intro",
