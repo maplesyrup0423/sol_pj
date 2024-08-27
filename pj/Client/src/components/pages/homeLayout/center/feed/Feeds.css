@@ -4,6 +4,7 @@
   padding: 5px;
   box-sizing: border-box;
   border-bottom: 1px solid white;
+  color: white;
 }
 .moreA {
   text-decoration: none; /* 링크의 밑줄 제거 */
