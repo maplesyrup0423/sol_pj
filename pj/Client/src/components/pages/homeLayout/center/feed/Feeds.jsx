@@ -6,8 +6,25 @@ import { IoChatbubbleOutline } from "react-icons/io5";
 import { FaRegBookmark } from "react-icons/fa";
 import { FaBookmark } from "react-icons/fa";
 import ProfileImg from "../../../../utills/ProfileImg";
+import ImageViewer from "./ImageViewer";
+import { useState } from "react";
 
 function Feeds(props) {
+  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const images = props.file_paths ? props.file_paths.split(", ") : [];
+
+  const openModal = (index) => {
+    setSelectedImageIndex(index);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedImageIndex(null);
+  };
+
   return (
     <div className="feed-container">
       <div className="feed-header">
@@ -25,17 +42,25 @@ function Feeds(props) {
       <div className="feed-image">
         {/* 피드이미지 */}
         {/* TODO 캐로셀 처리  */}
-        {props.file_paths &&
-          props.file_paths
-            .split(", ")
-            .map((filePath, index) => (
-              <img
-                key={index}
-                src={filePath}
-                alt={`Post ${props.post_id} image ${index + 1}`}
-                className="feedImg1"
-              />
-            ))}
+        {images.map((filePath, index) => (
+          <img
+            key={index}
+            src={filePath}
+            alt={`Post ${props.post_id} image ${index + 1}`}
+            className="feedImg1"
+            onClick={() => openModal(index)} // 이미지 클릭 시 모달 열기
+          />
+        ))}
+
+        {/* 모달 컴포넌트 */}
+        {isModalOpen && selectedImageIndex !== null && (
+          <ImageViewer
+            images={images}
+            currentIndex={selectedImageIndex}
+            onClose={closeModal}
+            onChangeImage={(index) => setSelectedImageIndex(index)}
+          />
+        )}
       </div>
 
       <div className="feed-text">
