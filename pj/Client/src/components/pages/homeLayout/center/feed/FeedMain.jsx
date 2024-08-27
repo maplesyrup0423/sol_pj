@@ -3,6 +3,7 @@ import Feeds from "./Feeds";
 import Writing from "./Writing";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 
 function FeedMain({ myInfo }) {
   const { boardId: paramBoardId } = useParams(); // URL 파라미터로 게시판 ID 가져오기
@@ -12,12 +13,17 @@ function FeedMain({ myInfo }) {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch(`/api/post?board_info_id=${boardId}`) // 게시판 ID를 사용하여 데이터 요청
-      .then((response) => response.json())
-      .then((data) => setData(data))
-      .catch((error) => console.error("Error fetching data:", error));
-  }, [boardId]);
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`/api/post?board_info_id=${boardId}`);
+        setData(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
+    fetchData();
+  }, [boardId]);
   return (
     <div className="feed_main">
       <div className="order">

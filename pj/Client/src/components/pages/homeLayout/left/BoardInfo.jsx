@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "./BoardInfo.css";
 import BoardName from "./BoardName.jsx";
 import More from "./More.jsx";
+import axios from "axios";
 
 function BoardInfo() {
   //const titles = ['1번', '2번', '3번', '4번', '5번'];
@@ -10,14 +11,15 @@ function BoardInfo() {
 
   useEffect(() => {
     const callApi = async () => {
-      const response = await fetch("/api/boardInfo");
-      const body = await response.json();
-      return body;
+      try {
+        const response = await axios.get("/api/boardInfo");
+        setBoardName(response.data);
+      } catch (err) {
+        console.error("Error fetching board info:", err);
+      }
     };
 
-    callApi()
-      .then((res) => setBoardName(res))
-      .catch((err) => console.log(err));
+    callApi();
   }, []);
 
   return (
