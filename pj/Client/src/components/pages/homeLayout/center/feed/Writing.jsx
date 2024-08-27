@@ -1,7 +1,7 @@
 import ProfileImg from "../../../../utills/ProfileImg";
 import "./Writing.css";
 import BasicButton from "../../../../utills/buttons/BasicButton";
-function Writing({ myInfo }) {
+function Writing({ myInfo, boardId }) {
   return (
     <div className="writingArea">
       <table className="Wtable">
@@ -15,7 +15,7 @@ function Writing({ myInfo }) {
                 name="postContent"
                 rows={4}
                 cols={40}
-                placeholder="글을 작성해주세요."
+                placeholder={`게시판 아이디 : ${boardId} || 글을 작성해주세요.`}
               />
             </td>
           </tr>
@@ -33,8 +33,6 @@ function Writing({ myInfo }) {
           </tr>
         </tbody>
       </table>
-
-      {/* 참고 : https://ko.react.dev/reference/react-dom/components/textarea */}
     </div>
   );
 }

@@ -5,9 +5,14 @@ const router = express.Router();
 //todo 지금은 board_info_id=1인 게시판 정보 받아옴. 추후 게시판별로 받아와야함
 module.exports = (conn) => {
   router.get("/post", (req, res) => {
-    const board_info_id = 1;
+    const board_info_id = req.query.board_info_id; // 쿼리 파라미터로 게시판 ID 받아오기
+
+    // 게시판 ID가 제공되지 않은 경우 처리
+    if (!board_info_id) {
+      return res.status(400).send("게시판 ID가 필요합니다.");
+    }
     conn.query(
-      "SELECT p.post_id,p.post_text,p.user_no,p.createDate,p.modiDate, p.views," +
+      "SELECT p.board_info_id, p.post_id,p.post_text,p.user_no,p.createDate,p.modiDate, p.views," +
         " GROUP_CONCAT(pf.file_path ORDER BY pf.upload_date SEPARATOR ', ') AS file_paths," +
         " u.user_id,up.nickname,up.image_url" +
         " FROM posts p" +

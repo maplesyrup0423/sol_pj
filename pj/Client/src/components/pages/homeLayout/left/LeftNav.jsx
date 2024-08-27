@@ -1,6 +1,7 @@
 import "./LeftNav.css";
 import BoardInfo from "./BoardInfo";
 import ProfileCard from "./ProfileCard";
+import { Link } from "react-router-dom";
 
 function LeftNav({ myInfo }) {
   return (
@@ -23,7 +24,7 @@ function LeftNav({ myInfo }) {
         </li>
 
         <li>
-          <a href="#profileCard">
+          <Link to={"/myPage"}>
             {myInfo.length > 0 ? (
               <ProfileCard
                 user_no={myInfo[0].user_no}
@@ -34,7 +35,7 @@ function LeftNav({ myInfo }) {
             ) : (
               <h5>로그인 해주세욤</h5>
             )}
-          </a>
+          </Link>
         </li>
       </ul>
     </div>
