@@ -1,6 +1,6 @@
 import "./CenterContent.css";
 import FeedMain from "./feed/FeedMain.jsx";
-import UserProfile from "./feed/UserProfile.jsx";
+//import UserProfile from "./feed/UserProfile.jsx";
 
 function CenterContent({ myInfo }) {
   return (
