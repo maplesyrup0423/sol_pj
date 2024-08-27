@@ -18,7 +18,7 @@ INSERT INTO UserProfile VALUES(6,6,'요이커','https://cdn.pixabay.com/photo/20
 select * from UserProfile;
 
 -- 게시판
-INSERT INTO board_info_table VALUES(1,'리그 오브 레전드','/League of Legends.png');
+INSERT INTO board_info_table VALUES(1,'리그 오브 레전드','League of Legends.png');
 INSERT INTO board_info_table VALUES(2,'로스트 아크','LOST ARK.png');
 INSERT INTO board_info_table VALUES(3,'배틀 그라운드','PUBG BATTLEGROUNDS.png');
 INSERT INTO board_info_table VALUES(4,'발로란트','VALORANT.png');

@@ -3,7 +3,7 @@ import Feeds from "./Feeds";
 import Writing from "./Writing";
 import { useState, useEffect } from "react";
 
-function FeedMain(props) {
+function FeedMain({ myInfo }) {
   const [post, setPost] = useState([]);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ function FeedMain(props) {
       <div className="posting">
         {/* 글쓰기 부분 
         todo DB insert문 만들기*/}
-        <Writing image_url={props.image_url} />
+        <Writing myInfo={myInfo} />
       </div>
 
       <div className="feed">
