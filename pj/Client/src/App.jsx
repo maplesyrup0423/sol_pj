@@ -2,7 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import "./App.css";
 import LoginPage, { action as loginAction } from "./components/pages/Login";
-import IntroPage from "./components/pages/Intro";
+import IntroPage from "./components/pages/IntroLayout/Intro";
 import HomePage from "./components/pages/homeLayout/Home";
 
 function App() {

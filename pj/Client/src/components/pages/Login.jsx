@@ -66,7 +66,6 @@ function LoginPage() {
 export default LoginPage;
 
 export async function action({ request }) {
-    // 폼 데이터를 추출합니다.
     const formData = await request.formData();
     const username = formData.get("username");
     const password = formData.get("password");

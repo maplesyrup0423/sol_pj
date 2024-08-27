@@ -50,3 +50,12 @@ INSERT INTO post_files VALUES (NULL, 11,'https://cdn.pixabay.com/photo/2023/12/2
 INSERT INTO post_files VALUES (NULL, 11,'https://cdn.pixabay.com/photo/2021/10/27/19/09/cat-6748193_1280.jpg',NOW());
 INSERT INTO post_files VALUES (NULL, 11,'https://cdn.pixabay.com/photo/2022/12/05/05/20/cat-7635983_1280.png',NOW());
 select * from post_files;
+
+-- 유저 패스워드 (회원 비밀번호 1234로 통일해놓은 상태)
+INSERT INTO password values(1,1,10,1234,now());
+INSERT INTO password values(2,2,10,1234,now());
+INSERT INTO password values(3,3,10,1234,now());
+INSERT INTO password values(4,4,10,1234,now());
+INSERT INTO password values(5,5,10,1234,now());
+INSERT INTO password values(6,6,10,1234,now());
+SELECT * FROM password;
