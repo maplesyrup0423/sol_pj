@@ -8,39 +8,41 @@ function LoginPage() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     //로그인 버튼 누르면 실행되는 함수
+    
     const submitHandler = async (e) => {
-        //공백값 방지함수
         e.preventDefault();
-
-        //사용자정보가 많을시 폼데이터로 모아서 전달 가능(지금은 안씀)
-        // const formData = new FormData(e.target);
-        // const payload = Object.fromEntries(formData);
-
+    
         const user = { username, password };
-        console.log("아이디 : ", user.username);
-        console.log("비밀번호 : ", user.password);
-
-        //서버로 데이터 전송
+        console.log("로그인 시도:", user);
+    
         try {
-            //이거 ^^l발 왜안됨? 요청이 보내지지가 않아 병123신같음
-            //해결 ^^
+            console.log("서버에 요청 전송");
             const response = await axios.post(
-                "http://localhost:5000/login",
-                user
+                "/api/login",
+                user,
+                { withCredentials: true }
             );
-
+            console.log("서버 응답 받음:", response);
+    
             if (response.status === 200) {
-                console.log("리디렉션 준비", response.data);
-                // 로그인 성공 시 미리 준비된 redirect주소로 이동!
+                console.log("로그인 성공, 데이터:", response.data);
+    
+                localStorage.setItem('accessToken', response.data.accessToken);
+                console.log("액세스 토큰 저장됨");
+    
+                console.log("리다이렉트 준비:", response.data.redirectUrl);
                 window.location.href = response.data.redirectUrl;
             } else {
                 console.error("로그인 실패:", response.statusText);
             }
         } catch (error) {
-            //왜 맨날 여기로 오냐고 ㅋㅋ
-            console.error("로그인 요청 중 오류 발생:", error.message);
+            console.error("로그인 요청 중 오류 발생:", error);
+            if (error.response) {
+                console.error("에러 응답:", error.response.data);
+            }
         }
     };
+    
     function nameInputChange(e) {
         setUsername(e.target.value);
     }
