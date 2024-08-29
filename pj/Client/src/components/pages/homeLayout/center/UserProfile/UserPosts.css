@@ -1,0 +1,12 @@
+.post-container {
+    height: 30vh;
+}
+
+.post-box {
+    border: 1px solid white;
+    min-height: 100px;
+    padding: 5px 20px 5px;
+}
+.post-box p {
+    margin: 15px 40px 15px;
+}

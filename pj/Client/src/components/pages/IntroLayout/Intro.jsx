@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import "./Intro.css";
+import IntroCard from "./IntroCard";
 
 function IntroPage() {
     return (
@@ -11,14 +12,7 @@ function IntroPage() {
             </div>
             <div className="blank"></div>
             <div className="intro-container-second">
-                <div className="intro-card">
-                    <div className="intro-info">
-                        <img src="/assets/courses.png" alt="" />
-                        <h3>Courses</h3>
-                        <p>따옴표 왜 안됨? 어이없네</p>
-                    </div>
-                    <a href="/">Lrearn More</a>
-                </div>
+                <IntroCard />
                 <div className="intro-card">
                     <div className="intro-info">
                         <img src="/assets/team.png" alt="" />

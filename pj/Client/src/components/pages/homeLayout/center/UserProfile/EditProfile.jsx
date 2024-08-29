@@ -1,15 +1,15 @@
-import "./MyProfile.css";
-import discordImage from "./img/discord.png";
-import Savebtn from "../utilButton/Savebtn";
-import Closebtn from "../utilButton/Closebtn";
+import "./EditProfile.css";
+import Savebtn from "../../../../utills/buttons/Savebtn";
+import Closebtn from "../../../../utilButton/Closebtn";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
 function MyProfile() {
+    console.log("에딧프로필 진입");
     // 유저 정보를 상태로 관리
     const [user, setUser] = useState({
         nickname: "",
-        image_url: discordImage,
+        image_url: "",
         introduce: "",
     });
 
@@ -31,8 +31,7 @@ function MyProfile() {
                 if (data.success) {
                     setUser({
                         userName: data.user.nickname,
-                        image_url:
-                            "/assets/" + data.user.image_url || discordImage, // 이미지가 없을 경우 기본 이미지 사용
+                        image_url: "/assets/" + data.user.image_url || "", // 이미지가 없을 경우 기본 이미지 사용
                         introduce:
                             data.user.introduction || "자기소개가 없습니다.",
                     });
@@ -48,31 +47,33 @@ function MyProfile() {
     }, []);
 
     return (
-        <div className="profileCard">
-            <header>
-                <div className="quitBox">
-                    <Closebtn />
-                </div>
-                <span>프로필 수정</span>
-                <div className="save">
-                    <Savebtn />
-                </div>
-            </header>
-            <div className="cardMain">
-                <div className="main1">
-                    <img
-                        className="userImage"
-                        src={user.image_url}
-                        alt="userImage"
-                    />
-                    <div className="nameContent">
-                        <div className="name">이름</div>
-                        <div className="userName">{user.nickname}</div>
+        <>
+            <div className="profileCard">
+                <header>
+                    <div className="quitBox">
+                        <Closebtn />
                     </div>
+                    <span>프로필 수정</span>
+                    <div className="save">
+                        <Savebtn />
+                    </div>
+                </header>
+                <div className="cardMain">
+                    <div className="main1">
+                        <img
+                            className="userImage"
+                            src={user.image_url}
+                            alt="userImage"
+                        />
+                        <div className="nameContent">
+                            <div className="name">이름</div>
+                            <div className="userName">{user.nickname}</div>
+                        </div>
+                    </div>
+                    <div className="introContent">{user.introduce}</div>
                 </div>
-                <div className="introContent">{user.introduce}</div>
             </div>
-        </div>
+        </>
     );
 }
 

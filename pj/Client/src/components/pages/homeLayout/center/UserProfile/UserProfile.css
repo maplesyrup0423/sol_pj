@@ -1,64 +1,64 @@
 header {
-  display: flex;
-  align-items: center;
-  padding: 20px 0 20px 0;
+    display: flex;
+    align-items: center;
+    padding: 20px 0 20px 0;
 }
 
 .backArrow {
-  width: 50px;
+    width: 50px;
 }
 
 .userInfo {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .nickName {
-  color: gray;
+    color: gray;
 }
 
 main {
-  padding: 20px 20px 20px 0;
-  display: flex;
+    padding: 20px 20px 20px 0;
+    display: flex;
 }
 
 .pic {
-  width: 120px;
-  height: 120px;
+    width: 120px;
+    height: 120px;
 }
 
 .proImg {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
 }
 
 .userInfo {
-  padding: 20px;
+    padding: 20px;
 }
 
 .introduce {
-  margin-top: 10px;
-  font-size: 18px;
+    margin-top: 10px;
+    font-size: 18px;
 }
 
 .editProfile {
-  position: absolute;
-  right: 50px;
-  margin: 20px;
-  display: flex;
-  border: 3px solid #ffcd19;
-  border-radius: 50px;
-  width: 150px;
-  height: 50px;
+    position: absolute;
+    right: 350px;
+    margin: 20px;
+    display: flex;
+    border: 3px solid #ffcd19;
+    border-radius: 50px;
+    width: 150px;
+    height: 50px;
 
-  justify-content: center;
-  align-items: center;
+    justify-content: center;
+    align-items: center;
 }
 
 button {
-  font-size: 24px;
-  color: #ffcd19;
-  background-color: inherit;
-  border: none;
+    font-size: 24px;
+    color: #ffcd19;
+    background-color: inherit;
+    border: none;
 }
