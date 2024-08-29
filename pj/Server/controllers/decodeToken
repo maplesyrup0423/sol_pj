@@ -1,0 +1,32 @@
+require('dotenv').config();
+const jwt = require('jsonwebtoken');
+
+function decodeToken(token) {
+    if (!token) {
+        return {
+            success: false,
+            message: "토큰이 제공되지 않았습니다."
+        };
+    }
+
+    // 'Bearer ' 접두사 제거
+    if (token.startsWith('Bearer ')) {
+        token = token.slice(7);
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.ACCESS_SECRET);
+        return {
+            success: true,
+            payload: decoded
+        };
+    } catch (error) {
+        return {
+            success: false,
+            message: "토큰 디코딩 실패",
+            error: error.message
+        };
+    }
+}
+
+module.exports = { decodeToken };
