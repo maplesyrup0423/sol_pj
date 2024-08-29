@@ -19,7 +19,12 @@ header {
 
 main {
   padding: 20px 20px 20px 0;
+  /* display: flex; */
+}
+.userContainer {
+  width: 100%;
   display: flex;
+  margin-bottom: 60px;
 }
 
 .pic {
@@ -61,4 +66,25 @@ button {
   color: #ffcd19;
   background-color: inherit;
   border: none;
+}
+
+.switch {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 auto;
+  font-size: 18px;
+}
+
+.switch-posts,
+.switch-comments {
+  flex: 1;
+  text-align: center;
+  text-decoration: none;
+  color: white;
+}
+
+.switch-posts:hover,
+.switch-comments:hover {
+  color: #ffcd19;
 }
