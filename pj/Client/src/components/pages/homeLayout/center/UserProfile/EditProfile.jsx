@@ -1,4 +1,3 @@
-import { useLocation } from "react-router-dom";
 import "./EditProfile.css";
 import Savebtn from "../../../../utills/buttons/Savebtn";
 import Closebtn from "../../../../utills/buttons/Closebtn";
@@ -6,48 +5,42 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 function MyProfile() {
-  const location = useLocation();
-
-  // `location.state`에서 전달된 데이터 가져오기
-  const { nickname, image_url, introduce } = location.state || {};
-
+  console.log("에딧프로필 진입");
   // 유저 정보를 상태로 관리
   const [user, setUser] = useState({
-    nickname: nickname || "",
-    image_url: image_url || "",
-    introduce: introduce || "",
+    nickname: "",
+    image_url: "",
+    introduce: "",
   });
 
   useEffect(() => {
-    if (!nickname) {
-      // 서버에서 유저 정보를 가져오는 함수
-      const fetchUserProfile = async () => {
-        try {
-          const response = await axios.get("http://localhost:3000/login", {
-            params: {
-              username: "", // 현재 로그인한 유저의 아이디를 여기에 전달
-            },
+    // 서버에서 유저 정보를 가져오는 함수
+    const fetchUserProfile = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/login", {
+          params: {
+            username: "", // 현재 로그인한 유저의 아이디를 여기에 전달
+          },
+        });
+
+        const data = response.data;
+
+        if (data.success) {
+          setUser({
+            userName: data.user.nickname,
+            image_url: "/assets/" + data.user.image_url || "", // 이미지가 없을 경우 기본 이미지 사용
+            introduce: data.user.introduction || "자기소개가 없습니다.",
           });
-
-          const data = response.data;
-
-          if (data.success) {
-            setUser({
-              nickname: data.user.nickname,
-              image_url: "/assets/" + (data.user.image_url || ""), // 이미지가 없을 경우 기본 이미지 사용
-              introduce: data.user.introduction || "자기소개가 없습니다.",
-            });
-          } else {
-            alert("유저 정보를 가져올 수 없습니다.");
-          }
-        } catch (error) {
-          console.error("유저 정보를 가져오는 중 오류 발생:", error);
+        } else {
+          alert("유저 정보를 가져올 수 없습니다.");
         }
-      };
+      } catch (error) {
+        console.error("유저 정보를 가져오는 중 오류 발생:", error);
+      }
+    };
 
-      fetchUserProfile();
-    }
-  }, [nickname]);
+    fetchUserProfile();
+  }, []);
 
   return (
     <>

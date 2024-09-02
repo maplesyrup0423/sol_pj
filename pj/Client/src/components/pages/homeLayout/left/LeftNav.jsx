@@ -3,7 +3,7 @@ import BoardInfo from "./BoardInfo";
 import ProfileCard from "./ProfileCard";
 import { Link } from "react-router-dom";
 
-function LeftNav({ myInfo }) {
+function LeftNav({ userInfo }) {
   return (
     <div className="sidebar">
       <ul>
@@ -25,12 +25,12 @@ function LeftNav({ myInfo }) {
 
         <li>
           <Link to={"/myPage"}>
-            {myInfo.length > 0 ? (
+            {userInfo ? (
               <ProfileCard
-                user_no={myInfo[0].user_no}
-                nickname={myInfo[0].nickname}
-                image_url={myInfo[0].image_url}
-                user_id={myInfo[0].user_id}
+                user_no={userInfo.user_no}
+                nickname={userInfo.nickname}
+                image_url={userInfo.image_url}
+                user_id={userInfo.user_id}
               />
             ) : (
               <h5>로그인 해주세욤</h5>

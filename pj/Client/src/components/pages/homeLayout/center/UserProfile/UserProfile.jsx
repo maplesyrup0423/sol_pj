@@ -2,25 +2,27 @@ import { useState } from "react";
 import "./UserProfile.css";
 import BackArrow from "../../../../utills/buttons/BackArrow";
 import BasicButton from "../../../../utills/buttons/BasicButton";
+import { useContext } from "react";
+import { AuthContext } from "../../../../../Context/AuthContext";
 import { NavLink } from "react-router-dom";
 
-function UserProfile({ myInfo }) {
-    //현재 선택된 탭 관리
-    const [activeTab, setActiveTab] = useState("posts");
+function UserProfile() {
+  const { userInfo } = useContext(AuthContext);
+  //현재 선택된 탭 관리
+  const [activeTab, setActiveTab] = useState("posts");
 
-    //switch-posts 클릭시 호출
-    const showPosts = () => {
-        setActiveTab("posts");
-    };
+  //switch-posts 클릭시 호출
+  const showPosts = () => {
+    setActiveTab("posts");
+  };
 
-    //switch-comments 클릭시 호출
-    const showComments = () => {
-        setActiveTab("comments");
-    };
+  //switch-comments 클릭시 호출
+  const showComments = () => {
+    setActiveTab("comments");
+  };
 
-
-  console.log("myInfo : ", myInfo);
-  console.log("myInfo.nickname : ", myInfo.nickname);
+  console.log("userInfo : ", userInfo);
+  console.log("userInfo.nickname : ", userInfo.nickname);
   return (
     <>
       <header>
@@ -28,29 +30,29 @@ function UserProfile({ myInfo }) {
           <BackArrow />
         </div>
         <div className="userInfo">
-          <div className="name">{myInfo[0].nickname}</div>
-          <div className="nickName">@{myInfo[0].user_id}</div>
+          <div className="name">{userInfo.nickname}</div>
+          <div className="nickName">@{userInfo.user_id}</div>
         </div>
       </header>
       <main>
         <div className="userContainer">
           <div className="userPic">
             <div className="pic">
-              <img src={myInfo[0].image_url} alt="" className="proImg" />
+              <img src={userInfo.image_url} alt="" className="proImg" />
             </div>
           </div>
           <div className="userInfo">
-            <div className="name">{myInfo[0].nickname}</div>
-            <div className="nickName">@{myInfo[0].user_id}</div>
-            <div className="introduce">{myInfo[0].introduce}</div>
+            <div className="name">{userInfo.nickname}</div>
+            <div className="nickName">@{userInfo.user_id}</div>
+            <div className="introduce">{userInfo.introduce}</div>
             <div className="editProfile">
               <NavLink
                 to="/editProfile"
                 state={{
-                  user_no: myInfo[0].user_no,
-                  nickname: myInfo[0].nickname,
-                  image_url: myInfo[0].image_url,
-                  user_id: myInfo[0].user_id,
+                  user_no: userInfo.user_no,
+                  nickname: userInfo.nickname,
+                  image_url: userInfo.image_url,
+                  user_id: userInfo.user_id,
                 }}
               >
                 <BasicButton btnText="프로필수정" />
