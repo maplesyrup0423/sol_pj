@@ -1,7 +1,7 @@
 // src/App.jsx
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { AuthProvider } from "./Context/AuthContext";
-import "bootstrap/dist/css/bootstrap.min.css";
+//import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import LoginPage from "./components/pages/Login";
 import IntroPage from "./components/pages/IntroLayout/Intro";

@@ -8,6 +8,7 @@ import { FaBookmark } from "react-icons/fa";
 import ProfileImg from "../../../../utills/ProfileImg";
 import ImageViewer from "./ImageViewer";
 import { useState } from "react";
+import Carousel from "react-bootstrap/Carousel";
 
 function Feeds(props) {
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
@@ -42,15 +43,18 @@ function Feeds(props) {
       <div className="feed-image">
         {/* 피드이미지 */}
         {/* TODO 캐로셀 처리  */}
-        {images.map((filePath, index) => (
-          <img
-            key={index}
-            src={filePath}
-            alt={`Post ${props.post_id} image ${index + 1}`}
-            className="feedImg1"
-            onClick={() => openModal(index)} // 이미지 클릭 시 모달 열기
-          />
-        ))}
+        <Carousel slide={false}>
+          {images.map((filePath, index) => (
+            <Carousel.Item key={index}>
+              <img
+                src={filePath}
+                alt={`Post ${props.post_id} image ${index + 1}`}
+                className="feedImg1"
+                onClick={() => openModal(index)} // 이미지 클릭 시 모달 열기
+              />
+            </Carousel.Item>
+          ))}
+        </Carousel>
 
         {/* 모달 컴포넌트 */}
         {isModalOpen && selectedImageIndex !== null && (
