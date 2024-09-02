@@ -1,5 +1,8 @@
 .footer {
-    padding-left: 10px;
+    margin-left: auto;
     display: flex;
+    align-items: center;
+    justify-content: right;
     font-size: 10pt;
+    gap: 5px;
 }
