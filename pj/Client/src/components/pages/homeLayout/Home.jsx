@@ -16,7 +16,6 @@ function HomePage() {
         {userInfo ? (
           <>
             <LeftNav userInfo={userInfo} />
-            {/* <div>{`${userInfo.user_no}은 있다.`}</div> */}
           </>
         ) : (
           <div>Loading...</div>
