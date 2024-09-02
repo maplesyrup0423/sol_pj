@@ -1,55 +1,36 @@
+// src/App.jsx
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
+import { AuthProvider } from "./Context/AuthContext";
 import "./App.css";
-import LoginPage, { action as loginAction } from "./components/pages/Login";
+import LoginPage from "./components/pages/Login";
 import IntroPage from "./components/pages/IntroLayout/Intro";
 import HomePage from "./components/pages/homeLayout/Home";
-import FeedMain from "./components/pages/homeLayout/center/feed/FeedMain";
-import UserProfile from "./components/pages/homeLayout/center/UserProfile/UserProfile";
-import { useState, useEffect } from "react";
-import axios from "axios";
+// import FeedMain from "./components/pages/homeLayout/center/feed/FeedMain";
+// import UserProfile from "./components/pages/homeLayout/center/UserProfile/UserProfile";
 
 function App() {
-  // !로그인 회원 정보는 나중에 토큰으로 변경 예정
-  //! 지금까지 제작한 컴포넌트들의 값을 위해 최상단에 임시 하드코딩함
-  const [myInfo, setMyInfo] = useState([]);
-
-  useEffect(() => {
-    const myInfoCallApi = async () => {
-      try {
-        const response = await axios.get("/api/userProfileInfo");
-        setMyInfo(response.data);
-      } catch (err) {
-        console.error("Axios error:", err);
-      }
-    };
-
-    myInfoCallApi();
-  }, []);
-
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <HomePage myInfo={myInfo} />,
-      children: [
-        {
-          path: "/",
-          element: <FeedMain myInfo={myInfo} />, //처음에 보일 화면 아직 처리 안함
-        },
-        {
-          path: "/post/:boardId",
-          element: <FeedMain myInfo={myInfo} />, // 게시판 ID에 따라 데이터를 처리할 페이지
-        },
-        {
-          path: "/myPage",
-          element: <UserProfile myInfo={myInfo} />, // 마이페이지
-        },
-      ],
+      element: <HomePage />,
+      // children: [
+      //   // {
+      //   //   path: "/",
+      //   //   element: <FeedMain />,
+      //   // },
+      //   // {
+      //   //   path: "/post/:boardId",
+      //   //   element: <FeedMain />,
+      //   // },
+      //   // {
+      //   //   path: "/myPage",
+      //   //   element: <UserProfile />,
+      //   // },
+      // ],
     },
     {
       path: "/login",
       element: <LoginPage />,
-      action: loginAction,
     },
     {
       path: "/intro",
@@ -58,9 +39,9 @@ function App() {
   ]);
 
   return (
-    <>
+    <AuthProvider>
       <RouterProvider router={router} />
-    </>
+    </AuthProvider>
   );
 }
 

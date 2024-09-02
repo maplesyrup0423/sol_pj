@@ -1,23 +1,31 @@
-import "./Login.css";
-import { useState } from "react";
+// src/components/pages/Login.jsx
+import { useState, useContext } from "react";
 import { FaUser, FaLock } from "react-icons/fa";
-import { Form, redirect } from "react-router-dom";
+import { AuthContext } from "../../Context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import "./Login.css";
 
 function LoginPage() {
-    //아이디와 비밀번호 스테이트
+    const { login } = useContext(AuthContext);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
-    function nameInputChange(e) {
-        setUsername(e.target.value);
-    }
-    function passInputChange(e) {
-        setPassword(e.target.value);
-    }
+    const handleLogin = async (event) => {
+        event.preventDefault();
+        try {
+            await login(username, password);
+            // 로그인 성공 시 리디렉션
+            navigate("/");
+        } catch (error) {
+            alert("로그인 실패: " + error.message);
+        }
+    };
+
     return (
         <div className="log-container">
             <div className="log-wrapper">
-                <Form method="POST">
+                <form method="POST" onSubmit={handleLogin}>
                     <h1>Login</h1>
                     <div className="input-box">
                         <input
@@ -25,7 +33,7 @@ function LoginPage() {
                             placeholder="Username"
                             required
                             value={username}
-                            onChange={nameInputChange}
+                            onChange={(e) => setUsername(e.target.value)}
                             name="username"
                         />
                         <FaUser className="icon" />
@@ -36,7 +44,7 @@ function LoginPage() {
                             placeholder="Password"
                             required
                             value={password}
-                            onChange={passInputChange}
+                            onChange={(e) => setPassword(e.target.value)}
                             name="password"
                         />
                         <FaLock className="icon" />
@@ -50,47 +58,17 @@ function LoginPage() {
                         <a href="/">비밀번호를 잃어버렸습니까?</a>
                     </div>
 
-                    <button>로그인</button>
+                    <button type="submit">로그인</button>
 
                     <div className="register-link">
                         <p>
                             계정이 없으신가요? <a href="/">가입하기</a>
                         </p>
                     </div>
-                </Form>
+                </form>
             </div>
         </div>
     );
 }
 
 export default LoginPage;
-
-export async function action({ request }) {
-    const formData = await request.formData();
-    const username = formData.get("username");
-    const password = formData.get("password");
-
-    const response = await fetch("http://localhost:5000/login", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            
-        },
-        body: JSON.stringify({ username, password }),
-        credentials: 'include'
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-        sessionStorage.setItem("isLogin", true);
-        sessionStorage.setItem("username", username);
-        localStorage.setItem("accessToken", data.accessToken);
-        return redirect("/");
-    } else {
-        return {
-            success: false,
-            message: data.message || "로그인에 실패했습니다.",
-        };
-    }
-}
