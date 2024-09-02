@@ -1,7 +1,9 @@
 {
   "dependencies": {
+    "bootstrap": "^5.3.3",
     "concurrently": "^8.2.2",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "react-bootstrap": "^2.10.4"
   },
   "scripts": {
     "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
