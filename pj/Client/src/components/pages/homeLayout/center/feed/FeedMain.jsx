@@ -6,7 +6,6 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useContext } from "react";
 import { AuthContext } from "../../../../../Context/AuthContext";
-import { Link } from "react-router-dom";
 
 function FeedMain() {
   const { userInfo } = useContext(AuthContext);
