@@ -40,6 +40,11 @@ INSERT INTO posts VALUES (NULL, 'img test post', 1, NOW(), NULL, 1, 0, 0);
 
 select * from posts;
 -- DELETE FROM posts WHERE post_id=2;
+
+
+
+
+select * from refreshtokens;
 -- SHOW TABLE STATUS LIKE 'posts';
 -- ALTER TABLE posts AUTO_INCREMENT = 1;
 
@@ -60,3 +65,22 @@ INSERT INTO password values(4,4,10,1234,now());
 INSERT INTO password values(5,5,10,1234,now());
 INSERT INTO password values(6,6,10,1234,now());
 SELECT * FROM password;
+
+-- 좋아요
+INSERT INTO post_likes VALUES(NULL, 11,2, NOW());
+INSERT INTO post_likes VALUES(NULL, 11,3, NOW());
+INSERT INTO post_likes VALUES(NULL, 11,4, NOW());
+INSERT INTO post_likes VALUES(NULL, 11,5, NOW());
+INSERT INTO post_likes VALUES(NULL, 11,6, NOW());
+INSERT INTO post_likes VALUES(NULL, 9,1, NOW());
+INSERT INTO post_likes VALUES(NULL, 9,2, NOW());
+
+-- 댓글
+
+INSERT INTO comments VALUES(NULL,11,NULL,'댓글1',5,NOW(),NULL,0);
+INSERT INTO comments VALUES(NULL,11,1,'1-1',2,NOW(),NULL,0);
+INSERT INTO comments VALUES(NULL,11,2,'1-1-1',5,NOW(),NULL,0);
+INSERT INTO comments VALUES(NULL,11,NULL,'댓글2',4,NOW(),NULL,0);
+INSERT INTO comments VALUES(NULL,11,4,'2-1',5,NOW(),NULL,0);
+INSERT INTO comments VALUES(NULL,11,4,'2-2',1,NOW(),NULL,0);
+INSERT INTO comments VALUES(NULL,11,6,'2-2-1',5,NOW(),NULL,0);
