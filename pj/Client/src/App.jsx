@@ -6,6 +6,7 @@ import IntroPage from "./components/pages/IntroLayout/Intro";
 import HomePage from "./components/pages/homeLayout/Home";
 import FeedMain from "./components/pages/homeLayout/center/feed/FeedMain";
 import UserProfile from "./components/pages/homeLayout/center/UserProfile/UserProfile";
+import MyProfile from "./components/pages/homeLayout/center/UserProfile/EditProfile";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -43,6 +44,10 @@ function App() {
         {
           path: "/myPage",
           element: <UserProfile myInfo={myInfo} />, // 마이페이지
+        },
+        {
+          path: "/editProfile",
+          element: <MyProfile myInfo={myInfo} />, // 프로필수정
         },
       ],
     },
