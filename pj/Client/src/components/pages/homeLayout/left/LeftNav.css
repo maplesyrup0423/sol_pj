@@ -52,3 +52,7 @@
   left: 0;
   right: 0;
 }
+
+.no-hover:hover {
+  background-color: black !important;
+}
