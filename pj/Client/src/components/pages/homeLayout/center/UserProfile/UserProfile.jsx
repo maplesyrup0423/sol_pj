@@ -1,23 +1,21 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import "./UserProfile.css";
 import BackArrow from "../../../../utills/buttons/BackArrow";
 import BasicButton from "../../../../utills/buttons/BasicButton";
-import { NavLink } from "react-router-dom";
 
 function UserProfile({ myInfo }) {
-    //현재 선택된 탭 관리
-    const [activeTab, setActiveTab] = useState("posts");
+  //현재 선택된 탭 관리
+  const [activeTab, setActiveTab] = useState("posts");
 
-    //switch-posts 클릭시 호출
-    const showPosts = () => {
-        setActiveTab("posts");
-    };
+  //switch-posts 클릭시 호출
+  const showPosts = () => {
+    setActiveTab("posts");
+  };
 
-    //switch-comments 클릭시 호출
-    const showComments = () => {
-        setActiveTab("comments");
-    };
-
+  //switch-comments 클릭시 호출
+  const showComments = () => {
+    setActiveTab("comments");
+  };
 
   console.log("myInfo : ", myInfo);
   console.log("myInfo.nickname : ", myInfo.nickname);
@@ -44,17 +42,7 @@ function UserProfile({ myInfo }) {
             <div className="nickName">@{myInfo[0].user_id}</div>
             <div className="introduce">{myInfo[0].introduce}</div>
             <div className="editProfile">
-              <NavLink
-                to="/editProfile"
-                state={{
-                  user_no: myInfo[0].user_no,
-                  nickname: myInfo[0].nickname,
-                  image_url: myInfo[0].image_url,
-                  user_id: myInfo[0].user_id,
-                }}
-              >
-                <BasicButton btnText="프로필수정" />
-              </NavLink>
+              <BasicButton btnText="프로필수정" />
             </div>
           </div>
         </div>

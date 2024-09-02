@@ -1,35 +1,21 @@
-.rsidebar main {
-    height: 90vh;
-}
-
 .rsidebar {
-    width: 27%;
-    background-color: #000000;
-    /* border-left: 1px solid white; */
-    box-sizing: border-box;
-    color: white;
-    position: fixed;
-    height: 100%;
-    padding-top: 20px;
-    z-index: 1;
+  width: 27%;
+  background-color: #000000;
+  /* border-left: 1px solid white; */
+  box-sizing: border-box;
+  color: white;
+  position: fixed;
+  height: 100%;
+  padding-top: 20px;
+  z-index: 1;
 }
 
 .rsidebar ul {
-    list-style-type: none;
-    padding: 0;
+  list-style-type: none;
+  padding: 0;
 }
 
 .rsidebar ul li {
-    padding: 10px 20px;
-    text-align: left;
-}
-
-.activeTab {
-    position: relative;
-    width: 250px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 15px;
-    gap: 70px;
+  padding: 10px 20px;
+  text-align: left;
 }
