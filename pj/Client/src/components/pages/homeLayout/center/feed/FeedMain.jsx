@@ -42,13 +42,7 @@ function FeedMain() {
       <div className="posting">
         {/* 글쓰기 부분 
         todo DB insert문 만들기*/}
-        {userInfo ? (
-          <Writing userInfo={userInfo} boardId={boardId} />
-        ) : (
-          <h5>
-            <Link to={"/login"}>로그인 해주세욤</Link>
-          </h5>
-        )}
+        {userInfo ? <Writing userInfo={userInfo} boardId={boardId} /> : ""}
       </div>
 
       <div className="feed">
