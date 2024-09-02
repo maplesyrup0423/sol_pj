@@ -1,36 +1,20 @@
+// src/App.jsx
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
+import { AuthProvider } from "./Context/AuthContext";
 import "./App.css";
-import LoginPage, { action as loginAction } from "./components/pages/Login";
+import LoginPage from "./components/pages/Login";
 import IntroPage from "./components/pages/IntroLayout/Intro";
 import HomePage from "./components/pages/homeLayout/Home";
 import FeedMain from "./components/pages/homeLayout/center/feed/FeedMain";
 import UserProfile from "./components/pages/homeLayout/center/UserProfile/UserProfile";
 import MyProfile from "./components/pages/homeLayout/center/UserProfile/EditProfile";
 import { useState, useEffect } from "react";
-import axios from "axios";
 
 function App() {
-  // !로그인 회원 정보는 나중에 토큰으로 변경 예정
-  //! 지금까지 제작한 컴포넌트들의 값을 위해 최상단에 임시 하드코딩함
-  const [myInfo, setMyInfo] = useState([]);
-
-  useEffect(() => {
-    const myInfoCallApi = async () => {
-      try {
-        const response = await axios.get("/api/userProfileInfo");
-        setMyInfo(response.data);
-      } catch (err) {
-        console.error("Axios error:", err);
-      }
-    };
-
-    myInfoCallApi();
-  }, []);
-
   const router = createBrowserRouter([
     {
       path: "/",
+
       element: <HomePage myInfo={myInfo} />,
       children: [
         {
@@ -50,11 +34,11 @@ function App() {
           element: <MyProfile myInfo={myInfo} />, // 프로필수정
         },
       ],
+
     },
     {
       path: "/login",
       element: <LoginPage />,
-      action: loginAction,
     },
     {
       path: "/intro",
@@ -63,9 +47,9 @@ function App() {
   ]);
 
   return (
-    <>
+    <AuthProvider>
       <RouterProvider router={router} />
-    </>
+    </AuthProvider>
   );
 }
 

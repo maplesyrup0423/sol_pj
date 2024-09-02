@@ -1,8 +1,18 @@
+// api.js
 import axios from 'axios';
 
 const api = axios.create({
   baseURL: 'http://localhost:5000',
 });
+
+let isRefreshing = false;
+let refreshSubscribers = [];
+
+// 리프레시 토큰이 성공적으로 갱신되면 대기 중인 요청들을 처리합니다.
+const onRefreshed = (newAccessToken) => {
+  refreshSubscribers.forEach(callback => callback(newAccessToken));
+  refreshSubscribers = [];
+};
 
 // 요청 인터셉터
 api.interceptors.request.use(
@@ -24,27 +34,36 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    // 액세스 토큰이 만료되어 401 에러가 발생한 경우
     if (error.response.status === 401 && !originalRequest._retry) {
+      if (isRefreshing) {
+        // 리프레시 토큰 요청 중이면 새로 생긴 요청은 큐에 추가
+        return new Promise((resolve) => {
+          refreshSubscribers.push((newAccessToken) => {
+            originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+            resolve(api(originalRequest));
+          });
+        });
+      }
+
       originalRequest._retry = true;
+      isRefreshing = true;
 
       try {
-        // 리프레시 토큰을 사용하여 새 액세스 토큰 요청
-        const response = await axios.post('/refresh-token');
+        const response = await axios.post('http://localhost:5000/refresh-token', {}, {
+          withCredentials: true
+        });
         const newAccessToken = response.data.accessToken;
 
-        // 새 액세스 토큰을 로컬 스토리지에 저장
         localStorage.setItem('accessToken', newAccessToken);
+        api.defaults.headers['Authorization'] = `Bearer ${newAccessToken}`;
 
-        // 새 액세스 토큰으로 헤더 업데이트
-        originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+        isRefreshing = false;
+        onRefreshed(newAccessToken);
 
-        // 원래 요청 재시도
         return api(originalRequest);
       } catch (refreshError) {
-        // 리프레시 토큰도 만료된 경우 로그아웃 처리
+        isRefreshing = false;
         localStorage.removeItem('accessToken');
-        // 로그인 페이지로 리다이렉트 (예시)
         window.location.href = '/login';
         return Promise.reject(refreshError);
       }
