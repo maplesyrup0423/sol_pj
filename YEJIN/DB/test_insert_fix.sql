@@ -55,7 +55,6 @@ INSERT INTO post_files VALUES (NULL, 9,'https://cdn.pixabay.com/photo/2018/09/15
 INSERT INTO post_files VALUES (NULL, 11,'https://cdn.pixabay.com/photo/2023/12/28/14/09/cat-8474233_1280.png',NOW());
 INSERT INTO post_files VALUES (NULL, 11,'https://cdn.pixabay.com/photo/2021/10/27/19/09/cat-6748193_1280.jpg',NOW());
 INSERT INTO post_files VALUES (NULL, 11,'https://cdn.pixabay.com/photo/2022/12/05/05/20/cat-7635983_1280.png',NOW());
-
 INSERT INTO post_files VALUES (NULL, 12,'https://cdn.pixabay.com/photo/2021/11/05/19/30/animal-6771900_1280.jpg',NOW());
 INSERT INTO post_files VALUES (NULL, 12,'https://cdn.pixabay.com/photo/2023/05/27/22/56/kitten-8022452_1280.jpg',NOW());
 INSERT INTO post_files VALUES (NULL, 12,'https://cdn.pixabay.com/photo/2023/12/07/19/45/tiger-8436227_1280.jpg',NOW());
