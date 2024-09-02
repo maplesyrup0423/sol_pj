@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 function LeftNav({ userInfo }) {
   return (
-    <div className="sidebar">
+    <nav className="sidebar">
       <ul>
         <li>
           <div className="logoCon">
@@ -23,7 +23,7 @@ function LeftNav({ userInfo }) {
           <BoardInfo />
         </li>
 
-        <li>
+        <li id="ProfileCard_li">
           <Link to={"/myPage"}>
             {userInfo ? (
               <ProfileCard
@@ -38,7 +38,7 @@ function LeftNav({ userInfo }) {
           </Link>
         </li>
       </ul>
-    </div>
+    </nav>
   );
 }
 
