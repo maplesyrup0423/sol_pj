@@ -1,21 +1,34 @@
 import "./Home.css";
-import LeftNav from "./left/LeftNav.jsx";
-import RightNav from "./right/RightNav.jsx";
+import LeftNav from "./left/LeftNav";
+import RightNav from "./right/RightNav";
 import { Outlet } from "react-router-dom";
+import { useContext } from 'react';
+import { AuthContext } from "../../../Context/AuthContext";
 
-function HomePage({ myInfo }) {
+function HomePage() {
+ const { userInfo } = useContext(AuthContext);
+ //사용 <div>{`${userInfo.user_no}은 있다.`}</div>
+  // 콘솔 로그로 userInfo 확인
+  console.log("UserInfo:", userInfo);
   return (
     <div className="container">
       <div className="leftNav">
-        {myInfo.length > 0 && <LeftNav myInfo={myInfo} />}
+        {userInfo ? (
+          <>  
+            {/* <LeftNav userInfo={userInfo} /> */}
+            <div>{`${userInfo.user_no}은 있다.`}</div>
+          </>
+        ) : (
+          <div>Loading...</div>
+        )}
       </div>
 
       <div className="center">
-        <Outlet />
+        {/* <Outlet /> */}
       </div>
 
       <div className="rightNav">
-        <RightNav />
+        {/* <RightNav /> */}
       </div>
     </div>
   );
