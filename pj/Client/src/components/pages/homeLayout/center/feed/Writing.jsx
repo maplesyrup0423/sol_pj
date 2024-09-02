@@ -1,14 +1,14 @@
 import ProfileImg from "../../../../utills/ProfileImg";
 import "./Writing.css";
 import BasicButton from "../../../../utills/buttons/BasicButton";
-function Writing({ myInfo, boardId }) {
+function Writing({ userInfo, boardId }) {
   return (
     <div className="writingArea">
       <table className="Wtable">
         <tbody>
           <tr>
             <td className="ProfileImg">
-              <ProfileImg image_url={myInfo[0].image_url} />
+              <ProfileImg image_url={userInfo.image_url} />
             </td>
             <td className="">
               <textarea

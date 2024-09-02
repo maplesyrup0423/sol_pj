@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./UserProfile.css";
 import BackArrow from "../../../../utills/buttons/BackArrow";
 import BasicButton from "../../../../utills/buttons/BasicButton";
+import { useContext } from "react";
+import { AuthContext } from "../../../../../Context/AuthContext";
+import { NavLink } from "react-router-dom";
 
-function UserProfile({ myInfo }) {
+function UserProfile() {
+  const { userInfo } = useContext(AuthContext);
   //현재 선택된 탭 관리
   const [activeTab, setActiveTab] = useState("posts");
 
@@ -17,8 +21,8 @@ function UserProfile({ myInfo }) {
     setActiveTab("comments");
   };
 
-  console.log("myInfo : ", myInfo);
-  console.log("myInfo.nickname : ", myInfo.nickname);
+  console.log("userInfo : ", userInfo);
+  console.log("userInfo.nickname : ", userInfo.nickname);
   return (
     <>
       <header>
@@ -26,23 +30,33 @@ function UserProfile({ myInfo }) {
           <BackArrow />
         </div>
         <div className="userInfo">
-          <div className="name">{myInfo[0].nickname}</div>
-          <div className="nickName">@{myInfo[0].user_id}</div>
+          <div className="name">{userInfo.nickname}</div>
+          <div className="nickName">@{userInfo.user_id}</div>
         </div>
       </header>
       <main>
         <div className="userContainer">
           <div className="userPic">
             <div className="pic">
-              <img src={myInfo[0].image_url} alt="" className="proImg" />
+              <img src={userInfo.image_url} alt="" className="proImg" />
             </div>
           </div>
           <div className="userInfo">
-            <div className="name">{myInfo[0].nickname}</div>
-            <div className="nickName">@{myInfo[0].user_id}</div>
-            <div className="introduce">{myInfo[0].introduce}</div>
+            <div className="name">{userInfo.nickname}</div>
+            <div className="nickName">@{userInfo.user_id}</div>
+            <div className="introduce">{userInfo.introduce}</div>
             <div className="editProfile">
-              <BasicButton btnText="프로필수정" />
+              <NavLink
+                to="/editProfile"
+                state={{
+                  user_no: userInfo.user_no,
+                  nickname: userInfo.nickname,
+                  image_url: userInfo.image_url,
+                  user_id: userInfo.user_id,
+                }}
+              >
+                <BasicButton btnText="프로필수정" />
+              </NavLink>
             </div>
           </div>
         </div>
