@@ -2,12 +2,6 @@ import "./Messenger.css";
 import MessengerUser from "./MessengerUser";
 
 function Messenger() {
-    const user = {
-        name: "요한",
-        user_no: 6,
-        chatList: 2,
-    };
-
     const chatList = [
         {
             user_no: 6,
@@ -23,6 +17,15 @@ function Messenger() {
             chat_no: 2,
             img: "",
             room_name: "2번 채팅방",
+            unread_count: 5,
+            last_date: "2024-09-01",
+            last_chat: "작업이최고야",
+        },
+        {
+            user_no: 6,
+            chat_no: 2,
+            img: "",
+            room_name: "3번 채팅방",
             unread_count: 5,
             last_date: "2024-09-01",
             last_chat: "작업이최고야",

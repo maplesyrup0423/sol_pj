@@ -16,6 +16,11 @@ function FriendList() {
                 f_name: "친구2",
                 f_unread_count: 5,
             },
+            {
+                f_no: 1,
+                f_name: "친구3",
+                f_unread_count: 10,
+            },
         ],
     };
 
