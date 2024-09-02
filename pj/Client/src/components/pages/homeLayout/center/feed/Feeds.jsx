@@ -78,9 +78,9 @@ function Feeds(props) {
           {/* 좋아요는 로그인한 사람에 따라 하트가 달라짐 */}
           <AiFillHeart size="30" />
           <AiOutlineHeart size="30" />
-          <span> &nbsp;{props.likes_count} &nbsp; </span>
+          <span> &nbsp;{props.like_count} &nbsp; </span>
           <IoChatbubbleOutline size="30" />
-          <span> &nbsp;5 </span>
+          <span> &nbsp;{props.comment_count} </span>
         </div>
         <div className="share-icons">
           {/* 공유 등 오른쪽 부분 */}
