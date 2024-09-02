@@ -51,7 +51,7 @@ function Feeds(props) {
               onClick={() => openModal(0)} // 이미지 클릭 시 모달 열기
             />
           ) : (
-            <Carousel slide={false}>
+            <Carousel interval={null}>
               {images.map((filePath, index) => (
                 <Carousel.Item key={index}>
                   <img
