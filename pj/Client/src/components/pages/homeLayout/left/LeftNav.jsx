@@ -10,12 +10,13 @@ function LeftNav({ userInfo }) {
         <li>
           <div className="logoCon">
             <button className="logoButton">
-              <img
-                className="logo"
-                src="/web-development.png"
-                alt="로고 이미지"
-              />
-              {/* 로고를 누르면 새로고침 */}
+              <Link to={"/"} className="no-hover">
+                <img
+                  className="logo"
+                  src="/web-development.png"
+                  alt="로고 이미지"
+                />
+              </Link>
             </button>
           </div>
         </li>
@@ -33,7 +34,9 @@ function LeftNav({ userInfo }) {
                 user_id={userInfo.user_id}
               />
             ) : (
-              <h5>로그인 해주세욤</h5>
+              <h5>
+                <Link to={"/login"}>로그인 해주세욤</Link>
+              </h5>
             )}
           </Link>
         </li>
