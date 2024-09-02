@@ -13,15 +13,8 @@ function HomePage() {
   return (
     <div className="homeContainer">
       <div className="leftNav">
-        {userInfo ? (
-          <>
-            <LeftNav userInfo={userInfo} />
-          </>
-        ) : (
-          <div>Loading...</div>
-        )}
+        <LeftNav userInfo={userInfo} />
       </div>
-
       <div className="center">
         <Outlet />
       </div>

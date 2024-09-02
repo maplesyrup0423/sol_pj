@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useContext } from "react";
 import { AuthContext } from "../../../../../Context/AuthContext";
+import { Link } from "react-router-dom";
 
 function FeedMain() {
   const { userInfo } = useContext(AuthContext);
@@ -41,7 +42,13 @@ function FeedMain() {
       <div className="posting">
         {/* 글쓰기 부분 
         todo DB insert문 만들기*/}
-        {userInfo ? <Writing userInfo={userInfo} boardId={boardId} /> : "로딩"}
+        {userInfo ? (
+          <Writing userInfo={userInfo} boardId={boardId} />
+        ) : (
+          <h5>
+            <Link to={"/login"}>로그인 해주세욤</Link>
+          </h5>
+        )}
       </div>
 
       <div className="feed">

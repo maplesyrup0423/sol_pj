@@ -34,7 +34,9 @@ function LeftNav({ userInfo }) {
                 user_id={userInfo.user_id}
               />
             ) : (
-              <h5>로그인 해주세욤</h5>
+              <h5>
+                <Link to={"/login"}>로그인 해주세욤</Link>
+              </h5>
             )}
           </Link>
         </li>
