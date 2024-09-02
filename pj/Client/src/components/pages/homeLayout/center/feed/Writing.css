@@ -1,29 +1,37 @@
-.writingArea {
-  width: 100%;
+.write-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
   border-bottom: 1px solid white;
 }
 
-.writingArea textarea {
-  width: 98%;
+.write-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.profile-image {
+  flex-shrink: 0;
+}
+
+.textarea-container {
+  flex-grow: 1;
+}
+.textarea-container textarea {
+  width: 100%;
   resize: none;
   background-color: black;
   border: none;
   color: white;
+  overflow: hidden;
 }
-
-.writingArea textarea:focus {
+.textarea-container textarea:focus {
   outline: none;
 }
 
-/* .Wtable td {
-  border: 1px solid red;
-} */
-.Wtable {
-  width: 100%;
-}
-.writingArea .ProfileImg {
-  width: 5%;
-}
-.writingArea .btn {
-  text-align: right;
+.button-row {
+  display: flex;
+  justify-content: flex-end;
 }
