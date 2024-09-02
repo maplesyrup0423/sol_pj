@@ -1,7 +1,13 @@
+import { NavLink } from "react-router-dom";
 import ProfileImg from "../../../utills/ProfileImg";
+import BasicButton from "../../../utills/buttons/BasicButton";
 import "./ProfileCard.css";
 
 import { IoIosMore } from "react-icons/io";
+
+const moreClick = () => {
+  alert("클릭");
+};
 
 function ProfileCard(props) {
   //console.log("ProfileCard props:", props);
@@ -21,7 +27,9 @@ function ProfileCard(props) {
             </td>
             <td rowSpan={2}>
               {/*프로필 자세히 */}
-              <IoIosMore />
+              <NavLink to="/" onClick={moreClick}>
+                <IoIosMore />
+              </NavLink>
             </td>
           </tr>
 
