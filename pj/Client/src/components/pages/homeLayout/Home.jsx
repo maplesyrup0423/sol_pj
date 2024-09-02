@@ -11,7 +11,7 @@ function HomePage() {
   // 콘솔 로그로 userInfo 확인
   console.log("UserInfo:", userInfo);
   return (
-    <div className="container">
+    <div className="homeContainer">
       <div className="leftNav">
         {userInfo ? (
           <>
