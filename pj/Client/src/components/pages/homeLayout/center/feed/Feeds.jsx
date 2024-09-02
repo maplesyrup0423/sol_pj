@@ -42,19 +42,28 @@ function Feeds(props) {
 
       <div className="feed-image">
         {/* 피드이미지 */}
-        {/* TODO 캐로셀 처리  */}
-        <Carousel slide={false}>
-          {images.map((filePath, index) => (
-            <Carousel.Item key={index}>
-              <img
-                src={filePath}
-                alt={`Post ${props.post_id} image ${index + 1}`}
-                className="feedImg1"
-                onClick={() => openModal(index)} // 이미지 클릭 시 모달 열기
-              />
-            </Carousel.Item>
+        {images.length > 0 &&
+          (images.length === 1 ? (
+            <img
+              src={images[0]}
+              alt={`Post ${props.post_id} image 1`}
+              className="feedImg1"
+              onClick={() => openModal(0)} // 이미지 클릭 시 모달 열기
+            />
+          ) : (
+            <Carousel slide={false}>
+              {images.map((filePath, index) => (
+                <Carousel.Item key={index}>
+                  <img
+                    src={filePath}
+                    alt={`Post ${props.post_id} image ${index + 1}`}
+                    className="feedImg1"
+                    onClick={() => openModal(index)} // 이미지 클릭 시 모달 열기
+                  />
+                </Carousel.Item>
+              ))}
+            </Carousel>
           ))}
-        </Carousel>
 
         {/* 모달 컴포넌트 */}
         {isModalOpen && selectedImageIndex !== null && (
