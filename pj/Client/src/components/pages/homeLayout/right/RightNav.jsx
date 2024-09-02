@@ -5,9 +5,9 @@ import Messenger from "./Messenger";
 import Footer from "./Footer";
 import AddMessenger from "./AddMessenger";
 import { useState } from "react";
-import UserList from "./UserList";
-import { BsChatLeftDots, BsChatLeftDotsFill } from "react-icons/bs";
+import { BsChatLeftDotsFill } from "react-icons/bs";
 import { FaUserGroup } from "react-icons/fa6";
+import FriendList from "./friendList";
 
 function RightNav() {
     const [activeTab, setActiveTab] = useState("messenger");
@@ -43,10 +43,10 @@ function RightNav() {
                         </div>
                         {activeTab === "messenger" && <Messenger />}
                         {/* 반복 */}
-                        {activeTab === "userList" && <UserList />}
+                        {activeTab === "userList" && <FriendList />}
+                        <AddMessenger />
                     </li>
                 </ul>
-                <AddMessenger />
             </main>
             <Footer />
         </div>
