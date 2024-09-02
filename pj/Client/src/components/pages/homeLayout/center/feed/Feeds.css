@@ -1,6 +1,7 @@
 .feed-container {
   background-color: black;
   width: 100%;
+  min-width: 550px;
   padding: 5px;
   box-sizing: border-box;
   border-bottom: 1px solid white;
@@ -9,6 +10,10 @@
 .moreA {
   text-decoration: none; /* 링크의 밑줄 제거 */
   color: inherit; /* 링크의 색상 제거 */
+}
+.feed-image {
+  width: 500px;
+  text-align: center;
 }
 .feedImg1 {
   width: 470px;
