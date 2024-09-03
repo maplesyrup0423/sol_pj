@@ -14,19 +14,19 @@ function FeedMain() {
   //todo 추후 유저가 선택한 게시판 중 가장 높은 id 번호로 지정되게 수정 예정
   const boardId = paramBoardId || 1; // boardId가 undefined일 때 기본값 1 설정
   const [data, setData] = useState([]);
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`/api/post?board_info_id=${boardId}`);
+      setData(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`/api/post?board_info_id=${boardId}`);
-        setData(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
     fetchData();
   }, [boardId]);
+
   return (
     <div className="feed_main">
       <div className="order">
@@ -41,7 +41,15 @@ function FeedMain() {
       <div className="posting">
         {/* 글쓰기 부분 
         todo DB insert문 만들기*/}
-        {userInfo ? <Writing userInfo={userInfo} boardId={boardId} /> : ""}
+        {userInfo ? (
+          <Writing
+            userInfo={userInfo}
+            boardId={boardId}
+            refreshPosts={fetchData}
+          />
+        ) : (
+          ""
+        )}
       </div>
 
       <div className="feed">
