@@ -1,56 +1,31 @@
-import "./Login.css";
-import { useState } from "react";
+// src/components/pages/Login.jsx
+import { useState, useContext } from "react";
 import { FaUser, FaLock } from "react-icons/fa";
-import axios from "axios";
+import { AuthContext } from "../../Context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import "./Login.css";
 
 function LoginPage() {
-    //아이디와 비밀번호 스테이트
+    const { login } = useContext(AuthContext);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    //로그인 버튼 누르면 실행되는 함수
-    const submitHandler = async (e) => {
-        //공백값 방지함수
-        e.preventDefault();
+    const navigate = useNavigate();
 
-        //사용자정보가 많을시 폼데이터로 모아서 전달 가능(지금은 안씀)
-        // const formData = new FormData(e.target);
-        // const payload = Object.fromEntries(formData);
-
-        const user = { username, password };
-        console.log("아이디 : ", user.username);
-        console.log("비밀번호 : ", user.password);
-
-        //서버로 데이터 전송
+    const handleLogin = async (event) => {
+        event.preventDefault();
         try {
-            //이거 ^^l발 왜안됨? 요청이 보내지지가 않아 병123신같음
-            //해결 ^^
-            const response = await axios.post(
-                "http://localhost:5000/login",
-                user
-            );
-
-            if (response.status === 200) {
-                console.log("리디렉션 준비", response.data);
-                // 로그인 성공 시 미리 준비된 redirect주소로 이동!
-                window.location.href = response.data.redirectUrl;
-            } else {
-                console.error("로그인 실패:", response.statusText);
-            }
+            await login(username, password);
+            // 로그인 성공 시 리디렉션
+            navigate("/");
         } catch (error) {
-            //왜 맨날 여기로 오냐고 ㅋㅋ
-            console.error("로그인 요청 중 오류 발생:", error.message);
+            alert("로그인 실패: " + error.message);
         }
     };
-    function nameInputChange(e) {
-        setUsername(e.target.value);
-    }
-    function passInputChange(e) {
-        setPassword(e.target.value);
-    }
+
     return (
         <div className="log-container">
             <div className="log-wrapper">
-                <form onSubmit={submitHandler}>
+                <form method="POST" onSubmit={handleLogin}>
                     <h1>Login</h1>
                     <div className="input-box">
                         <input
@@ -58,7 +33,7 @@ function LoginPage() {
                             placeholder="Username"
                             required
                             value={username}
-                            onChange={nameInputChange}
+                            onChange={(e) => setUsername(e.target.value)}
                             name="username"
                         />
                         <FaUser className="icon" />
@@ -69,7 +44,7 @@ function LoginPage() {
                             placeholder="Password"
                             required
                             value={password}
-                            onChange={passInputChange}
+                            onChange={(e) => setPassword(e.target.value)}
                             name="password"
                         />
                         <FaLock className="icon" />

@@ -2,23 +2,31 @@ import "./FeedMain.css";
 import Feeds from "./Feeds";
 import Writing from "./Writing";
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import { useContext } from "react";
+import { AuthContext } from "../../../../../Context/AuthContext";
 
-function FeedMain(props) {
-  const [post, setPost] = useState([]);
+function FeedMain() {
+  const { userInfo } = useContext(AuthContext);
+  const { boardId: paramBoardId } = useParams(); // URL 파라미터로 게시판 ID 가져오기
+  //! 메인 화면 첫 페이지에 보여줄 개사판 1번으로 하드코딩
+  //todo 추후 유저가 선택한 게시판 중 가장 높은 id 번호로 지정되게 수정 예정
+  const boardId = paramBoardId || 1; // boardId가 undefined일 때 기본값 1 설정
+  const [data, setData] = useState([]);
 
   useEffect(() => {
-    const postCallApi = async () => {
-      //유저 번호, 아이디, 프로필사진, 닉네임 받아옴
-      const response = await fetch("/api/post");
-      const body = await response.json();
-      console.log(body); // 서버 응답 확인용
-      return body;
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`/api/post?board_info_id=${boardId}`);
+        setData(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
-    postCallApi()
-      .then((res) => setPost(res))
-      .catch((err) => console.log(err));
-  }, []);
-  console.log("post:", post);
+
+    fetchData();
+  }, [boardId]);
   return (
     <div className="feed_main">
       <div className="order">
@@ -33,15 +41,12 @@ function FeedMain(props) {
       <div className="posting">
         {/* 글쓰기 부분 
         todo DB insert문 만들기*/}
-        <Writing image_url={props.image_url} />
+        {userInfo ? <Writing userInfo={userInfo} boardId={boardId} /> : "로딩"}
       </div>
 
       <div className="feed">
-        {/* 피드부분
-          todo 게시판DB 받아오기 현재 하드코딩
-        */}
-        {post.length > 0 ? (
-          post.map((p) => <Feeds key={p.post_id} {...p} />)
+        {data.length > 0 ? (
+          data.map((p) => <Feeds key={p.post_id} {...p} />)
         ) : (
           <h1>Loading...</h1>
         )}

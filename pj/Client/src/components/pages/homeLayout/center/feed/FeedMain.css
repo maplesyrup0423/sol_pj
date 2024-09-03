@@ -24,4 +24,6 @@
 .feed_main {
   height: 100vh;
   overflow-y: auto;
+  scrollbar-width: none; /* 스크롤바의 너비 (auto, thin, none) */
+  scrollbar-color: #2c2c2c #000000; /* 스크롤바 손잡이와 트랙 색상 */
 }

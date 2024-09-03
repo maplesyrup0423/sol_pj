@@ -1,12 +1,13 @@
 .sidebar {
   width: 23%;
   background-color: #000000;
-  border-right: 1px solid white;
+  /* border-right: 1px solid white; */
   box-sizing: border-box;
   color: white;
   position: fixed;
   height: 100%;
   padding-top: 20px;
+  z-index: 1;
 }
 
 .sidebar ul {

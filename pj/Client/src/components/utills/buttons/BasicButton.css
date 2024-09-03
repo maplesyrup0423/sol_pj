@@ -6,10 +6,10 @@
 } */
 
 .mediumButton {
-  border: none;
-  width: 85px;
-  height: 30px;
-  border-radius: 30px;
+    border: none;
+    width: 85px;
+    height: 30px;
+    border-radius: 30px;
 }
 
 /* .smallButton {
@@ -20,16 +20,19 @@
 
 /* 버튼 색 */
 .yellowButton {
-  background-color: #ffcd19;
-  color: white;
+    background-color: #ffcd19;
+    color: white;
 }
 
 .blackButton {
-  background-color: black;
-  color: white;
+    background-color: black;
+    color: white;
 }
 
 .whiteButton {
-  background-color: white;
-  color: black;
+    background-color: white;
+    color: black;
+}
+button {
+    cursor: pointer;
 }
