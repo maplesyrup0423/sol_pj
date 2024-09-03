@@ -2,11 +2,11 @@ import "./Messenger.css";
 import MessengerUser from "./MessengerUser";
 
 function Messenger() {
-    const user = {
-        name: "요한",
-        user_no: 6,
-        chatList: 2,
-    };
+    // const user = {
+    //     name: "요한",
+    //     user_no: 6,
+    //     chatList: 2,
+    // };
 
     const chatList = [
         {

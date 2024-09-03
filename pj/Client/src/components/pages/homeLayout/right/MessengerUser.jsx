@@ -3,6 +3,8 @@ import "./MessengerUser.css";
 function MessengerUser({ ...chat }) {
     return (
         <div className="messengerUser">
+            {/* messengerTable 부분 테이블 태그로 만들어져 있는데
+            css수정할 때 불편한 부분이 많아서 div나 ul>div 로 대체해도 되는지  */}
             <table className="messengerTable">
                 <tr>
                     <td colSpan="3">

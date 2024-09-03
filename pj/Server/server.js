@@ -71,7 +71,5 @@ app.use(UserProfile(conn));
 const PostRoutes = require("./controllers/post");
 app.use(PostRoutes(conn));
 
-
-
 // 'images' 디렉토리의 경로를 절대 경로로 설정
 app.use("/images", express.static(path.join(__dirname, "images")));
