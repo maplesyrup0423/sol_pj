@@ -9,47 +9,52 @@ import HomePage from "./components/pages/homeLayout/Home";
 import FeedMain from "./components/pages/homeLayout/center/feed/FeedMain";
 import UserProfile from "./components/pages/homeLayout/center/UserProfile/UserProfile";
 import MyProfile from "./components/pages/homeLayout/center/UserProfile/EditProfile";
+import SignUp from "./components/pages/SignUp";
 
 function App() {
-  const router = createBrowserRouter([
-    {
-      path: "/",
+    const router = createBrowserRouter([
+        {
+            path: "/",
 
-      element: <HomePage />,
-      children: [
-        {
-          path: "/",
-          element: <FeedMain />, //처음에 보일 화면 아직 처리 안함
+            element: <HomePage />,
+            children: [
+                {
+                    path: "/",
+                    element: <FeedMain />, //처음에 보일 화면 아직 처리 안함
+                },
+                {
+                    path: "/post/:boardId",
+                    element: <FeedMain />, // 게시판 ID에 따라 데이터를 처리할 페이지
+                },
+                {
+                    path: "/myPage",
+                    element: <UserProfile />, // 마이페이지
+                },
+                {
+                    path: "/editProfile",
+                    element: <MyProfile />, // 프로필수정
+                },
+            ],
         },
         {
-          path: "/post/:boardId",
-          element: <FeedMain />, // 게시판 ID에 따라 데이터를 처리할 페이지
+            path: "/login",
+            element: <LoginPage />,
         },
         {
-          path: "/myPage",
-          element: <UserProfile />, // 마이페이지
+            path: "/intro",
+            element: <IntroPage />,
         },
         {
-          path: "/editProfile",
-          element: <MyProfile />, // 프로필수정
+            path: "/signup",
+            element: <SignUp />,
         },
-      ],
-    },
-    {
-      path: "/login",
-      element: <LoginPage />,
-    },
-    {
-      path: "/intro",
-      element: <IntroPage />,
-    },
-  ]);
+    ]);
 
-  return (
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
-  );
+    return (
+        <AuthProvider>
+            <RouterProvider router={router} />
+        </AuthProvider>
+    );
 }
 
 export default App;
