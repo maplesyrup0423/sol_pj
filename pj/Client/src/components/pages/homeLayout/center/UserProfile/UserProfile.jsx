@@ -21,8 +21,8 @@ function UserProfile() {
     setActiveTab("comments");
   };
 
-  console.log("userInfo : ", userInfo);
-  console.log("userInfo.nickname : ", userInfo.nickname);
+  // console.log("userInfo : ", userInfo);
+  // console.log("userInfo.nickname : ", userInfo.nickname);
   return (
     <>
       <header>
@@ -42,21 +42,30 @@ function UserProfile() {
             </div>
           </div>
           <div className="userInfo">
-            <div className="name">{userInfo.nickname}</div>
-            <div className="nickName">@{userInfo.user_id}</div>
-            <div className="introduce">{userInfo.introduce}</div>
-            <div className="editProfile">
-              <NavLink
-                to="/editProfile"
-                state={{
-                  user_no: userInfo.user_no,
-                  nickname: userInfo.nickname,
-                  image_url: userInfo.image_url,
-                  user_id: userInfo.user_id,
-                }}
-              >
-                <BasicButton btnText="프로필수정" />
-              </NavLink>
+            <div className="Info">
+              <div className="name">{userInfo.nickname}</div>
+              <div className="nickName">@{userInfo.user_id}</div>
+              <div className="introduce">{userInfo.introduce}</div>
+            </div>
+            <div className="edit">
+              <div className="editProfile">
+                <NavLink
+                  to="/editProfile"
+                  state={{
+                    user_no: userInfo.user_no,
+                    nickname: userInfo.nickname,
+                    image_url: userInfo.image_url,
+                    user_id: userInfo.user_id,
+                    introduce: userInfo.introduce,
+                  }}
+                >
+                  <BasicButton
+                    btnSize="largeButton"
+                    btnColor="inheritButton"
+                    btnText="프로필수정"
+                  />
+                </NavLink>
+              </div>
             </div>
           </div>
         </div>

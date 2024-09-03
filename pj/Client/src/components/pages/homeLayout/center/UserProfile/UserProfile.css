@@ -1,31 +1,22 @@
 header {
   display: flex;
   align-items: center;
-  padding: 20px 0 20px 0;
 }
 
 .backArrow {
   width: 50px;
 }
 
-.userInfo {
-  display: flex;
-  flex-direction: column;
-}
-
 .nickName {
   color: gray;
 }
 
-main {
-  padding: 20px 20px 20px 0;
-  /* display: flex; */
-}
 .userContainer {
   width: 100%;
   display: flex;
   margin-bottom: 60px;
   padding: 20px;
+  align-items: center;
 }
 
 .pic {
@@ -40,18 +31,26 @@ main {
 }
 
 .userInfo {
-  padding: 20px;
+  display: flex; /* Flexbox로 좌우 정렬 */
+  align-items: center; /* 세로 정렬: 가운데 정렬 */
+}
+
+.Info {
+  flex: 1;
+  margin-right: 200px;
 }
 
 .introduce {
   margin-top: 10px;
   font-size: 18px;
 }
+.edit {
+  margin-left: auto; /* 자동으로 오른쪽으로 정렬 */
+  display: flex; /* 필요시 버튼 정렬을 위해 flexbox 사용 */
+  align-items: center; /* edit 안의 콘텐츠를 세로 가운데 정렬 */
+}
 
 .editProfile {
-  position: absolute;
-  right: 500px;
-  margin: 20px;
   display: flex;
   border: 3px solid #ffcd19;
   border-radius: 50px;
@@ -62,7 +61,7 @@ main {
   align-items: center;
 }
 
-button {
+.bBtn {
   font-size: 24px;
   color: #ffcd19;
   background-color: inherit;
