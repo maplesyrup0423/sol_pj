@@ -236,32 +236,37 @@ CREATE TABLE comment_likes (
 -- ChatRoomUser 테이블 last_active_at 컬럼 null 불가 -> 허용 
 
 CREATE TABLE ChatRoom (
-   room_id varchar(256) NOT NULL,
-   room_name varchar(256) NOT NULL,
-   PRIMARY KEY (room_id)
+    room_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    room_name VARCHAR(255) DEFAULT NULL,
+    is_group BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE ChatRoomUser (
-   room_id varchar(256) NOT NULL,
-   user_no int NOT NULL,
-   role varchar(256) NULL,
-   joined_at datetime NOT NULL,
-   last_active_at datetime  NULL,
-   PRIMARY KEY (room_id, user_no),
-   FOREIGN KEY (room_id) REFERENCES ChatRoom(room_id),
-   FOREIGN KEY (user_no) REFERENCES user(user_no)
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    room_id BIGINT UNSIGNED NOT NULL,
+    user_no INT NOT NULL,
+    role ENUM('admin', 'member') DEFAULT 'member',
+    joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_active_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (room_id) REFERENCES ChatRoom(room_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_no) REFERENCES User(user_no) ON DELETE CASCADE,
+    UNIQUE KEY uq_room_user (room_id, user_no)
 );
 
 CREATE TABLE ChatMessage (
-   message_id varchar(256) NOT NULL,
-   room_id varchar(256) NOT NULL,
-   user_no int NOT NULL,
-   message_content varchar(256) NOT NULL,
-   created_at datetime NOT NULL,
-   status varchar(50) NULL,
-   PRIMARY KEY (message_id),
-   FOREIGN KEY (room_id) REFERENCES ChatRoom(room_id),
-   FOREIGN KEY (user_no) REFERENCES user(user_no)
+    message_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    room_id BIGINT UNSIGNED NOT NULL,
+    user_no INT NOT NULL,
+    message_content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status ENUM('sent', 'delivered', 'read') DEFAULT 'sent',
+    is_edited BOOLEAN NOT NULL DEFAULT FALSE,
+    is_deleted BOOLEAN NOT NULL DEFAULT FALSE,
+    FOREIGN KEY (room_id) REFERENCES ChatRoom(room_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_no) REFERENCES User(user_no) ON DELETE CASCADE,
+    INDEX idx_room_id (room_id),
+    INDEX idx_user_no (user_no)
 );
 
 -- 인증용 토큰 저장용

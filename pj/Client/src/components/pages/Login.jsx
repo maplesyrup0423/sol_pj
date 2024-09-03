@@ -2,7 +2,7 @@
 import { useState, useContext } from "react";
 import { FaUser, FaLock } from "react-icons/fa";
 import { AuthContext } from "../../Context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Login.css";
 
 function LoginPage() {
@@ -62,7 +62,8 @@ function LoginPage() {
 
                     <div className="register-link">
                         <p>
-                            계정이 없으신가요? <a href="/">가입하기</a>
+                            계정이 없으신가요?{" "}
+                            <Link to="/signup">가입하기</Link>
                         </p>
                     </div>
                 </form>
