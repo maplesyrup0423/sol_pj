@@ -46,14 +46,15 @@ function FeedMain() {
     });
   };
 
+
   return (
     <div className="feed_main">
       <div className="order" >
         <div className="popularity">
-          <div className={`switch-pop ${activeTab === "post_pop" ? "active" : ""}`} onClick={orderBy_pop}><span className={"pop" + (btnActive ? " active1" : "")} onClick={toggleActive}>인기</span></div>
+          <div className={`switch-pop ${activeTab === "post_pop" ? "active" : ""}`} onClick={orderBy_pop}><span className={"pop" + (btnActive ? "" : " active")} onClick={toggleActive}>인기</span></div>
         </div>
         <div className="Latest">
-          <div className={`switch-date ${activeTab === "post_date" ? "active" : ""}`} onClick={orderBy_date}><span className={"late" + (btnActive ? " active2" : "")} onClick={toggleActive}>최신</span></div>
+          <div className={`switch-date ${activeTab === "post_date" ? "active" : ""}`} onClick={orderBy_date}><span className={"late" + (btnActive ? " active" : "")} onClick={toggleActive}>최신</span></div>
         </div>
       </div>
 
