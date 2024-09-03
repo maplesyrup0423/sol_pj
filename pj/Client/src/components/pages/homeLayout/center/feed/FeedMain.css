@@ -11,6 +11,24 @@
   height: 50px;
   border-bottom: 1px solid white;
   box-sizing: border-box;
+
+}
+
+.pop,
+.late{
+  &.active1 {
+    background-color: lightblue;
+  }
+
+  &.active2 {
+    background-color: lightblue;
+  }
+}
+
+.Latest:hover,
+.popularity:hover {
+  cursor: pointer;
+  color: orange;
 }
 
 .Latest > div,
@@ -26,4 +44,13 @@
   overflow-y: auto;
   scrollbar-width: none; /* 스크롤바의 너비 (auto, thin, none) */
   scrollbar-color: #2c2c2c #000000; /* 스크롤바 손잡이와 트랙 색상 */
+}
+
+/*!!!!!임시!!!!!*/
+.feed_orders { 
+  height: 200px;
+  line-height: 200px;
+  font-size: 50pt;
+  border: 5px dotted orange;
+  text-align: center;
 }
