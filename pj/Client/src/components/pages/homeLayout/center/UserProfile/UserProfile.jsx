@@ -8,21 +8,22 @@ import { NavLink } from "react-router-dom";
 
 function UserProfile() {
   const { userInfo } = useContext(AuthContext);
-  //현재 선택된 탭 관리
+  // 현재 선택된 탭 관리
   const [activeTab, setActiveTab] = useState("posts");
 
-  //switch-posts 클릭시 호출
+  // switch-posts 클릭 시 호출
   const showPosts = () => {
     setActiveTab("posts");
   };
 
-  //switch-comments 클릭시 호출
+  // switch-comments 클릭 시 호출
   const showComments = () => {
     setActiveTab("comments");
   };
 
-  // console.log("userInfo : ", userInfo);
-  // console.log("userInfo.nickname : ", userInfo.nickname);
+  // userInfo가 존재하는지 확인
+  const isUserInfoAvailable = userInfo && userInfo.nickname;
+
   return (
     <>
       <header>
@@ -32,33 +33,53 @@ function UserProfile() {
           </NavLink>
         </div>
         <div className="userInfo">
-          <div className="name">{userInfo.nickname}</div>
-          <div className="nickName">@{userInfo.user_id}</div>
+          {isUserInfoAvailable ? (
+            <>
+              <div className="name">{userInfo.nickname}</div>
+              <div className="nickName">@{userInfo.user_id}</div>
+            </>
+          ) : (
+            <div>Loading...</div>
+          )}
         </div>
       </header>
       <main>
         <div className="userContainer">
           <div className="userPic">
             <div className="pic">
-              <img src={userInfo.image_url} alt="" className="proImg" />
+              <img
+                src={
+                  isUserInfoAvailable
+                    ? userInfo.image_url
+                    : "default-image-url.jpg"
+                }
+                alt=""
+                className="proImg"
+              />
             </div>
           </div>
           <div className="userInfo">
             <div className="Info">
-              <div className="name">{userInfo.nickname}</div>
-              <div className="nickName">@{userInfo.user_id}</div>
-              <div className="introduce">{userInfo.introduce}</div>
+              {isUserInfoAvailable ? (
+                <>
+                  <div className="name">{userInfo.nickname}</div>
+                  <div className="nickName">@{userInfo.user_id}</div>
+                  <div className="introduce">{userInfo.introduce}</div>
+                </>
+              ) : (
+                <div>Loading...</div>
+              )}
             </div>
             <div className="edit">
               <div className="editProfile">
                 <NavLink
                   to="/editProfile"
                   state={{
-                    user_no: userInfo.user_no,
-                    nickname: userInfo.nickname,
-                    image_url: userInfo.image_url,
-                    user_id: userInfo.user_id,
-                    introduce: userInfo.introduce,
+                    user_no: isUserInfoAvailable ? userInfo.user_no : null,
+                    nickname: isUserInfoAvailable ? userInfo.nickname : "",
+                    image_url: isUserInfoAvailable ? userInfo.image_url : "",
+                    user_id: isUserInfoAvailable ? userInfo.user_id : "",
+                    introduce: isUserInfoAvailable ? userInfo.introduce : "",
                   }}
                 >
                   <BasicButton
@@ -101,4 +122,5 @@ function UserProfile() {
     </>
   );
 }
+
 export default UserProfile;

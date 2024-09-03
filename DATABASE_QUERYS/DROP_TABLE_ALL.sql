@@ -11,3 +11,5 @@ SET @tables = CONCAT('DROP TABLE IF EXISTS ', @tables);
 PREPARE stmt FROM @tables;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
+
+commit;

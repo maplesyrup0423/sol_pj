@@ -36,8 +36,9 @@ header {
 }
 
 .Info {
+  width: 300px;
   flex: 1;
-  margin-right: 200px;
+  margin-right: 0;
 }
 
 .introduce {
