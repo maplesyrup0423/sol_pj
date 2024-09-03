@@ -38,21 +38,5 @@ module.exports = (conn) => {
     );
   });
 
-  router.post("/postInsert", decodeToken, (req, res) => {
-    const { postContent, user_no, board_info_id } = req.body;
-    conn.query(
-      "INSERT INTO posts VALUES (NULL, ?, ?, NOW(), NULL, ?, 0, 0)",
-      [postContent, user_no, board_info_id],
-      (err, result) => {
-        if (err) {
-          console.error("쿼리 실행 오류:", err);
-          res.status(500).send("서버 오류");
-        } else {
-          res.send({ message: "게시글이 성공적으로 등록되었습니다.", result });
-        }
-      }
-    );
-  });
-
   return router; // 라우터 반환
 };
