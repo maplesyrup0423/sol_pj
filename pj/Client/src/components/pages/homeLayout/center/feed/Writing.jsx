@@ -33,6 +33,7 @@ function Writing({ userInfo, boardId, refreshPosts }) {
       alert("글이 성공적으로 등록되었습니다!");
       refreshPosts();
       setPostContent("");
+      document.querySelector("textarea").style.height = "auto";
     } catch (err) {
       console.error("Error inserting post:", err);
       alert("글 등록에 실패했습니다. 다시 시도해주세요.");
