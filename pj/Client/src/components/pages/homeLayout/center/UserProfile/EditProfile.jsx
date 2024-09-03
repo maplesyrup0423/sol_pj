@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import "./EditProfile.css";
 import Savebtn from "../../../../utills/buttons/Savebtn";
 import Closebtn from "../../../../utills/buttons/Closebtn";
@@ -54,7 +54,9 @@ function MyProfile() {
       <div className="profileCard">
         <header>
           <div className="quitBox">
-            <Closebtn />
+            <NavLink to="/myPage">
+              <Closebtn />
+            </NavLink>
           </div>
           <span>프로필 수정</span>
           <div className="save">
