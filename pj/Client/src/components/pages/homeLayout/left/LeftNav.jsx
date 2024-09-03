@@ -68,7 +68,8 @@ function LeftNav({ userInfo }) {
               <div ref={dropdownRef} className="dropdown-menu-up">
                 <ul>
                   <li>
-                    <Link to="/logout">로그아웃</Link>
+                    <Link to="/login">로그아웃</Link>
+                    {/* 일단 로그인으로 보내기만했음 로그아웃처리는 추후 */}
                   </li>
                 </ul>
               </div>
