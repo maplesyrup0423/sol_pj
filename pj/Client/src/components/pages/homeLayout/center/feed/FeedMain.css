@@ -16,12 +16,10 @@
 
 .pop,
 .late{
-  &.active1 {
-    background-color: lightblue;
-  }
-
-  &.active2 {
-    background-color: lightblue;
+  
+  &.active {
+    color: orange;
+    border-bottom: 2px solid orange;
   }
 }
 
