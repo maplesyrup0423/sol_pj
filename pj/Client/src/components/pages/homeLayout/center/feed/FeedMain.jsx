@@ -3,9 +3,9 @@ import Feeds from "./Feeds";
 import Writing from "./Writing";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import { useContext } from "react";
 import { AuthContext } from "../../../../../Context/AuthContext";
+import api from "../../../../auth/api";
 
 function FeedMain() {
   const { userInfo } = useContext(AuthContext);
@@ -16,7 +16,7 @@ function FeedMain() {
   const [data, setData] = useState([]);
   const fetchData = async () => {
     try {
-      const response = await axios.get(`/api/post?board_info_id=${boardId}`);
+      const response = await api.get(`/api/post?board_info_id=${boardId}`);
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -25,7 +25,7 @@ function FeedMain() {
 
   useEffect(() => {
     fetchData();
-  }, [boardId]);
+  });
 
   return (
     <div className="feed_main">

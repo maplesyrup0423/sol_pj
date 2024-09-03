@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
+const decodeToken = require("./decodeToken");
 
 // DB 연결 객체를 매개변수로 받는 함수로 모듈화
 module.exports = (conn) => {
-  router.get("/boardInfo", (req, res) => {
+  router.get("/api/boardInfo", decodeToken, (req, res) => {
     conn.query("SELECT * FROM board_info_table", (err, rows, fields) => {
       if (err) {
         console.error("쿼리 실행 오류:", err);
