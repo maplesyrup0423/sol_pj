@@ -38,7 +38,7 @@ module.exports = (conn) => {
     );
   });
 
-  router.post("/postInsert", decodeToken(), (req, res) => {
+  router.post("/api/postInsert", decodeToken(), (req, res) => {
     const { postContent, user_no, board_info_id } = req.body;
     conn.query(
       "INSERT INTO posts VALUES (NULL, ?, ?, NOW(), NULL, ?, 0, 0)",
