@@ -22,7 +22,9 @@
 /* 버튼 색 */
 .yellowButton {
   background-color: #ffcd19;
-  color: white;
+  color: black;
+  font-weight: 20px;
+  font-weight: bold;
 }
 
 .blackButton {
