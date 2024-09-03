@@ -27,7 +27,9 @@ function UserProfile() {
     <>
       <header>
         <div className="backArrow">
-          <BackArrow />
+          <NavLink to="/post/1">
+            <BackArrow />
+          </NavLink>
         </div>
         <div className="userInfo">
           <div className="name">{userInfo.nickname}</div>
