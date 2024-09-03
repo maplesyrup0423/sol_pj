@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const decodeToken = require("./decodeToken");
+const decodeToken = require("../middleware/decodeToken");
 
 // post DB값 받아오기
 module.exports = (conn) => {
-  router.get("/api/post", decodeToken, (req, res) => {
+  router.get("/api/post", decodeToken(), (req, res) => {
     const board_info_id = req.query.board_info_id; // 쿼리 파라미터로 게시판 ID 받아오기
 
     // 게시판 ID가 제공되지 않은 경우 처리
@@ -38,7 +38,7 @@ module.exports = (conn) => {
     );
   });
 
-  router.post("/api/postInsert", decodeToken, (req, res) => {
+  router.post("/postInsert", decodeToken(), (req, res) => {
     const { postContent, user_no, board_info_id } = req.body;
     conn.query(
       "INSERT INTO posts VALUES (NULL, ?, ?, NOW(), NULL, ?, 0, 0)",

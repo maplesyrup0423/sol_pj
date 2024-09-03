@@ -25,7 +25,7 @@ function FeedMain() {
 
   useEffect(() => {
     fetchData();
-  });
+  }, [boardId]);
 
   return (
     <div className="feed_main">
