@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
+const decodeToken = require("./decodeToken");
 
 // post DB값 받아오기
-//todo 지금은 board_info_id=1인 게시판 정보 받아옴. 추후 게시판별로 받아와야함
 module.exports = (conn) => {
   router.get("/post", (req, res) => {
     const board_info_id = req.query.board_info_id; // 쿼리 파라미터로 게시판 ID 받아오기
@@ -33,6 +33,22 @@ module.exports = (conn) => {
           res.status(500).send("서버 오류");
         } else {
           res.send(rows);
+        }
+      }
+    );
+  });
+
+  router.post("/api/postInsert", decodeToken, (req, res) => {
+    const { postContent, user_no, board_info_id } = req.body;
+    conn.query(
+      "INSERT INTO posts VALUES (NULL, ?, ?, NOW(), NULL, ?, 0, 0)",
+      [postContent, user_no, board_info_id],
+      (err, result) => {
+        if (err) {
+          console.error("쿼리 실행 오류:", err);
+          res.status(500).send("서버 오류");
+        } else {
+          res.send({ message: "게시글이 성공적으로 등록되었습니다.", result });
         }
       }
     );
