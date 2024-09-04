@@ -75,10 +75,11 @@ function Feeds(props) {
           />
         )}
       </div>
-
-      <div className="feed-text">
-        {/* 피드텍스트 */}
-        <h5>{props.post_text}</h5>
+      <div className="feed-text-container">
+        <div className="feed-text">
+          {/* 피드텍스트 */}
+          <h5>{props.post_text}</h5>
+        </div>
       </div>
       <div className="feed-CreationDate">
         {/* 작성일/조회수 등 상세 정보 */}
