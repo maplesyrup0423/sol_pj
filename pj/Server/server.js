@@ -68,5 +68,9 @@ app.use(boardInfoRoutes(conn));
 const PostRoutes = require("./controllers/post");
 app.use(PostRoutes(conn));
 
+//회원가입 라우터
+const signupRoutes = require("./controllers/signup");
+app.use(signupRoutes(conn));
+
 // 'images' 디렉토리의 경로를 절대 경로로 설정
 app.use("/images", express.static(path.join(__dirname, "images")));
