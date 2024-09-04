@@ -4,6 +4,7 @@ import BasicButton from "../../../../utills/buttons/BasicButton";
 import { useState } from "react";
 import api from "../../../../auth/api";
 import Swal from "sweetalert2";
+import { BsImages } from "react-icons/bs";
 
 function Writing({ userInfo, boardId, refreshPosts }) {
   const [, setContent] = useState(""); //textarea 높이 처리
@@ -43,6 +44,7 @@ function Writing({ userInfo, boardId, refreshPosts }) {
           "Content-Type": "multipart/form-data",
         },
       });
+
       console.log("Response:", response.data);
       //글 입력 성공시
       Swal.fire({
@@ -58,6 +60,7 @@ function Writing({ userInfo, boardId, refreshPosts }) {
       });
       refreshPosts(); // 글목록 갱신
       setPostContent(""); // textarea값 초기화
+      setSelectedFiles([]); // 선택된 이미지 초기화
       document.querySelector("textarea").style.height = "auto"; // textarea크기 초기화
     } catch (err) {
       // 글 입력 실패시
@@ -93,18 +96,29 @@ function Writing({ userInfo, boardId, refreshPosts }) {
             />
           </div>
         </div>
-        <div className="inputImg">
-          <input type="file" multiple onChange={handleFileChange} />
-        </div>
-        <div className="button-row">
-          <BasicButton
-            btnOn={postContent === ""}
-            btnSize="mediumButton"
-            btnColor="yellowButton"
-            action={null}
-            btnText="전송"
-            type="submit"
-          />
+        <div className="buttons">
+          <div className="inputImg">
+            <label htmlFor="file">
+              <BsImages className="file-BsImages" />
+            </label>
+            <input
+              type="file"
+              name="file"
+              id="file"
+              multiple
+              onChange={handleFileChange}
+            />
+          </div>
+          <div className="button-row">
+            <BasicButton
+              btnOn={postContent === "" && selectedFiles.length === 0}
+              btnSize="mediumButton"
+              btnColor="yellowButton"
+              action={null}
+              btnText="전송"
+              type="submit"
+            />
+          </div>
         </div>
       </form>
     </div>
