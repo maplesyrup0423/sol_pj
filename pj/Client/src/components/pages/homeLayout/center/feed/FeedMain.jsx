@@ -2,11 +2,10 @@ import "./FeedMain.css";
 import Feeds from "./Feeds";
 import Writing from "./Writing";
 import { useState, useEffect } from "react";
-import { useParams, NavLink } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../../../../Context/AuthContext";
 import api from "../../../../auth/api";
-
 
 function FeedMain() {
   const { userInfo } = useContext(AuthContext);
@@ -17,15 +16,17 @@ function FeedMain() {
   const [data, setData] = useState([]);
   const fetchData = async () => {
     try {
-      const response = await api.get(`/api/post?board_info_id=${boardId}&orderBy=${activeTab === 'post_pop' ? 'pop' : 'date'}`);
+      const response = await api.get(
+        `/api/post?board_info_id=${boardId}&orderBy=${
+          activeTab === "post_pop" ? "pop" : "date"
+        }`
+      );
       setData(response.data);
       // console.log(`Fetching posts with orderBy: ${activeTab === 'post_pop' ? 'pop' : 'date'}`);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-
-  
 
   const [activeTab, setActiveTab] = useState("post_pop");
 
@@ -37,7 +38,7 @@ function FeedMain() {
   const orderBy_date = () => {
     setActiveTab("post_date");
     //fetchData();
-  }
+  };
 
   useEffect(() => {
     fetchData();
@@ -51,15 +52,36 @@ function FeedMain() {
     });
   };
 
-
   return (
     <div className="feed_main">
-      <div className="order" >
+      <div className="order">
         <div className="popularity">
-          <div className={`switch-pop ${activeTab === "post_pop" ? "active" : ""}`} onClick={orderBy_pop}><span className={"pop" + (btnActive ? "" : " active")} onClick={toggleActive}>인기</span></div>
+          <div
+            className={`switch-pop ${activeTab === "post_pop" ? "active" : ""}`}
+            onClick={orderBy_pop}
+          >
+            <span
+              className={"pop" + (btnActive ? "" : " active")}
+              onClick={toggleActive}
+            >
+              인기
+            </span>
+          </div>
         </div>
         <div className="Latest">
-          <div className={`switch-date ${activeTab === "post_date" ? "active" : ""}`} onClick={orderBy_date}><span className={"late" + (btnActive ? " active" : "")} onClick={toggleActive}>최신</span></div>
+          <div
+            className={`switch-date ${
+              activeTab === "post_date" ? "active" : ""
+            }`}
+            onClick={orderBy_date}
+          >
+            <span
+              className={"late" + (btnActive ? " active" : "")}
+              onClick={toggleActive}
+            >
+              최신
+            </span>
+          </div>
         </div>
       </div>
 
@@ -77,33 +99,30 @@ function FeedMain() {
         )}
       </div>
 
-
       <div className="feed_orders">
         <div className="feed_contents">
           {activeTab === "post_pop" && (
-
             <div className="feed">
-              인기순<hr/>
-            {data.length > 0 ? (
-              data.map((p) => <Feeds key={p.post_id} {...p} />)
-            ) : (
-              <h1>Loading...</h1>
-            )}
-          </div>
-
-            )}
-          {activeTab === "post_date" && (
-
-            <div className="feed">
-              최신순<hr/>
-            {data.length > 0 ? (
-              data.map((p) => <Feeds key={p.post_id} {...p} />)
-            ) : (
-              <h1>Loading...</h1>
-            )}
+              인기순
+              <hr />
+              {data.length > 0 ? (
+                data.map((p) => <Feeds key={p.post_id} {...p} />)
+              ) : (
+                <h1>Loading...</h1>
+              )}
             </div>
-
-            )}
+          )}
+          {activeTab === "post_date" && (
+            <div className="feed">
+              최신순
+              <hr />
+              {data.length > 0 ? (
+                data.map((p) => <Feeds key={p.post_id} {...p} />)
+              ) : (
+                <h1>Loading...</h1>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
@@ -114,9 +133,6 @@ function FeedMain() {
           <h1>Loading...</h1>
         )}
       </div> */}
-
-
-
     </div>
   );
 }

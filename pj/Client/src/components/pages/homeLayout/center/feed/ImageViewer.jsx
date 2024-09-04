@@ -1,5 +1,5 @@
 import "./ImageViewer.css";
-
+const baseUrl = import.meta.env.VITE_BASE_URL;
 const ImageViewer = ({ images, currentIndex, onClose, onChangeImage }) => {
   const prevImage = () => {
     const prevIndex = (currentIndex - 1 + images.length) % images.length;
@@ -15,7 +15,7 @@ const ImageViewer = ({ images, currentIndex, onClose, onChangeImage }) => {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <img
-          src={images[currentIndex]}
+          src={`${baseUrl}/images/uploads/${images[currentIndex]}`}
           alt="Full view"
           className="modal-image"
         />
