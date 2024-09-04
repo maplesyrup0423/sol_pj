@@ -85,3 +85,11 @@ INSERT INTO comments VALUES(NULL,11,NULL,'댓글2',4,NOW(),NULL,0);
 INSERT INTO comments VALUES(NULL,11,4,'2-1',5,NOW(),NULL,0);
 INSERT INTO comments VALUES(NULL,11,4,'2-2',1,NOW(),NULL,0);
 INSERT INTO comments VALUES(NULL,11,6,'2-2-1',5,NOW(),NULL,0);
+
+-- 친구 추가
+INSERT INTO userfollower (follower_no, following_no) VALUES(6,1);
+INSERT INTO userfollower (follower_no, following_no) VALUES(6,2);
+INSERT INTO userfollower (follower_no, following_no) VALUES(6,3);
+INSERT INTO userfollower (follower_no, following_no) VALUES(6,4);
+INSERT INTO userfollower (follower_no, following_no) VALUES(6,5);
+INSERT INTO userfollower (follower_no, following_no) VALUES(6,6);

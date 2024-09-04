@@ -4,12 +4,18 @@ import Notice from "./Notice";
 import Messenger from "./Messenger";
 import Footer from "./Footer";
 import AddMessenger from "./AddMessenger";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import { BsChatLeftDotsFill } from "react-icons/bs";
 import { FaUserGroup } from "react-icons/fa6";
 import FriendList from "./friendList";
+import { AuthContext } from "../../../../Context/AuthContext";
 
 function RightNav() {
+    const { userInfo } = useContext(AuthContext);
+    useEffect(() => {
+        console.log("라이트네비 유저인포 가져오기 : ", userInfo);
+    }, [userInfo]);
+
     const [activeTab, setActiveTab] = useState("messenger");
 
     return (
@@ -43,7 +49,9 @@ function RightNav() {
                         </div>
                         {activeTab === "messenger" && <Messenger />}
                         {/* 반복 */}
-                        {activeTab === "userList" && <FriendList />}
+                        {activeTab === "userList" && (
+                            <FriendList user_no={userInfo.user_no} />
+                        )}
                         <AddMessenger />
                     </li>
                 </ul>
