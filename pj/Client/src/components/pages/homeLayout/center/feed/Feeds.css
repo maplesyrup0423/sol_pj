@@ -53,9 +53,13 @@
   display: flex;
   align-items: center;
 }
+.feed-text-container {
+  width: 550px;
+}
 .feed-text {
   margin-bottom: 15px;
   font-size: 20px;
+  overflow-wrap: break-word;
   white-space: pre-wrap; /* 공백과 줄바꿈을 모두 보존 */
 }
 .like-comment {
