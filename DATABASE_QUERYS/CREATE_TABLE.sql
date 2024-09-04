@@ -60,6 +60,16 @@ CREATE TABLE Password (
    FOREIGN KEY (user_no) REFERENCES User(user_no)
 );
 
+-- 팔로워(친구) 테이블 --
+CREATE TABLE UserFollower (
+    follower_no int NOT NULL,
+    following_no int NOT NULL,
+    follow_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (follower_no, following_no),
+    FOREIGN KEY (follower_no) REFERENCES User(user_no) ON DELETE CASCADE,
+    FOREIGN KEY (following_no) REFERENCES User(user_no) ON DELETE CASCADE
+);
+
 CREATE TABLE slumberUser (
    sl_user_no   int   NOT NULL,
    sl_user_id   varchar(128)   NULL,
