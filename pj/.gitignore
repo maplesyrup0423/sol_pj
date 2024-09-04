@@ -25,3 +25,6 @@ dist-ssr
 
 # 보안관련 파일
 .env
+
+#업로드 이미지
+uploads/

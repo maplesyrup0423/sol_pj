@@ -1,14 +1,26 @@
 const express = require("express");
 const router = express.Router();
 const decodeToken = require("../middleware/decodeToken");
+const path = require("path");
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, "..", "images", "uploads")); // 업로드할 디렉토리
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`); // 파일 이름 설정
+  },
+});
+const upload = multer({ storage });
 
 // post DB값 받아오기
 module.exports = (conn) => {
   router.get("/api/post", decodeToken(), (req, res) => {
     const board_info_id = req.query.board_info_id; // 쿼리 파라미터로 게시판 ID 받아오기
-    const orderBy = req.query.orderBy || 'pop';
+    const orderBy = req.query.orderBy || "pop";
 
-    console.log('Received orderBy:', orderBy);
+    console.log("Received orderBy:", orderBy);
 
     // 게시판 ID가 제공되지 않은 경우 처리
     if (!board_info_id) {
@@ -16,12 +28,11 @@ module.exports = (conn) => {
     }
 
     let orderClause;
-    if (orderBy === 'pop') {
-      orderClause = 'ORDER BY like_count DESC, p.views DESC'; // 인기순 (좋아요 수 -> 조회수 순)
+    if (orderBy === "pop") {
+      orderClause = "ORDER BY like_count DESC, p.views DESC"; // 인기순 (좋아요 수 -> 조회수 순)
     } else {
-      orderClause = 'ORDER BY p.createDate DESC'; // 최신순
+      orderClause = "ORDER BY p.createDate DESC"; // 최신순
     }
-
 
     const query = `
     SELECT p.board_info_id, p.post_id, p.post_text, p.user_no, p.createDate, p.modiDate, p.views,
@@ -40,35 +51,57 @@ module.exports = (conn) => {
     ${orderClause}
   `;
 
-  // 로그로 쿼리와 정렬 조건을 출력하여 디버깅
-  //console.log('Executing query:', query);
+    // 로그로 쿼리와 정렬 조건을 출력하여 디버깅
+    //console.log('Executing query:', query);
 
-
-  conn.query(query, [board_info_id], (err, rows, fields) => {
-    if (err) {
-      console.error("쿼리 실행 오류:", err);
-      res.status(500).send("서버 오류");
-    } else {
-      res.send(rows);
-    }
-  });
-  });
-
-  router.post("/api/postInsert", decodeToken(), (req, res) => {
-    const { postContent, user_no, board_info_id } = req.body;
-    conn.query(
-      "INSERT INTO posts VALUES (NULL, ?, ?, NOW(), NULL, ?, 0, 0)",
-      [postContent, user_no, board_info_id],
-      (err, result) => {
-        if (err) {
-          console.error("쿼리 실행 오류:", err);
-          res.status(500).send("서버 오류");
-        } else {
-          res.send({ message: "게시글이 성공적으로 등록되었습니다.", result });
-        }
+    conn.query(query, [board_info_id], (err, rows, fields) => {
+      if (err) {
+        console.error("쿼리 실행 오류:", err);
+        res.status(500).send("서버 오류");
+      } else {
+        res.send(rows);
       }
-    );
+    });
   });
+
+  router.post(
+    "/api/postInsert",
+    upload.array("images"),
+    decodeToken(),
+    (req, res) => {
+      const { postContent, user_no, board_info_id } = req.body;
+      conn.query(
+        "INSERT INTO posts (post_text, user_no, board_info_id) VALUES (?, ?, ?)",
+        [postContent, user_no, board_info_id],
+        (err, result) => {
+          if (err) {
+            console.error("쿼리 실행 오류:", err);
+            res.status(500).send("서버 오류");
+          }
+          const post_id = result.insertId; // 삽입된 글의 ID
+
+          // 이미지 삽입
+          if (req.files && req.files.length > 0) {
+            const imageInserts = req.files.map((file) => [
+              post_id,
+              file.filename,
+            ]);
+
+            const sql = "INSERT INTO post_files (post_id, file_path) VALUES ?";
+            conn.query(sql, [imageInserts], (err) => {
+              if (err) {
+                console.error("Image Insertion Error:", err);
+                return res.status(500).send("Error inserting images");
+              }
+              res.send("Post and images successfully inserted");
+            });
+          } else {
+            res.send("Post successfully inserted without images");
+          }
+        }
+      );
+    }
+  );
 
   return router; // 라우터 반환
 };

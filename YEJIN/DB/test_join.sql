@@ -34,4 +34,6 @@ WHERE p.board_info_id = 1 and  p.isDeleted=0
 GROUP BY p.post_id, p.post_text, p.user_no, p.createDate, p.modiDate, p.views, u.user_id, up.nickname, up.image_url
 ORDER BY p.createDate DESC;
 
+-- insert문 테스트 ( 프론트에서 입력받는 필요한 것만 )
+INSERT INTO posts (post_text, user_no, board_info_id) VALUES ("인설트문 테스트", 1, 1);
 

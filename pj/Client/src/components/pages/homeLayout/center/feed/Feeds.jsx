@@ -11,6 +11,7 @@ import { useState } from "react";
 import Carousel from "react-bootstrap/Carousel";
 
 function Feeds(props) {
+  const baseUrl = import.meta.env.VITE_BASE_URL;
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -45,7 +46,7 @@ function Feeds(props) {
         {images.length > 0 &&
           (images.length === 1 ? (
             <img
-              src={images[0]}
+              src={`${baseUrl}/images/uploads/${images[0]}`}
               alt={`Post ${props.post_id} image 1`}
               className="feedImg1"
               onClick={() => openModal(0)} // 이미지 클릭 시 모달 열기
@@ -55,7 +56,7 @@ function Feeds(props) {
               {images.map((filePath, index) => (
                 <Carousel.Item key={index}>
                   <img
-                    src={filePath}
+                    src={`${baseUrl}/images/uploads/${filePath}`}
                     alt={`Post ${props.post_id} image ${index + 1}`}
                     className="feedImg1"
                     onClick={() => openModal(index)} // 이미지 클릭 시 모달 열기
