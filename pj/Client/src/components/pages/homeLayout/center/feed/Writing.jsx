@@ -3,6 +3,7 @@ import "./Writing.css";
 import BasicButton from "../../../../utills/buttons/BasicButton";
 import { useState } from "react";
 import api from "../../../../auth/api";
+import Swal from "sweetalert2";
 
 function Writing({ userInfo, boardId, refreshPosts }) {
   const [, setContent] = useState("");
@@ -30,13 +31,33 @@ function Writing({ userInfo, boardId, refreshPosts }) {
     try {
       const response = await api.post("/api/postInsert", postData);
       console.log("Response:", response.data);
-      alert("글이 성공적으로 등록되었습니다!");
+      Swal.fire({
+        position: "top",
+        icon: "success",
+        title: "글이 성공적으로 등록되었습니다!",
+        showConfirmButton: false,
+        timer: 1500,
+        width: "300px",
+        customClass: {
+          title: "custom-swal-title",
+        },
+      });
       refreshPosts();
       setPostContent("");
       document.querySelector("textarea").style.height = "auto";
     } catch (err) {
       console.error("Error inserting post:", err);
-      alert("글 등록에 실패했습니다. 다시 시도해주세요.");
+      Swal.fire({
+        position: "top",
+        icon: "error",
+        title: "글 등록에 실패했습니다. 다시 시도해주세요.",
+        showConfirmButton: false,
+        timer: 1500,
+        width: "300px",
+        customClass: {
+          title: "custom-swal-title",
+        },
+      });
     }
   };
   return (
@@ -58,7 +79,7 @@ function Writing({ userInfo, boardId, refreshPosts }) {
         </div>
         <div className="button-row">
           <BasicButton
-            btnOn={false}
+            btnOn={postContent === ""}
             btnSize="mediumButton"
             btnColor="yellowButton"
             action={null}

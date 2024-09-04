@@ -6,6 +6,9 @@
   margin: 0 auto;
   padding: 0;
   background-color: #000000;
+  overflow-y: auto;
+  scrollbar-width: thin; /* 스크롤바의 너비 (auto, thin, none) */
+  scrollbar-color: #2c2c2c #000000; /* 스크롤바 손잡이와 트랙 색상 */
 }
 
 .leftNav,
@@ -19,13 +22,18 @@
 
 .leftNav {
   z-index: 1;
+  border-right: 1px solid white;
+  position: sticky;
+  top: 0;
 }
 .center {
   z-index: 2;
-  border-left: 1px solid white;
-  border-right: 1px solid white;
+
   box-sizing: border-box;
 }
 .rightNav {
   z-index: 1;
+  border-left: 1px solid white;
+  position: sticky;
+  top: 0;
 }

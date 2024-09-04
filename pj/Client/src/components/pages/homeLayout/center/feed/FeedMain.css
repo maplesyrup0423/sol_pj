@@ -11,12 +11,10 @@
   height: 50px;
   border-bottom: 1px solid white;
   box-sizing: border-box;
-
 }
 
 .pop,
-.late{
-  
+.late {
   &.active {
     color: orange;
     border-bottom: 2px solid orange;
@@ -40,13 +38,10 @@
 }
 .feed_main {
   height: 100vh;
-  overflow-y: auto;
-  scrollbar-width: none; /* 스크롤바의 너비 (auto, thin, none) */
-  scrollbar-color: #2c2c2c #000000; /* 스크롤바 손잡이와 트랙 색상 */
 }
 
 /*!!!!!임시!!!!!*/
-.feed_orders { 
+.feed_orders {
   height: 200px;
   line-height: 200px;
   font-size: 50pt;
