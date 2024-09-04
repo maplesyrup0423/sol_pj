@@ -26,6 +26,10 @@
   font-weight: 20px;
   font-weight: bold;
 }
+.yellowButton:disabled {
+  background-color: #af9c56;
+  /* cursor: not-allowed; */
+}
 
 .blackButton {
   background-color: black;
