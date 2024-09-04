@@ -17,26 +17,31 @@ function FeedMain() {
   const [data, setData] = useState([]);
   const fetchData = async () => {
     try {
-      const response = await api.get(`/api/post?board_info_id=${boardId}`);
+      const response = await api.get(`/api/post?board_info_id=${boardId}&orderBy=${activeTab === 'post_pop' ? 'pop' : 'date'}`);
       setData(response.data);
+      // console.log(`Fetching posts with orderBy: ${activeTab === 'post_pop' ? 'pop' : 'date'}`);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
+  
+
   const [activeTab, setActiveTab] = useState("post_pop");
 
   const orderBy_pop = () => {
     setActiveTab("post_pop");
+    //fetchData();
   };
 
   const orderBy_date = () => {
     setActiveTab("post_date");
+    //fetchData();
   }
 
   useEffect(() => {
     fetchData();
-  }, [boardId]);
+  }, [boardId, activeTab]);
 
   let [btnActive, setBtnActive] = useState(false);
 
@@ -75,18 +80,40 @@ function FeedMain() {
 
       <div className="feed_orders">
         <div className="feed_contents">
-          {activeTab === "post_pop" && (<div>인기순</div>)} {/*TODO -안에 <Feeds />orderby 다르게 해서 불러오기*/}
-          {activeTab === "post_date" && (<div>최신순</div>)}
+          {activeTab === "post_pop" && (
+
+            <div className="feed">
+              인기순<hr/>
+            {data.length > 0 ? (
+              data.map((p) => <Feeds key={p.post_id} {...p} />)
+            ) : (
+              <h1>Loading...</h1>
+            )}
+          </div>
+
+            )}
+          {activeTab === "post_date" && (
+
+            <div className="feed">
+              최신순<hr/>
+            {data.length > 0 ? (
+              data.map((p) => <Feeds key={p.post_id} {...p} />)
+            ) : (
+              <h1>Loading...</h1>
+            )}
+            </div>
+
+            )}
         </div>
       </div>
 
-      <div className="feed">
+      {/* <div className="feed">
         {data.length > 0 ? (
           data.map((p) => <Feeds key={p.post_id} {...p} />)
         ) : (
           <h1>Loading...</h1>
         )}
-      </div>
+      </div> */}
 
 
 
