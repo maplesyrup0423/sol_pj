@@ -1,5 +1,6 @@
 import "./FeedMain.css";
 import Feeds from "./Feeds";
+import FeedDetail from "./FeedDetail";
 import Writing from "./Writing";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
@@ -103,8 +104,6 @@ function FeedMain() {
         <div className="feed_contents">
           {activeTab === "post_pop" && (
             <div className="feed">
-              인기순
-              <hr />
               {data.length > 0 ? (
                 data.map((p) => <Feeds key={p.post_id} {...p} />)
               ) : (
@@ -114,8 +113,6 @@ function FeedMain() {
           )}
           {activeTab === "post_date" && (
             <div className="feed">
-              최신순
-              <hr />
               {data.length > 0 ? (
                 data.map((p) => <Feeds key={p.post_id} {...p} />)
               ) : (
