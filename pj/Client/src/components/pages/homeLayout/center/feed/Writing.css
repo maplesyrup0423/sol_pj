@@ -54,3 +54,33 @@
 .file-BsImages:hover {
   background-color: rgb(98, 98, 98);
 }
+
+.preview-container {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.image-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.preview-container .image-preview img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
+.img-delete-button {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  font-size: 30px;
+  color: #ffcd19;
+  cursor: pointer;
+}
