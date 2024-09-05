@@ -26,13 +26,13 @@ function UserProfile() {
 
   return (
     <>
-      <header>
+      <header className="profileHeader">
         <div className="backArrow">
           <NavLink to="/post/1">
             <BackArrow />
           </NavLink>
         </div>
-        <div className="userInfo">
+        <div className="userInfo1">
           {isUserInfoAvailable ? (
             <>
               <div className="name">{userInfo.nickname}</div>

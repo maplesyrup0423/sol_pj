@@ -16,6 +16,9 @@ INSERT INTO UserProfile VALUES(4,4,'로크만','https://cdn.pixabay.com/photo/20
 INSERT INTO UserProfile VALUES(5,5,'기둥','https://cdn.pixabay.com/photo/2022/05/28/06/39/cat-7226671_1280.jpg','자기소개3');
 INSERT INTO UserProfile VALUES(6,6,'요이커','https://cdn.pixabay.com/photo/2017/03/14/14/49/cat-2143332_1280.jpg','자기소개4');
 
+select * from UserProfile;
+update UserProfile set nickname = '김한결', introduce ='123123'
+where user_no = 3;
 
 -- 게시판
 INSERT INTO board_info_table VALUES(1,'리그 오브 레전드','League of Legends.png');
