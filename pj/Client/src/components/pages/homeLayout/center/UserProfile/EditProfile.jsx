@@ -3,7 +3,7 @@ import "./EditProfile.css";
 import Savebtn from "../../../../utills/buttons/Savebtn";
 import Closebtn from "../../../../utills/buttons/Closebtn";
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../../../../../components/auth/api"; // 수정: api 인스턴스 import
 import Swal from "sweetalert2";
 
 function MyProfile() {
@@ -17,42 +17,34 @@ function MyProfile() {
     introduce: introduce || "",
   });
 
-  Swal.fire({
-    position: "top",
-    icon: "success",
-    title: "프로필이 수정되었습니다!",
-    showConfirmButton: false,
-    timer: 1500,
-    width: "300px",
-    customClass: {
-      title: "custom-swal-title",
-    },
-  });
-
   useEffect(() => {
     // 서버에서 유저 정보를 가져오는 함수
     const fetchUserProfile = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/login", {
-          params: {
-            username: user_id || "", // user_id를 사용해 유저 정보를 가져옵니다
-          },
-        });
-
+        const response = await api.get("/user-info"); // 수정: API 요청 URL을 baseURL에 맞게 설정
         const data = response.data;
 
         if (data.success) {
           setUser({
-            nickname: data.userInfo.nickname || "",
-            image_url: "/assets/" + (data.userInfo.image_url || ""), // 이미지가 없을 경우 기본 이미지 사용
-            introduce: data.userInfo.introduction || "자기소개가 없습니다.",
+            nickname: data.user.nickname || "",
+            image_url: data.user.image_url || "", // 이미지가 없을 경우 기본 이미지 사용
+            introduce: data.user.introduce || "자기소개가 없습니다.",
           });
-          console.log("userInfo111 : " + userInfo);
+          console.log("userInfo111 : " + JSON.stringify(userInfo.image_url)); // 수정: JSON.stringify 사용
         } else {
-          alert("유저 정보를 가져올 수 없습니다. 오류 메시지: " + data.message); // 오류 메시지 포함
+          Swal.fire({
+            icon: "error",
+            title: "오류",
+            text: `유저 정보를 가져올 수 없습니다. 오류 메시지: ${data.message}`, // 수정: Swal 사용하여 오류 표시
+          });
         }
       } catch (error) {
         console.error("유저 정보를 가져오는 중 오류 발생:", error);
+        Swal.fire({
+          icon: "error",
+          title: "오류",
+          text: "서버와의 통신 오류가 발생했습니다.",
+        });
       }
     };
 
