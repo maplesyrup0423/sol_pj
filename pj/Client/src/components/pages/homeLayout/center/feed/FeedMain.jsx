@@ -1,5 +1,6 @@
 import "./FeedMain.css";
 import Feeds from "./Feeds";
+import FeedDetail from "./FeedDetail";
 import Writing from "./Writing";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
@@ -30,6 +31,8 @@ function FeedMain() {
 
   const [activeTab, setActiveTab] = useState("post_pop");
 
+  const [selectedPost, setSelectedPost] = useState(null); // 선택된 게시물을 관리하는 상태
+
   const orderBy_pop = () => {
     setActiveTab("post_pop");
     //fetchData();
@@ -51,6 +54,25 @@ function FeedMain() {
       return !prev;
     });
   };
+
+  const handlePostClick = (post) => {
+    setSelectedPost(post); // 게시물이 클릭되면 선택된 게시물을 설정
+  };
+
+  const handleBackToFeed = () => {
+    setSelectedPost(null); // 세부 화면에서 다시 목록으로 돌아가면 null로 설정
+  };
+
+
+    // FeedDetail을 표시할 때 FeedMain의 전체 UI가 FeedDetail로 대체됨
+    if (selectedPost) {
+      return (
+        <div className="feed_main">
+          <FeedDetail post={selectedPost} onBack={handleBackToFeed} />
+        </div>
+      );
+    }
+
 
   return (
     <div className="feed_main">
@@ -103,10 +125,8 @@ function FeedMain() {
         <div className="feed_contents">
           {activeTab === "post_pop" && (
             <div className="feed">
-              인기순
-              <hr />
               {data.length > 0 ? (
-                data.map((p) => <Feeds key={p.post_id} {...p} />)
+                data.map((p) => <Feeds key={p.post_id} {...p} onClick={() => handlePostClick(p)} />)
               ) : (
                 <h1>Loading...</h1>
               )}
@@ -114,10 +134,8 @@ function FeedMain() {
           )}
           {activeTab === "post_date" && (
             <div className="feed">
-              최신순
-              <hr />
               {data.length > 0 ? (
-                data.map((p) => <Feeds key={p.post_id} {...p} />)
+                data.map((p) => <Feeds key={p.post_id} {...p} onClick={() => handlePostClick(p)} />)
               ) : (
                 <h1>Loading...</h1>
               )}
