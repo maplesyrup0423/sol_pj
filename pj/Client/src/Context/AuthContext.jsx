@@ -1,67 +1,73 @@
 // src/Context/AuthContext.jsx
-import { createContext, useState, useEffect } from 'react';
-import api from '../components/auth/api';
+import { createContext, useState, useEffect } from "react";
+import api from "../components/auth/api";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [accessToken, setAccessToken] = useState(localStorage.getItem('accessToken'));
-    const [userInfo, setUserInfo] = useState(null);
+  const [accessToken, setAccessToken] = useState(
+    localStorage.getItem("accessToken")
+  );
+  const [userInfo, setUserInfo] = useState(null);
 
-    useEffect(() => {
-        const initializeAuth = async () => {
-            const storedToken = localStorage.getItem('accessToken');
-            if (storedToken) {
-                try {
-                    // 서버에 토큰을 보내서 사용자 정보를 가져옴
-                    const response = await api.get('/user-info', {
-                        headers: { Authorization: `Bearer ${storedToken}` }
-                    });
-
-                    if (response.data.success) {
-                        setUserInfo(response.data.user);
-                        setAccessToken(storedToken);
-                    } else {
-                        // 토큰이 유효하지 않거나 사용자 정보를 가져오는 데 실패한 경우
-                        localStorage.removeItem('accessToken');
-                        setAccessToken(null);
-                        setUserInfo(null);
-                    }
-                } catch (error) {
-                    console.error("토큰 검증 오류:", error);
-                    localStorage.removeItem('accessToken');
-                    setAccessToken(null);
-                    setUserInfo(null);
-                }
-            }
-        };
-
-        initializeAuth();
-    }, []);
-
-    const login = async (username, password) => {
+  useEffect(() => {
+    const initializeAuth = async () => {
+      const storedToken = localStorage.getItem("accessToken");
+      if (storedToken) {
         try {
-            const response = await api.post('/login', { username, password },{ withCredentials: true });
-            const { accessToken, user } = response.data;
+          // 서버에 토큰을 보내서 사용자 정보를 가져옴
+          const response = await api.get("/user-info", {
+            headers: { Authorization: `Bearer ${storedToken}` },
+          });
 
-            localStorage.setItem('accessToken', accessToken);
-            setAccessToken(accessToken);
-            setUserInfo(user);
+          if (response.data.success) {
+            setUserInfo(response.data.user);
+            setAccessToken(storedToken);
+          } else {
+            // 토큰이 유효하지 않거나 사용자 정보를 가져오는 데 실패한 경우
+            localStorage.removeItem("accessToken");
+            setAccessToken(null);
+            setUserInfo(null);
+          }
         } catch (error) {
-            console.error("Login error:", error);
-            throw new Error('로그인 실패');
+          console.error("토큰 검증 오류:", error);
+          localStorage.removeItem("accessToken");
+          setAccessToken(null);
+          setUserInfo(null);
         }
+      }
     };
 
-    const logout = () => {
-        localStorage.removeItem('accessToken');
-        setAccessToken(null);
-        setUserInfo(null);
-    };
+    initializeAuth();
+  }, []);
 
-    return (
-        <AuthContext.Provider value={{ accessToken, userInfo, login, logout }}>
-            {children}
-        </AuthContext.Provider>
-    );
+  const login = async (username, password) => {
+    try {
+      const response = await api.post(
+        "/login",
+        { username, password },
+        { withCredentials: true }
+      );
+      const { accessToken, user } = response.data;
+
+      localStorage.setItem("accessToken", accessToken);
+      setAccessToken(accessToken);
+      setUserInfo(user);
+    } catch (error) {
+      console.error("Login error:", error);
+      throw new Error("로그인 실패");
+    }
+  };
+
+  const logout = () => {
+    localStorage.removeItem("accessToken");
+    setAccessToken(null);
+    setUserInfo(null);
+  };
+
+  return (
+    <AuthContext.Provider value={{ accessToken, userInfo, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };

@@ -4,6 +4,7 @@ import Savebtn from "../../../../utills/buttons/Savebtn";
 import Closebtn from "../../../../utills/buttons/Closebtn";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 function MyProfile() {
   const location = useLocation();
@@ -14,6 +15,18 @@ function MyProfile() {
     nickname: nickname || "",
     image_url: image_url || "",
     introduce: introduce || "",
+  });
+
+  Swal.fire({
+    position: "top",
+    icon: "success",
+    title: "프로필이 수정되었습니다!",
+    showConfirmButton: false,
+    timer: 1500,
+    width: "300px",
+    customClass: {
+      title: "custom-swal-title",
+    },
   });
 
   useEffect(() => {
@@ -59,23 +72,42 @@ function MyProfile() {
             </NavLink>
           </div>
           <span>프로필 수정</span>
-          <div className="save">
+          {/* <div className="save">
             <Savebtn btnText="저장" />
-          </div>
+          </div> */}
         </header>
         <div className="cardMain">
-          <div className="main1">
-            <img
-              className="userImage"
-              src={userInfo.image_url}
-              alt="userImage"
-            />
-            <div className="nameContent">
-              <div className="name">이름</div>
-              <div className="userName">{userInfo.nickname}</div>
+          <form action="">
+            <div className="main1">
+              <img
+                className="userImage"
+                src={userInfo.image_url}
+                alt="userImage"
+              />
+
+              <div className="nameContent">
+                <div className="name">이름</div>
+                <input
+                  type="text"
+                  id="userName"
+                  placeholder={userInfo.nickname}
+                />
+                <div></div>
+              </div>
             </div>
-          </div>
-          <div className="introContent">{userInfo.introduce}</div>
+
+            <div className="introContent">
+              <div className="introHeader">자기소개</div>
+              <textarea
+                type="text"
+                id="introduce"
+                placeholder={userInfo.introduce}
+              />
+            </div>
+            <div className="save">
+              <Savebtn btnText="저장" className="save" />
+            </div>
+          </form>
         </div>
       </div>
     </>
