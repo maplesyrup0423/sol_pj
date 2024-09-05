@@ -63,16 +63,14 @@ function FeedMain() {
     setSelectedPost(null); // 세부 화면에서 다시 목록으로 돌아가면 null로 설정
   };
 
-
-    // FeedDetail을 표시할 때 FeedMain의 전체 UI가 FeedDetail로 대체됨
-    if (selectedPost) {
-      return (
-        <div className="feed_main">
-          <FeedDetail post={selectedPost} onBack={handleBackToFeed} />
-        </div>
-      );
-    }
-
+  // FeedDetail을 표시할 때 FeedMain의 전체 UI가 FeedDetail로 대체됨
+  if (selectedPost) {
+    return (
+      <div className="feed_main">
+        <FeedDetail post={selectedPost} onBack={handleBackToFeed} />
+      </div>
+    );
+  }
 
   return (
     <div className="feed_main">
@@ -108,8 +106,7 @@ function FeedMain() {
       </div>
 
       <div className="posting">
-        {/* 글쓰기 부분 
-        todo DB insert문 만들기*/}
+        {/* 글쓰기 부분*/}
         {userInfo ? (
           <Writing
             userInfo={userInfo}
@@ -126,7 +123,13 @@ function FeedMain() {
           {activeTab === "post_pop" && (
             <div className="feed">
               {data.length > 0 ? (
-                data.map((p) => <Feeds key={p.post_id} {...p} onClick={() => handlePostClick(p)} />)
+                data.map((p) => (
+                  <Feeds
+                    key={p.post_id}
+                    {...p}
+                    onClick={() => handlePostClick(p)}
+                  />
+                ))
               ) : (
                 <h1>Loading...</h1>
               )}
@@ -135,7 +138,13 @@ function FeedMain() {
           {activeTab === "post_date" && (
             <div className="feed">
               {data.length > 0 ? (
-                data.map((p) => <Feeds key={p.post_id} {...p} onClick={() => handlePostClick(p)} />)
+                data.map((p) => (
+                  <Feeds
+                    key={p.post_id}
+                    {...p}
+                    onClick={() => handlePostClick(p)}
+                  />
+                ))
               ) : (
                 <h1>Loading...</h1>
               )}
