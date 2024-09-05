@@ -27,8 +27,10 @@ function Feeds(props) {
     setSelectedImageIndex(null);
   };
 
+  const { onClick } = props;
+
   return (
-    <div className="feed-container">
+    <div className="feed-container" onClick={onClick}>
       <div className="feed-header">
         {/* 피드 헤더 */}
         <div className="user-info">
