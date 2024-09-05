@@ -10,6 +10,7 @@ import FeedMain from "./components/pages/homeLayout/center/feed/FeedMain";
 import UserProfile from "./components/pages/homeLayout/center/UserProfile/UserProfile";
 import MyProfile from "./components/pages/homeLayout/center/UserProfile/EditProfile";
 import SignUp from "./components/pages/SignUp";
+import Followers from "./components/pages/homeLayout/right/Followers";
 
 function App() {
     const router = createBrowserRouter([
@@ -33,6 +34,10 @@ function App() {
                 {
                     path: "/editProfile",
                     element: <MyProfile />, // 프로필수정
+                },
+                {
+                    path: "/followers",
+                    element: <Followers />,
                 },
             ],
         },
