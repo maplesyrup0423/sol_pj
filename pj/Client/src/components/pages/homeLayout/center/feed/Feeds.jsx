@@ -30,7 +30,7 @@ function Feeds(props) {
   const { onClick } = props;
 
   return (
-    <div className="feed-container" onClick={onClick}>
+    <div className="feed-container">
       <div className="feed-header">
         {/* 피드 헤더 */}
         <div className="user-info">
@@ -78,6 +78,8 @@ function Feeds(props) {
           />
         )}
       </div>
+
+      <div  onClick={onClick}>
       <div className="feed-text-container">
         <div className="feed-text">
           {/* 피드텍스트 */}
@@ -89,6 +91,8 @@ function Feeds(props) {
         <span> {props.createDate}</span>
         <span> 조회수 {props.views}</span>
       </div>
+      </div>
+
       <div className="feed-actions">
         <div className="like-comment">
           {/* 좋아요 댓글등 왼쪽 부분 */}
