@@ -1,4 +1,5 @@
 import "./FeedDetail.css";
+import "./Feeds.css";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { IoIosMore } from "react-icons/io";
 import { AiFillHeart } from "react-icons/ai";

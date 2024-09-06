@@ -52,6 +52,11 @@
   height: 100vh;
 }
 
+.switch-date,
+.switch-pop {
+  width: 200px;
+}
+
 
 
 /*!!!!!임시!!!!!*/
