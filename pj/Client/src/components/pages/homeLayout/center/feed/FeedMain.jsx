@@ -29,7 +29,7 @@ function FeedMain() {
     }
   };
 
-  const [activeTab, setActiveTab] = useState("post_pop");
+  const [activeTab, setActiveTab] = useState("post_date");
 
   const [selectedPost, setSelectedPost] = useState(null); // 선택된 게시물을 관리하는 상태
 
@@ -77,30 +77,30 @@ function FeedMain() {
       <div className="order">
         <div className="popularity">
           <div
-            className={`switch-pop ${activeTab === "post_pop" ? "active" : ""}`}
-            onClick={orderBy_pop}
+            className={`switch-date ${activeTab === "post_date" ? "active" : ""}`}
+            onClick={orderBy_date}
           >
-            <span
-              className={"pop" + (btnActive ? "" : " active")}
+            <div
+              className={"late" + (btnActive ? "" : " active")}
               onClick={toggleActive}
             >
-              인기
-            </span>
+              최신
+            </div>
           </div>
         </div>
         <div className="Latest">
           <div
-            className={`switch-date ${
-              activeTab === "post_date" ? "active" : ""
+            className={`switch-pop ${
+              activeTab === "post_pop" ? "active" : ""
             }`}
-            onClick={orderBy_date}
+            onClick={orderBy_pop}
           >
-            <span
-              className={"late" + (btnActive ? " active" : "")}
+            <div
+              className={"pop" + (btnActive ? " active" : "")}
               onClick={toggleActive}
             >
-              최신
-            </span>
+              인기
+            </div>
           </div>
         </div>
       </div>
