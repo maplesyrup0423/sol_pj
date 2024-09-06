@@ -12,7 +12,6 @@
   border-bottom: 1px solid white;
   box-sizing: border-box;
 
-
   &.active {
     color: #fae100;
     pointer-events: none;
@@ -54,10 +53,9 @@
 
 .switch-date,
 .switch-pop {
-  width: 200px;
+  width: 100%;
+  height: 100%;
 }
-
-
 
 /*!!!!!임시!!!!!*/
 /*
