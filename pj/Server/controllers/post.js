@@ -18,9 +18,9 @@ const upload = multer({ storage });
 module.exports = (conn) => {
   router.get("/api/post", decodeToken(), (req, res) => {
     const board_info_id = req.query.board_info_id; // 쿼리 파라미터로 게시판 ID 받아오기
-    const orderBy = req.query.orderBy || "pop";
+    const orderBy = req.query.orderBy || "date";
 
-    console.log("Received orderBy:", orderBy);
+    //console.log("Received orderBy:", orderBy);
 
     // 게시판 ID가 제공되지 않은 경우 처리
     if (!board_info_id) {
