@@ -1,0 +1,43 @@
+
+-- 파일 백업 테이블
+-- CREATE TABLE post_files_backup (
+--     backup_id INT PRIMARY KEY AUTO_INCREMENT,
+--     file_id INT,
+--     post_id INT,
+--     file_path VARCHAR(1024),
+--     delete_date DATETIME DEFAULT CURRENT_TIMESTAMP, 
+--     original_upload_date DATETIME 
+-- );
+-- 게시글 백업 테이블
+-- CREATE TABLE posts_backup (
+--     backup_id INT PRIMARY KEY AUTO_INCREMENT,
+--     original_post_id INT,
+--     post_text VARCHAR(1024),
+--     post_file1 VARCHAR(1024),
+--     post_file2 VARCHAR(1024),
+--     post_file3 VARCHAR(1024),
+--     post_file4 VARCHAR(1024),
+--     user_no INT,
+--     createDate DATETIME,
+--     modiDate DATETIME,
+--     board_info_id INT,
+--     isDeleted TINYINT,
+--     views INT,
+--     likes_count INT,
+--     backup_date DATETIME DEFAULT CURRENT_TIMESTAMP
+-- );
+
+-- 댓글 백업 테이블
+-- CREATE TABLE comments_backup (
+--     backup_id INT PRIMARY KEY AUTO_INCREMENT,
+--     original_comment_id INT,
+--     post_id INT,
+--     parent_comment_id INT,
+--     comment_text VARCHAR(1024),
+--     user_no INT,
+--     createDate DATETIME,
+--     modiDate DATETIME,
+--     isDeleted TINYINT,
+--     likes_count INT,
+--     backup_date DATETIME DEFAULT CURRENT_TIMESTAMP
+-- );
