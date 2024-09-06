@@ -75,20 +75,22 @@ function FeedMain() {
   return (
     <div className="feed_main">
       <div className="order">
-        <div className="popularity">
+
+        <div className={"popularity"+ (btnActive ? "" : " active")} onClick={toggleActive}>
           <div
             className={`switch-date ${activeTab === "post_date" ? "active" : ""}`}
             onClick={orderBy_date}
           >
             <div
-              className={"late" + (btnActive ? "" : " active")}
-              onClick={toggleActive}
+              // className={"late" + (btnActive ? "" : " active")}
+              // onClick={toggleActive}
             >
               최신
             </div>
           </div>
         </div>
-        <div className="Latest">
+        
+        <div className={"Latest"+ (btnActive ? " active" : "")} onClick={toggleActive}>
           <div
             className={`switch-pop ${
               activeTab === "post_pop" ? "active" : ""
@@ -96,8 +98,8 @@ function FeedMain() {
             onClick={orderBy_pop}
           >
             <div
-              className={"pop" + (btnActive ? " active" : "")}
-              onClick={toggleActive}
+              // className={"pop" + (btnActive ? " active" : "")}
+              // onClick={toggleActive}
             >
               인기
             </div>

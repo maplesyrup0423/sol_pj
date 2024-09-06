@@ -11,21 +11,33 @@
   height: 50px;
   border-bottom: 1px solid white;
   box-sizing: border-box;
+
+
+  &.active {
+    color: #fae100;
+    pointer-events: none;
+    border-bottom: 3px solid #fae100;
+    font-weight: bold;
+  }
 }
 
-.pop,
+/* .pop,
 .late {
+
+  width: 250px;
+  height: 40px;
+
   &.active {
     color: orange;
     border-bottom: 2px solid orange;
     pointer-events: none;
   }
-}
+} */
 
 .Latest:hover,
 .popularity:hover {
   cursor: pointer;
-  color: orange;
+  color: #fae100;
 }
 
 .Latest > div,
@@ -39,6 +51,8 @@
 .feed_main {
   height: 100vh;
 }
+
+
 
 /*!!!!!임시!!!!!*/
 /*
