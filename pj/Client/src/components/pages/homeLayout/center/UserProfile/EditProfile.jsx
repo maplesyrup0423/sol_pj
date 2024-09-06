@@ -3,7 +3,7 @@ import "./EditProfile.css";
 import Savebtn from "../../../../utills/buttons/Savebtn";
 import Closebtn from "../../../../utills/buttons/Closebtn";
 import { useState, useEffect } from "react";
-import api from "../../../../../components/auth/api"; // 수정: api 인스턴스 import
+import api from "../../../../../components/auth/api";
 import Swal from "sweetalert2";
 
 function MyProfile() {
@@ -21,7 +21,7 @@ function MyProfile() {
     // 서버에서 유저 정보를 가져오는 함수
     const fetchUserProfile = async () => {
       try {
-        const response = await api.get("/user-info"); // 수정: API 요청 URL을 baseURL에 맞게 설정
+        const response = await api.get("/user-info");
         const data = response.data;
 
         if (data.success) {
@@ -30,12 +30,12 @@ function MyProfile() {
             image_url: data.user.image_url || "", // 이미지가 없을 경우 기본 이미지 사용
             introduce: data.user.introduce || "자기소개가 없습니다.",
           });
-          console.log("userInfo111 : " + JSON.stringify(userInfo.image_url)); // 수정: JSON.stringify 사용
+          console.log("userInfo111 : " + JSON.stringify(userInfo.image_url));
         } else {
           Swal.fire({
             icon: "error",
             title: "오류",
-            text: `유저 정보를 가져올 수 없습니다. 오류 메시지: ${data.message}`, // 수정: Swal 사용하여 오류 표시
+            text: `유저 정보를 가져올 수 없습니다. 오류 메시지: ${data.message}`,
           });
         }
       } catch (error) {
