@@ -48,7 +48,7 @@ CREATE TABLE Authentic (
    auth_date   datetime   NULL,
    address   varchar(128)   NULL,
    PRIMARY KEY (auth_no, user_no),
-   FOREIGN KEY (user_no) REFERENCES User(user_no)
+   FOREIGN KEY (user_no) REFERENCES User(user_no) ON DELETE CASCADE
 );
 
 CREATE TABLE Password (
@@ -58,7 +58,7 @@ CREATE TABLE Password (
    password   varchar(128)   NULL,
    update_date   datetime   NULL,
    PRIMARY KEY (password_no, user_no),
-   FOREIGN KEY (user_no) REFERENCES User(user_no)
+   FOREIGN KEY (user_no) REFERENCES User(user_no) ON DELETE CASCADE
 );
 
 -- 팔로워(친구) 테이블 --
