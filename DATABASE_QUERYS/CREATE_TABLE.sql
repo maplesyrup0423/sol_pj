@@ -9,23 +9,24 @@ use sol;
     테이블 생성 순서 고려해서 slumberUser 테이블 위치 이동
 */
 CREATE TABLE User (
-   user_no   int   NOT NULL,
-   user_id   varchar(256)   NULL,
+   user_no   int   NOT NULL AUTO_INCREMENT,
+   user_id   varchar(256)   NOT NULL UNIQUE,
+   status    varchar(50)    NULL, -- 유저 상태를 나타내는 컬럼 추가
    PRIMARY KEY (user_no)
 );
 
 CREATE TABLE UserProfile (
-   profile_no   int   NOT NULL,
-   user_no   int   NOT NULL,
+   profile_no   int   NOT NULL AUTO_INCREMENT,
+   user_no   int   NOT NULL UNIQUE,
    nickname   varchar(50)   NULL,
-   image_url   varchar(128)   NULL,
-   introduce   varchar(256)   NULL,
-   PRIMARY KEY (profile_no, user_no),
-   FOREIGN KEY (user_no) REFERENCES User(user_no)
+   image_url   varchar(512)   NULL,
+   introduce   varchar(512)   NULL,
+   PRIMARY KEY (profile_no),
+   FOREIGN KEY (user_no) REFERENCES User(user_no) ON DELETE CASCADE
 );
 
 CREATE TABLE Session (
-   login_no  int   NOT NULL,
+   login_no  int   NOT NULL AUTO_INCREMENT,
    user_no   int   NOT NULL,
    login_time   datetime   NULL,
    logout_time   datetime   NULL,
@@ -38,7 +39,7 @@ CREATE TABLE Session (
 );
 
 CREATE TABLE Authentic (
-   auth_no   int   NOT NULL,
+   auth_no   int   NOT NULL AUTO_INCREMENT,
    user_no   int   NOT NULL,
    gender   int   NULL,
    phone   varchar(128)   NULL,
@@ -51,7 +52,7 @@ CREATE TABLE Authentic (
 );
 
 CREATE TABLE Password (
-   password_no   int   NOT NULL,
+   password_no   int   NOT NULL AUTO_INCREMENT,
    user_no   int   NOT NULL,
    salt   varchar(128)   NULL,
    password   varchar(128)   NULL,
