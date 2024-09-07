@@ -36,7 +36,7 @@ function SignUp() {
         });
 
         if (response.ok) {
-            const data = await response.json();
+            // const data = await response.json();
             Swal.fire({
                 title: "회원가입 완료",
                 text: signupData.userId + "님 회원가입을 환영합니다.", // 회원가입 시 입력한 userId 사용
