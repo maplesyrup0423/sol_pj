@@ -1,3 +1,6 @@
+-- 프로시저 삭제
+DROP PROCEDURE IF EXISTS RegisterUser;
+
 DELIMITER $$
 
 CREATE PROCEDURE RegisterUser(
