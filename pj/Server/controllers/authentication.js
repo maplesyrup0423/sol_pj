@@ -7,11 +7,11 @@ const cookieParser = require('cookie-parser');
 // 로그인 라우트 설정
 module.exports = function (conn) {
     router.post("/login", async (req, res) => {
-        console.log("로그인 요청 받음:", req.body);
+        
         try {
             const { username, password } = req.body;
 
-            console.log("사용자 조회 쿼리 실행");
+            
             const query = `SELECT u.user_id, u.user_no, f.nickname, f.image_url, p.password, f.introduce 
                            FROM user u 
                            JOIN userprofile f ON u.user_no = f.user_no 
@@ -29,7 +29,7 @@ module.exports = function (conn) {
                 console.log("쿼리 결과:", results);
 
                 if (results.length === 0) {
-                    console.log("사용자 not found");
+                    
                     return res.status(401).json({
                         success: false,
                         message: "아이디 또는 비밀번호가 일치하지 않습니다.",
@@ -37,16 +37,14 @@ module.exports = function (conn) {
                 }
 
                 const user = results[0];
-                console.log("사용자 found:", user.user_id);
+                
 
                 const accessToken = jwt.sign(
                     { user_id: user.user_id, user_no: user.user_no },
                     process.env.access_secret,
                     { expiresIn: "60m" }
                 );
-                console.log("액세스 토큰 생성됨");
-
-                console.log("리프레시 토큰 확인 시작");
+               
                 const checkRefreshTokenQuery =
                     "SELECT token FROM refreshtokens WHERE user_no = ?";
                 conn.query(
@@ -60,11 +58,11 @@ module.exports = function (conn) {
                                 .json({ success: false, message: "서버 오류" });
                         }
 
-                        console.log("리프레시 토큰 확인 결과:", tokenResults);
+                        
 
                         let refreshToken;
                         if (tokenResults.length === 0) {
-                            console.log("새 리프레시 토큰 생성");
+                            
                             refreshToken = jwt.sign(
                                 {
                                     user_id: user.user_id,
@@ -74,7 +72,7 @@ module.exports = function (conn) {
                                 { expiresIn: "30d" }
                             );
 
-                            console.log("리프레시 토큰 DB 저장 시도");
+                            
                             const saveRefreshTokenQuery =
                                 "INSERT INTO refreshtokens (user_no, token) VALUES (?, ?)";
                             conn.query(
@@ -91,10 +89,8 @@ module.exports = function (conn) {
                                             message: "서버 오류",
                                         });
                                     }
-                                    console.log(
-                                        "리프레시 토큰 저장 결과:",
-                                        saveResult
-                                    );
+                                
+                                 
                                     sendResponse(
                                         res,
                                         user,
@@ -104,7 +100,7 @@ module.exports = function (conn) {
                                 }
                             );
                         } else {
-                            console.log("기존 리프레시 토큰 사용");
+                         
                             refreshToken = tokenResults[0].token;
                             sendResponse(res, user, accessToken, refreshToken);
                         }
@@ -120,7 +116,7 @@ module.exports = function (conn) {
     });
 
     function sendResponse(res, user, accessToken, refreshToken) {
-        console.log("응답 전송 시작");
+        
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
             maxAge: 30 * 24 * 60 * 60 * 1000, // 30일
@@ -128,18 +124,7 @@ module.exports = function (conn) {
             sameSite: 'strict',
         });
 
-        console.log("응답 데이터:", {
-            success: true,
-            message: "로그인 성공!",
-            user: {
-                user_id: user.user_id,
-                nickname: user.nickname,
-                image_url: user.image_url,
-                introduce: user.introduce,
-            },
-            accessToken,
-            redirectUrl: "http://localhost:3000/",
-        });
+     
 
         res.json({
             success: true,
@@ -312,18 +297,19 @@ module.exports = function (conn) {
         }
     });
 
-    router.post('/logout', (req, res) => {
-        // 쿠키에서 리프레시 토큰을 가져옴
+    router.post('/api/logout', (req, res) => {
         const refreshToken = req.cookies.refreshToken;
 
+
         if (!refreshToken) {
-            return res.status(401).json({ success: false, message: "리프레시 토큰이 없습니다." });
+            
+            return res.status(200).json({ success: true, message: "이미 로그아웃 된 상태입니다." });
         }
 
         try {
-            // 리프레시 토큰 검증
             const decoded = jwt.verify(refreshToken, process.env.refresh_secret);
             const { user_no } = decoded;
+
 
             // 데이터베이스에서 리프레시 토큰 삭제
             const query = "DELETE FROM refreshtokens WHERE user_no = ?";
@@ -332,22 +318,31 @@ module.exports = function (conn) {
                     console.error("리프레시 토큰 삭제 오류:", err);
                     return res.status(500).json({ success: false, message: "서버 오류" });
                 }
-
-                console.log("리프레시 토큰 삭제 결과:", results);
+        
+                if (results.affectedRows === 0) {
+                    
+                }
 
                 // 쿠키에서 리프레시 토큰 삭제
-                res.cookie('refreshToken', '', {
+                res.clearCookie('refreshToken', {
                     httpOnly: true,
-                    maxAge: 0, // 즉시 만료
                     secure: process.env.NODE_ENV === 'production',
-                    sameSite: 'strict',
+                    sameSite: 'strict'
                 });
 
+                
                 res.json({ success: true, message: "로그아웃 성공" });
             });
         } catch (err) {
             console.error("리프레시 토큰 검증 오류:", err);
-            return res.status(403).json({ success: false, message: "리프레시 토큰이 유효하지 않습니다." });
+            // 토큰이 유효하지 않아도 쿠키는 삭제
+            res.clearCookie('refreshToken', {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'strict'
+            });
+            
+            res.status(200).json({ success: true, message: "로그아웃 성공 (토큰 만료)" });
         }
     });
     

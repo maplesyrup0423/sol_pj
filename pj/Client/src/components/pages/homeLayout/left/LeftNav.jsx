@@ -14,7 +14,7 @@ function LeftNav({ userInfo }) {
 
   const handleMoreClick = (event) => {
     event.stopPropagation(); // 클릭 이벤트 전파 방지
-    setIsDropdownVisible(prev => !prev);
+    setIsDropdownVisible((prev) => !prev);
   };
 
   const handleClickOutside = (event) => {
@@ -37,7 +37,16 @@ function LeftNav({ userInfo }) {
     } catch (error) {
       console.error("로그아웃 오류:", error);
       // 사용자에게 알림 표시 또는 오류 처리
-      alert('로그아웃 중 오류가 발생했습니다. 다시 시도해주세요.');
+      alert("로그아웃 중 오류가 발생했습니다. 다시 시도해주세요.");
+    }
+  };
+
+  const handleAccount = async () => {
+    try {
+      navigate("/account"); //계정설정 페이지로 리다이렉트
+    } catch (error) {
+      console.error("계정설정 이동 오류 : ", error);
+      alert("이동중 오류 발생했습니다. 다시 시도해주세요.");
     }
   };
 
@@ -84,6 +93,9 @@ function LeftNav({ userInfo }) {
                   <li>
                     <button onClick={handleLogout}>로그아웃</button>
                     {/* 로그아웃 버튼 클릭 시 handleLogout 함수 호출 */}
+                  </li>
+                  <li>
+                    <button onClick={handleAccount}>계정설정</button>
                   </li>
                 </ul>
               </div>

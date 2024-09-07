@@ -29,7 +29,7 @@ function FeedMain() {
     }
   };
 
-  const [activeTab, setActiveTab] = useState("post_pop");
+  const [activeTab, setActiveTab] = useState("post_date");
 
   const [selectedPost, setSelectedPost] = useState(null); // 선택된 게시물을 관리하는 상태
 
@@ -44,6 +44,10 @@ function FeedMain() {
   };
 
   useEffect(() => {
+    const container = document.querySelector(".homeContainer"); // 스크롤이 발생하는 컨테이너 선택
+    if (container) {
+      container.scrollTop = 0;
+    }
     fetchData();
   }, [boardId, activeTab]);
 
@@ -75,32 +79,39 @@ function FeedMain() {
   return (
     <div className="feed_main">
       <div className="order">
-        <div className="popularity">
-          <div
-            className={`switch-pop ${activeTab === "post_pop" ? "active" : ""}`}
-            onClick={orderBy_pop}
-          >
-            <span
-              className={"pop" + (btnActive ? "" : " active")}
-              onClick={toggleActive}
-            >
-              인기
-            </span>
-          </div>
-        </div>
-        <div className="Latest">
+        <div
+          className={"popularity" + (btnActive ? "" : " active")}
+          onClick={toggleActive}
+        >
           <div
             className={`switch-date ${
               activeTab === "post_date" ? "active" : ""
             }`}
             onClick={orderBy_date}
           >
-            <span
-              className={"late" + (btnActive ? " active" : "")}
-              onClick={toggleActive}
+            <div
+            // className={"late" + (btnActive ? "" : " active")}
+            // onClick={toggleActive}
             >
               최신
-            </span>
+            </div>
+          </div>
+        </div>
+
+        <div
+          className={"Latest" + (btnActive ? " active" : "")}
+          onClick={toggleActive}
+        >
+          <div
+            className={`switch-pop ${activeTab === "post_pop" ? "active" : ""}`}
+            onClick={orderBy_pop}
+          >
+            <div
+            // className={"pop" + (btnActive ? " active" : "")}
+            // onClick={toggleActive}
+            >
+              인기
+            </div>
           </div>
         </div>
       </div>
