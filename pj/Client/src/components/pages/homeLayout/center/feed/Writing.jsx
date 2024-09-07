@@ -6,6 +6,7 @@ import api from "../../../../auth/api";
 import Swal from "sweetalert2";
 import { BsImages } from "react-icons/bs";
 import { AiFillCloseCircle } from "react-icons/ai";
+import { v4 as uuidv4 } from "uuid"; // UUID 생성 라이브러리
 
 function Writing({ userInfo, boardId, refreshPosts }) {
   const [, setContent] = useState(""); //textarea 높이 처리
@@ -25,13 +26,20 @@ function Writing({ userInfo, boardId, refreshPosts }) {
   // 이미지 파일 선택 처리
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
-    setSelectedFiles(files);
 
-    // 파일 미리보기 URL 생성
-    const filePreviews = files.map((file) => {
-      return URL.createObjectURL(file);
-    });
-    setPreviewUrls(filePreviews);
+    // 새로 선택한 파일들의 ID와 미리보기 URL을 생성
+    const updatedFiles = files.map((file) => ({
+      id: uuidv4(), // 파일에 고유 식별자 추가
+      file: file,
+      previewUrl: URL.createObjectURL(file),
+    }));
+
+    // 파일 이름을 기준으로 중복 제거
+    const existingFilesMap = new Map(
+      selectedFiles.map((file) => [file.file.name, file])
+    );
+    updatedFiles.forEach((file) => existingFilesMap.set(file.file.name, file));
+    setSelectedFiles(Array.from(existingFilesMap.values()));
   };
 
   useEffect(() => {
@@ -41,26 +49,32 @@ function Writing({ userInfo, boardId, refreshPosts }) {
   }, [previewUrls]);
 
   // X버튼 클릭 시 이미지 삭제
-  const handleDeleteImage = (index) => {
-    const updatedFiles = selectedFiles.filter((_, idx) => idx !== index);
-    const updatedPreviews = previewUrls.filter((_, idx) => idx !== index);
+  const handleDeleteImage = (id) => {
+    const updatedFiles = selectedFiles.filter((file) => file.id !== id);
+    const fileToRemove = selectedFiles.find((file) => file.id === id);
 
     setSelectedFiles(updatedFiles);
-    setPreviewUrls(updatedPreviews);
+
+    // Blob URL 해제는 상태 업데이트 이후 처리
+    setTimeout(() => {
+      URL.revokeObjectURL(fileToRemove.previewUrl);
+    }, 0);
   };
 
   //form submit 버튼 클릭시  처리
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // 서버로 보낼 데이터 구성
+
     const postData = new FormData();
     postData.append("postContent", postContent); // 글 내용 추가
     postData.append("user_no", userInfo.user_no); // 유저 ID 추가
     postData.append("board_info_id", boardId); // 게시판 ID 추가
+
     // 선택한 파일들을 formData에 추가
-    for (let i = 0; i < selectedFiles.length; i++) {
-      postData.append("images", selectedFiles[i]);
-    }
+    selectedFiles.forEach(({ file }) => {
+      postData.append("images", file);
+    });
+
     try {
       const response = await api.post("/api/postInsert", postData, {
         headers: {
@@ -107,11 +121,9 @@ function Writing({ userInfo, boardId, refreshPosts }) {
     <div className="write-container">
       <form onSubmit={handleSubmit}>
         <div className="write-row">
-          {/* 사용자 프로필 이미지 */}
           <div className="profile-image">
             <ProfileImg image_url={userInfo.image_url} />
           </div>
-          {/* textarea : 사용자 입력 */}
           <div className="textarea-container">
             <textarea
               value={postContent}
@@ -123,21 +135,18 @@ function Writing({ userInfo, boardId, refreshPosts }) {
           </div>
         </div>
 
-        {/* 이미지 미리보기 */}
         <div className="preview-container">
-          {previewUrls.map((url, index) => (
-            <div key={index} className="image-preview">
-              <img src={url} alt={`preview-${index}`} />
+          {selectedFiles.map(({ id, previewUrl }, index) => (
+            <div key={id} className="image-preview">
+              <img src={previewUrl} alt={`preview-${index}`} />
               <AiFillCloseCircle
-                onClick={() => handleDeleteImage(index)}
+                onClick={() => handleDeleteImage(id)}
                 className="img-delete-button"
               />
             </div>
           ))}
         </div>
-        {/* 하단 버튼 미리보기 */}
         <div className="buttons">
-          {/* 파일 등록 버튼 */}
           <div className="inputImg">
             <label htmlFor="file">
               <BsImages className="file-BsImages" />
@@ -150,7 +159,6 @@ function Writing({ userInfo, boardId, refreshPosts }) {
               onChange={handleFileChange}
             />
           </div>
-          {/* 글 쓰기 버튼 */}
           <div className="button-row">
             <BasicButton
               btnOn={postContent === "" && selectedFiles.length === 0}
