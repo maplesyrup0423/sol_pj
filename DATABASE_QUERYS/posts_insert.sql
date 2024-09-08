@@ -14,6 +14,8 @@ INSERT INTO board_info_table (board_info_name, board_img)
 VALUES('배틀 그라운드','PUBG BATTLEGROUNDS.png');
 INSERT INTO board_info_table (board_info_name, board_img) 
 VALUES('발로란트','VALORANT.png');
+INSERT INTO board_info_table (board_info_name, board_img) 
+VALUES('이터널 리턴','Eternal Return.png');
 
 --  게시글이랑 파일
 INSERT INTO posts (post_text, user_no, board_info_id)

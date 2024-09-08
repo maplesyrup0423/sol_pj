@@ -5,27 +5,28 @@ import More from "./More.jsx";
 import api from "../../../auth/api.js";
 
 function BoardInfo(props) {
-  const [boardName, setBoardName] = useState([]);
-  useEffect(() => {
-    const callApi = async () => {
-      try {
-        const response = await api.get(
-          `/api/boardInfoUser?user_no=${props.user_no}`
-        );
-        setBoardName(response.data);
-      } catch (err) {
-        console.error("Error fetching board info:", err);
-      }
-    };
+  const [boardInfoUser, setBoardInfoUser] = useState([]);
 
-    callApi();
+  const fetchBoardInfoUser = async () => {
+    try {
+      const response = await api.get(
+        `/api/boardInfoUser?user_no=${props.user_no}`
+      );
+      setBoardInfoUser(response.data);
+    } catch (err) {
+      console.error("Error fetching board info:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchBoardInfoUser();
   }, []);
 
   return (
     <div className="GameInfo">
       <ul>
-        {boardName.length > 0 ? (
-          boardName.map((bn) => (
+        {boardInfoUser.length > 0 ? (
+          boardInfoUser.map((bn) => (
             <BoardName
               key={bn.board_info_id}
               board_info_id={bn.board_info_id}
@@ -36,7 +37,7 @@ function BoardInfo(props) {
         ) : (
           <h1>Loading...</h1>
         )}
-        <More />
+        <More onBoardInfoUpdate={fetchBoardInfoUser} />
       </ul>
     </div>
   );

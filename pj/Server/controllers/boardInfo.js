@@ -4,6 +4,7 @@ const decodeToken = require("../middleware/decodeToken");
 
 // DB 연결 객체를 매개변수로 받는 함수로 모듈화
 module.exports = (conn) => {
+  // 게시판 정보 조회
   router.get("/api/boardInfo", decodeToken(), (req, res) => {
     conn.query("SELECT * FROM board_info_table", (err, rows, fields) => {
       if (err) {
@@ -24,6 +25,7 @@ module.exports = (conn) => {
     });
   });
   // ---------------------------------------------------------------------------
+  // 사용자 게시판 정보 조회
   router.get("/api/boardInfoUser", decodeToken(), (req, res) => {
     const query = `select ub.board_info_id, bi.board_info_name, bi.board_img  
       from userboard ub
@@ -49,6 +51,29 @@ module.exports = (conn) => {
       }
     });
   });
+  // ---------------------------------------------------------------------------
 
+  // 사용자 게시판 정보 업데이트
+  router.post("/api/updateUserBoard", decodeToken(), (req, res) => {
+    const { user_no, board_ids } = req.body;
+
+    // 프로시저 호출
+    conn.query(
+      "CALL UpdateUserBoard(?, ?)",
+      [user_no, JSON.stringify(board_ids)],
+      (err, results) => {
+        if (err) {
+          console.error("사용자 게시판 정보 업데이트 오류:", err.message);
+          res.status(500).json({
+            error: "사용자 게시판 정보를 업데이트하는 중 오류가 발생했습니다.",
+          });
+        } else {
+          res.status(200).json({
+            message: "사용자 게시판 정보가 성공적으로 업데이트되었습니다.",
+          });
+        }
+      }
+    );
+  });
   return router; // 라우터 반환
 };
