@@ -40,7 +40,8 @@ INSERT INTO posts (post_text, user_no, board_info_id) VALUES ("인설트문 테�
 select * from posts;
 select * from post_files;
 
--- 로그인한 유저별 선택 게시판
+-- 유저별 선택 게시판
+-- 추후 회원강비시 기본으로 몇개 등록하는 방법으로 구현
 insert into userboard(user_no, board_info_id) value(1,1),(1,2),(1,3),(1,4);
 insert into userboard(user_no, board_info_id) value(2,1),(2,2),(2,3);
 insert into userboard(user_no, board_info_id) value(3,1),(3,2);

@@ -6,16 +6,21 @@
 USE sol;
 
 -- 게시판
-INSERT INTO board_info_table (board_info_name, board_img) 
-VALUES('리그 오브 레전드','League of Legends.png');
-INSERT INTO board_info_table (board_info_name, board_img) 
-VALUES('로스트 아크','LOST ARK.png');
-INSERT INTO board_info_table (board_info_name, board_img) 
-VALUES('배틀 그라운드','PUBG BATTLEGROUNDS.png');
-INSERT INTO board_info_table (board_info_name, board_img) 
-VALUES('발로란트','VALORANT.png');
-INSERT INTO board_info_table (board_info_name, board_img) 
-VALUES('이터널 리턴','Eternal Return.png');
+INSERT INTO board_info_table (board_info_name, board_img)  VALUES('리그 오브 레전드','League of Legends.png');
+INSERT INTO board_info_table (board_info_name, board_img)  VALUES('로스트 아크','LOST ARK.png');
+INSERT INTO board_info_table (board_info_name, board_img)  VALUES('배틀 그라운드','PUBG BATTLEGROUNDS.png');
+INSERT INTO board_info_table (board_info_name, board_img)  VALUES('발로란트','VALORANT.png');
+INSERT INTO board_info_table (board_info_name, board_img)  VALUES('이터널 리턴','Eternal Return.png');
+
+
+-- 유저별 선택 게시판
+-- 추후 회원강비시 기본으로 몇개 등록하는 방법으로 구현
+insert into userboard(user_no, board_info_id) value(1,1),(1,2),(1,3),(1,4);
+insert into userboard(user_no, board_info_id) value(2,1),(2,2),(2,3);
+insert into userboard(user_no, board_info_id) value(3,1),(3,2);
+insert into userboard(user_no, board_info_id) value(4,1);
+insert into userboard(user_no, board_info_id) value(5,1),(5,2);
+insert into userboard(user_no, board_info_id) value(6,1),(6,2),(6,3);
 
 --  게시글이랑 파일
 INSERT INTO posts (post_text, user_no, board_info_id)
