@@ -1,21 +1,15 @@
 .moreContainer {
-  width: 200px;
-  height: 50px;
-  display: flex;
-  line-height: 50px;
   vertical-align: middle;
+  display: flex;
 }
 
-.more.image {
-  width: 30px;
-  height: 30px;
-  /* border: 2px solid white; */
-  margin-right: 10px;
+.more_image {
+  height: 40px;
+  line-height: 40px;
 }
 
-.more.text {
-  width: 100px;
-  height: 30px;
-  line-height: 30px;
-  padding-left: 10px;
+.more_text {
+  width: 180px;
+  height: 40px;
+  line-height: 40px;
 }
