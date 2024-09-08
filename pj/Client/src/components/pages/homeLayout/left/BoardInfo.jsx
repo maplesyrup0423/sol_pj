@@ -4,13 +4,14 @@ import BoardName from "./BoardName.jsx";
 import More from "./More.jsx";
 import api from "../../../auth/api.js";
 
-function BoardInfo() {
+function BoardInfo(props) {
   const [boardName, setBoardName] = useState([]);
-
   useEffect(() => {
     const callApi = async () => {
       try {
-        const response = await api.get("/api/boardInfo");
+        const response = await api.get(
+          `/api/boardInfoUser?user_no=${props.user_no}`
+        );
         setBoardName(response.data);
       } catch (err) {
         console.error("Error fetching board info:", err);
