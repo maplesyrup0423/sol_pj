@@ -22,7 +22,9 @@ function App() {
       children: [
         {
           path: "/",
-          element: <FeedMain />, //처음에 보일 화면 아직 처리 안함
+          element: <FeedMain />,
+          //처음에 보일 화면은 사용자가 선택한 게시판중 id가 가장 작은값
+          //todo 후추 사용자 경험 바탕으로 정해지는 방안 고민하기
         },
         {
           path: "/post/:boardId",

@@ -3,7 +3,7 @@ import Feeds from "./Feeds";
 import FeedDetail from "./FeedDetail";
 import Writing from "./Writing";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../../../../Context/AuthContext";
 import api from "../../../../auth/api";
@@ -13,6 +13,7 @@ function FeedMain() {
   const { boardId: paramBoardId } = useParams(); // URL 파라미터로 게시판 ID 가져오기
   const [data, setData] = useState([]);
   const [defaultBoardId, setDefaultBoardId] = useState([]);
+  const navigate = useNavigate(); // useNavigate 훅 추가
 
   const fetchBoardInfoUser = async () => {
     try {
@@ -24,15 +25,20 @@ function FeedMain() {
       if (boardIds.length > 0) {
         // 가장 작은 값 찾기
         const minBoardId = Math.min(...boardIds);
-        setDefaultBoardId([minBoardId]); // 가장 작은 값을 배열로 설정
+        setDefaultBoardId(minBoardId); // 가장 작은값
+        // URL에 기본 게시판 ID로 리디렉션
+        if (!paramBoardId) {
+          navigate(`/post/${minBoardId}`, { replace: true });
+        }
       } else {
-        setDefaultBoardId([1]); // 데이터가 없는 경우 1로 설정
+        setDefaultBoardId(1); // 데이터가 없는 경우 1로 설정
       }
     } catch (err) {
       console.error("Error fetching board info:", err);
     }
   };
   const boardId = paramBoardId || defaultBoardId; // boardId가 undefined일 때 기본값 설정
+
   const fetchData = async () => {
     try {
       const response = await api.get(
@@ -46,6 +52,7 @@ function FeedMain() {
       console.error("Error fetching data:", error);
     }
   };
+
   const [activeTab, setActiveTab] = useState("post_date");
 
   const [selectedPost, setSelectedPost] = useState(null); // 선택된 게시물을 관리하는 상태
