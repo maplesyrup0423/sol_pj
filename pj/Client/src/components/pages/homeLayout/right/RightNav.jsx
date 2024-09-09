@@ -89,7 +89,7 @@ function RightNav() {
                         {activeTab === "followers" && (
                             <Followers followerList={followerList} />
                         )}
-                        <AddMessenger />
+                        {/* <AddMessenger /> */}
                     </li>
                 </ul>
             </main>

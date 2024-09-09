@@ -1,0 +1,37 @@
+.chat-content {
+    display: flex;
+    gap: 10px;
+}
+.my-chat {
+    justify-content: flex-end;
+    color: black;
+    background: none;
+}
+.my-chat p {
+    background-color: #ffcd19;
+}
+.chat-img {
+    background-color: white;
+    min-width: 30px;
+    max-height: 30px;
+    border-radius: 50%;
+}
+.other-chat {
+    justify-content: flex-start;
+    color: black;
+    max-width: 70%; /* 최대 너비를 설정하여 너무 길지 않게 제한 */
+    background: none;
+}
+.other-chat p {
+    background-color: #f3f3f3;
+}
+.my-chat p,
+.other-chat p {
+    color: black;
+    border-radius: 10px;
+    padding: 5px;
+    max-width: 100%; /* 부모 요소인 chat-content의 최대 너비 내에서만 확장되도록 설정 */
+    word-wrap: break-word; /* 긴 단어를 줄바꿈 */
+    word-break: break-word; /* 긴 단어를 강제로 줄바꿈 */
+    /* display: inline-block; 텍스트 크기에 맞게 div가 확장되도록 설정 */
+}
