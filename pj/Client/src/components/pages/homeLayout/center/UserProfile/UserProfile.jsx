@@ -23,7 +23,6 @@ function UserProfile() {
 
   // userInfo가 존재하는지 확인
   const isUserInfoAvailable = userInfo && userInfo.nickname;
-  console.log("nickname : ", userInfo.nickname);
 
   return (
     <>

@@ -1,15 +1,19 @@
 import { useState, useEffect, useRef } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import "./EditProfile.css";
 import Savebtn from "../../../../utills/buttons/Savebtn";
 import Closebtn from "../../../../utills/buttons/Closebtn";
 import api from "../../../../../components/auth/api";
 import Swal from "sweetalert2";
+import { NavLink } from "react-router-dom";
 
 function MyProfile() {
   const location = useLocation();
   const { user_no, nickname, image_url, user_id, introduce } =
     location.state || {};
+
+  // 콘솔에 전달된 state 출력
+  console.log("EditProfile에서 받은 state:", location.state);
 
   const [userInfo, setUser] = useState({
     nickname: nickname || "",
@@ -17,45 +21,7 @@ function MyProfile() {
     introduce: introduce || "",
   });
 
-  const [isLoading, setIsLoading] = useState(true);
-
   const fileInputRef = useRef(null);
-
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const response = await api.get("/user-info");
-        const data = response.data;
-
-        if (data.success) {
-          setUser({
-            nickname: data.user.nickname || "",
-            image_url: data.user.image_url || "", // 이미지가 없을 경우 기본 이미지 사용
-            introduce: data.user.introduce || "자기소개가 없습니다.",
-          });
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: "오류",
-            text: `유저 정보를 가져올 수 없습니다. 오류 메시지: ${data.message}`,
-          });
-        }
-      } catch (error) {
-        console.error("유저 정보를 가져오는 중 오류 발생:", error);
-        Swal.fire({
-          icon: "error",
-          title: "오류",
-          text: "서버와의 통신 오류가 발생했습니다.",
-        });
-      } finally {
-        setIsLoading(false); // 데이터 로딩 완료
-      }
-    };
-
-    if (user_id) {
-      fetchUserProfile();
-    }
-  }, [user_id]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -95,23 +61,22 @@ function MyProfile() {
         },
       });
 
+      console.log("서버 응답 데이터:", response.data); // 서버 응답을 로그로 확인
+
       if (response && response.data) {
-        if (response.data.message === "프로필수정 성공!") {
+        console.log("서버 응답 데이터:", response.data); // 이 로그를 통해 응답 확인
+        const { message, error } = response.data;
+        if (message && message === "프로필 수정 성공!") {
           Swal.fire({
             icon: "success",
             title: "성공",
             text: "프로필이 성공적으로 수정되었습니다.",
-          }).then(() => {
-            // 상태 업데이트 후 페이지 새로고침을 시뮬레이션
-            setUser((prevState) => ({ ...prevState }));
           });
         } else {
           Swal.fire({
             icon: "error",
             title: "오류",
-            text: `프로필 수정 실패: ${
-              response.data.message || "알 수 없는 오류"
-            }`,
+            text: `프로필 수정 실패: ${message || error}`,
           });
         }
       } else {
@@ -129,12 +94,48 @@ function MyProfile() {
       Swal.fire({
         icon: "error",
         title: "오류",
-        text: `서버와의 통신 오류가 발생했습니다: ${
-          error.response?.data?.message || error.message
-        }`,
+        text: "서버와의 통신 오류가 발생했습니다.",
       });
     }
   };
+
+  useEffect(() => {
+    // 서버에서 유저 정보를 가져오는 함수
+    const fetchUserProfile = async () => {
+      try {
+        const response = await api.get("/user-info"); // 유저 정보를 가져오는 엔드포인트로 수정
+        const data = response.data;
+
+        console.log("서버 응답 데이터:", data);
+
+        if (data.success) {
+          setUser({
+            nickname: data.user.nickname || "",
+            image_url: data.user.image_url || "", // 이미지가 없을 경우 기본 이미지 사용
+            introduce: data.user.introduce || "자기소개가 없습니다.",
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "오류",
+            text: `유저 정보를 가져올 수 없습니다. 오류 메시지: ${data.message}`,
+          });
+        }
+      } catch (error) {
+        console.error("유저 정보를 가져오는 중 오류 발생:", error);
+        Swal.fire({
+          icon: "error",
+          title: "오류",
+          text: "서버와의 통신 오류가 발생했습니다.",
+        });
+      }
+    };
+
+    // user_id가 있을 때만 서버에서 데이터를 가져옵니다.
+    if (user_id) {
+      fetchUserProfile();
+    }
+  }, [user_id]);
 
   return (
     <>
@@ -160,7 +161,6 @@ function MyProfile() {
                   <figcaption onClick={() => fileInputRef.current.click()}>
                     <span className="material-symbols-outlined">image</span>
                   </figcaption>
-                  {/* https://ossam5.tistory.com/263 자료출처 */}
                   <input
                     type="file"
                     ref={fileInputRef}
