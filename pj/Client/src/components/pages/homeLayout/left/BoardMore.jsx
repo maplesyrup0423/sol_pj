@@ -89,19 +89,19 @@ function BoardMore({ onClose }) {
             <h2>게시판 더보기</h2>
             {/* 전체 게시판 목록*/}
             <ul>
-              {boardName.length > 0 ? (
-                boardName.map((bn) => (
-                  <BoardName
-                    key={bn.board_info_id}
-                    board_info_id={bn.board_info_id}
-                    board_info_name={bn.board_info_name}
-                    board_img={bn.board_img}
-                    onClose={onClose}
-                  />
-                ))
-              ) : (
-                <h1>Loading...</h1>
-              )}
+              {boardName.length > 0
+                ? boardName
+                    .filter((bn) => !boardInfoUser.includes(bn.board_info_id))
+                    .map((bn) => (
+                      <BoardName
+                        key={bn.board_info_id}
+                        board_info_id={bn.board_info_id}
+                        board_info_name={bn.board_info_name}
+                        board_img={bn.board_img}
+                        onClose={onClose}
+                      />
+                    ))
+                : ""}
             </ul>
             {/* 설정 버튼 */}
             <button className="settings-board-button" onClick={toggleSettings}>
@@ -125,11 +125,14 @@ function BoardMore({ onClose }) {
                         checked={checkedBoardIds.has(bn.board_info_id)}
                         onChange={() => handleCheckboxChange(bn.board_info_id)}
                       />
-                      <BoardName
-                        board_info_id={bn.board_info_id}
-                        board_info_name={bn.board_info_name}
-                        board_img={bn.board_img}
-                      />
+                      <div className="gameContainer">
+                        <div className="gameInfo gameImg">
+                          <img src={bn.board_img} alt="" />
+                        </div>
+                        <div className="gameInfo gameTitle">
+                          &nbsp; {bn.board_info_name}
+                        </div>
+                      </div>
                     </label>
                   </li>
                 ))
