@@ -4,24 +4,16 @@ function setupChatModule(app, io, conn) {
         console.log('새로운 클라이언트 연결');
 
         // 채팅방 참가
-        socket.on('join room', (room_id) => {
+        socket.on('join_room', (room_id, user_no) => {
             socket.join(room_id);
-            console.log(`클라이언트가 채팅방 ${room_id}에 참가함`);
+            console.log(`${user_no}가 채팅방 ${room_id}에 참가함`);
         });
-
+        
         // 메시지 전송
-        socket.on('chat message', (data) => {
+       socket.on('chat_message', (data) => {
             const { room_id, user_no, message_content } = data;
-            const message_id = Date.now().toString();
-
-            const query = 'INSERT INTO ChatMessage (message_id, room_id, user_no, message_content, created_at, status) VALUES (?, ?, ?, ?, NOW(), ?)';
-            conn.query(query, [message_id, room_id, user_no, message_content, 'sent'], (err, result) => {
-                if (err) {
-                    console.error('메시지 저장 실패:', err);
-                } else {
-                    io.to(room_id).emit('chat message', { message_id, room_id, user_no, message_content });
-                }
-            });
+            // 메시지를 해당 채팅방에 있는 모든 클라이언트에게 전송
+            io.to(room_id).emit('chat_message', { user_no, message_content });
         });
 
         // 연결 해제
