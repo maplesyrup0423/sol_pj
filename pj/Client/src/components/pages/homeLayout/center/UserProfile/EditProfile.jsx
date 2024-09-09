@@ -17,7 +17,45 @@ function MyProfile() {
     introduce: introduce || "",
   });
 
+  const [isLoading, setIsLoading] = useState(true);
+
   const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const response = await api.get("/user-info");
+        const data = response.data;
+
+        if (data.success) {
+          setUser({
+            nickname: data.user.nickname || "",
+            image_url: data.user.image_url || "", // 이미지가 없을 경우 기본 이미지 사용
+            introduce: data.user.introduce || "자기소개가 없습니다.",
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "오류",
+            text: `유저 정보를 가져올 수 없습니다. 오류 메시지: ${data.message}`,
+          });
+        }
+      } catch (error) {
+        console.error("유저 정보를 가져오는 중 오류 발생:", error);
+        Swal.fire({
+          icon: "error",
+          title: "오류",
+          text: "서버와의 통신 오류가 발생했습니다.",
+        });
+      } finally {
+        setIsLoading(false); // 데이터 로딩 완료
+      }
+    };
+
+    if (user_id) {
+      fetchUserProfile();
+    }
+  }, [user_id]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -63,6 +101,9 @@ function MyProfile() {
             icon: "success",
             title: "성공",
             text: "프로필이 성공적으로 수정되었습니다.",
+          }).then(() => {
+            // 상태 업데이트 후 페이지 새로고침을 시뮬레이션
+            setUser((prevState) => ({ ...prevState }));
           });
         } else {
           Swal.fire({
@@ -90,42 +131,6 @@ function MyProfile() {
       });
     }
   };
-
-  useEffect(() => {
-    // 서버에서 유저 정보를 가져오는 함수
-    const fetchUserProfile = async () => {
-      try {
-        const response = await api.get("/user-info");
-        const data = response.data;
-
-        if (data.success) {
-          setUser({
-            nickname: data.user.nickname || "",
-            image_url: data.user.image_url || "", // 이미지가 없을 경우 기본 이미지 사용
-            introduce: data.user.introduce || "자기소개가 없습니다.",
-          });
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: "오류",
-            text: `유저 정보를 가져올 수 없습니다. 오류 메시지: ${data.message}`,
-          });
-        }
-      } catch (error) {
-        console.error("유저 정보를 가져오는 중 오류 발생:", error);
-        Swal.fire({
-          icon: "error",
-          title: "오류",
-          text: "서버와의 통신 오류가 발생했습니다.",
-        });
-      }
-    };
-
-    // user_id가 있을 때만 서버에서 데이터를 가져옵니다.
-    if (user_id) {
-      fetchUserProfile();
-    }
-  }, [user_id]);
 
   return (
     <>

@@ -18,8 +18,14 @@ INSERT INTO UserProfile (user_no, nickname, image_url, introduce) VALUES(4, '로
 INSERT INTO UserProfile (user_no, nickname, image_url, introduce) VALUES(5, '기둥', 'https://cdn.pixabay.com/photo/2022/05/28/06/39/cat-7226671_1280.jpg', '자기소개3');
 INSERT INTO UserProfile (user_no, nickname, image_url, introduce) VALUES(6, '요이커', 'https://cdn.pixabay.com/photo/2017/03/14/14/49/cat-2143332_1280.jpg', '자기소개4');
 
-update UserProfile set nickname = '김한결', introduce ='123123'
+select * from userprofile;
+update UserProfile set nickname = '체르', introduce ='무엇을 해야 할까요?', image_url='https://cdn.pixabay.com/photo/2013/05/30/18/21/cat-114782_1280.jpg'
+where user_no = 1;
+
+update UserProfile set nickname = '김한결', introduce ='자기소개1', image_url='https://cdn.pixabay.com/photo/2014/11/30/14/11/cat-551554_1280.jpg'
 where user_no = 3;
+
+commit;
 
 -- 유저 패스워드 (회원 비밀번호 1234로 통일해놓은 상태)
 INSERT INTO password (user_no, salt, password, update_date) VALUES(1, '10', '1234', NOW());
