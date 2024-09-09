@@ -109,7 +109,9 @@ function MyProfile() {
           Swal.fire({
             icon: "error",
             title: "오류",
-            text: `프로필 수정 실패: ${response.data.error}`,
+            text: `프로필 수정 실패: ${
+              response.data.message || "알 수 없는 오류"
+            }`,
           });
         }
       } else {
@@ -127,7 +129,9 @@ function MyProfile() {
       Swal.fire({
         icon: "error",
         title: "오류",
-        text: "서버와의 통신 오류가 발생했습니다.",
+        text: `서버와의 통신 오류가 발생했습니다: ${
+          error.response?.data?.message || error.message
+        }`,
       });
     }
   };
