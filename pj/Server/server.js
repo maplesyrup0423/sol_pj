@@ -1,7 +1,7 @@
 // server.js
 const express = require("express");
 const bodyParser = require("body-parser");
-const cookieParser = require('cookie-parser');
+const cookieParser = require("cookie-parser");
 const http = require("http");
 const cors = require("cors");
 const mysql = require("mysql");
@@ -15,11 +15,11 @@ const app = express();
 const server = http.createServer(app);
 
 app.use(
-  cors({
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST"],
-    credentials: true,
-  })
+    cors({
+        origin: "http://localhost:3000",
+        methods: ["GET", "POST"],
+        credentials: true,
+    })
 );
 
 app.use(bodyParser.json());
@@ -30,28 +30,28 @@ const data = fs.readFileSync("./server/database.json");
 const conf = JSON.parse(data);
 
 const conn = mysql.createConnection({
-  host: conf.host,
-  port: conf.port,
-  user: conf.user,
-  password: conf.password,
-  database: conf.database,
+    host: conf.host,
+    port: conf.port,
+    user: conf.user,
+    password: conf.password,
+    database: conf.database,
 });
 
 conn.connect((err) => {
-  if (err) {
-    console.error("DB 연결 오류:", err);
-  } else {
-    console.log("DB 연결 성공");
-  }
+    if (err) {
+        console.error("DB 연결 오류:", err);
+    } else {
+        console.log("DB 연결 성공");
+    }
 });
 
 // Socket.IO 설정
 const io = socketIo(server, {
-  cors: {
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST"],
-    credentials: true,
-  },
+    cors: {
+        origin: "http://localhost:3000",
+        methods: ["GET", "POST"],
+        credentials: true,
+    },
 });
 
 // 채팅 모듈 설정
@@ -73,6 +73,9 @@ app.use(PostRoutes(conn));
 //회원가입 라우터
 const signupRoutes = require("./controllers/signup");
 app.use(signupRoutes(conn));
+//알림 기능 라우터
+const notificationRoutes = require("./controllers/notification");
+app.use(notificationRoutes(conn));
 
 // const chatServiceRoutes = require("./controllers/chatService");
 // app.use(chatServiceRoutes(conn));

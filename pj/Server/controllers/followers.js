@@ -4,7 +4,7 @@ require("dotenv").config();
 
 module.exports = (conn) => {
     router.get("/followers", async (req, res) => {
-        console.log("서버쪽 followers 진입");
+        //console.log("서버쪽 followers 진입");
         const user_no = req.query.user_no; // req.query로 수정
         const followerQuery = `SELECT 
             u.user_id AS following_id,
