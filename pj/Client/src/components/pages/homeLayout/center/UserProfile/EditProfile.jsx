@@ -1,15 +1,19 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import "./EditProfile.css";
 import Savebtn from "../../../../utills/buttons/Savebtn";
 import Closebtn from "../../../../utills/buttons/Closebtn";
-import { useState, useEffect } from "react";
 import api from "../../../../../components/auth/api";
 import Swal from "sweetalert2";
+import { NavLink } from "react-router-dom";
 
 function MyProfile() {
   const location = useLocation();
   const { user_no, nickname, image_url, user_id, introduce } =
     location.state || {};
+
+  // 콘솔에 전달된 state 출력
+  console.log("EditProfile에서 받은 state:", location.state);
 
   const [userInfo, setUser] = useState({
     nickname: nickname || "",
@@ -17,12 +21,92 @@ function MyProfile() {
     introduce: introduce || "",
   });
 
+  const fileInputRef = useRef(null);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setUser((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file); // 선택한 파일의 미리보기 URL 생성
+      setUser((prevState) => ({
+        ...prevState,
+        image_url: imageUrl,
+      }));
+    }
+  };
+
+  const handleSaveProfile = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("nickname", userInfo.nickname);
+    formData.append("introduce", userInfo.introduce);
+    formData.append("user_no", user_no);
+
+    if (fileInputRef.current.files[0]) {
+      formData.append("image", fileInputRef.current.files[0]);
+    }
+
+    try {
+      const response = await api.post("/mypage", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      console.log("서버 응답 데이터:", response.data); // 서버 응답을 로그로 확인
+
+      if (response && response.data) {
+        console.log("서버 응답 데이터:", response.data); // 이 로그를 통해 응답 확인
+        const { message, error } = response.data;
+        if (message && message === "프로필 수정 성공!") {
+          Swal.fire({
+            icon: "success",
+            title: "성공",
+            text: "프로필이 성공적으로 수정되었습니다.",
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "오류",
+            text: `프로필 수정 실패: ${message || error}`,
+          });
+        }
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "오류",
+          text: "서버 응답을 받지 못했습니다.",
+        });
+      }
+    } catch (error) {
+      console.error(
+        "프로필 수정 중 오류 발생:",
+        error.response ? error.response.data : error.message
+      );
+      Swal.fire({
+        icon: "error",
+        title: "오류",
+        text: "서버와의 통신 오류가 발생했습니다.",
+      });
+    }
+  };
+
   useEffect(() => {
     // 서버에서 유저 정보를 가져오는 함수
     const fetchUserProfile = async () => {
       try {
-        const response = await api.get("/user-info");
+        const response = await api.get("/user-info"); // 유저 정보를 가져오는 엔드포인트로 수정
         const data = response.data;
+
+        console.log("서버 응답 데이터:", data);
 
         if (data.success) {
           setUser({
@@ -30,7 +114,6 @@ function MyProfile() {
             image_url: data.user.image_url || "", // 이미지가 없을 경우 기본 이미지 사용
             introduce: data.user.introduce || "자기소개가 없습니다.",
           });
-          console.log("userInfo111 : " + JSON.stringify(userInfo.image_url));
         } else {
           Swal.fire({
             icon: "error",
@@ -64,41 +147,55 @@ function MyProfile() {
             </NavLink>
           </div>
           <span>프로필 수정</span>
-          {/* <div className="save">
-            <Savebtn btnText="저장" />
-          </div> */}
         </header>
         <div className="cardMain">
-          <form action="">
+          <form onSubmit={handleSaveProfile}>
             <div className="main1">
-              <img
-                className="userImage"
-                src={userInfo.image_url}
-                alt="userImage"
-              />
-
+              <div className="gallery">
+                <figure>
+                  <img
+                    className="userImage"
+                    src={userInfo.image_url || "/default-profile.png"}
+                    alt="userImage"
+                  />
+                  <figcaption onClick={() => fileInputRef.current.click()}>
+                    <span className="material-symbols-outlined">image</span>
+                  </figcaption>
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    style={{ display: "none" }}
+                    onChange={handleFileChange}
+                  />
+                </figure>
+              </div>
               <div className="nameContent">
-                <div className="name">이름</div>
+                <div className="nameHeader">이름</div>
                 <input
                   type="text"
                   id="userName"
-                  placeholder={userInfo.nickname}
+                  name="nickname"
+                  value={userInfo.nickname}
+                  onChange={handleInputChange}
+                  placeholder="이름을 입력하세요"
                 />
-                <div></div>
               </div>
             </div>
 
             <div className="introContent">
               <div className="introHeader">자기소개</div>
               <textarea
-                type="text"
                 id="introduce"
-                placeholder={userInfo.introduce}
+                name="introduce"
+                value={userInfo.introduce}
+                onChange={handleInputChange}
+                placeholder="자기소개를 입력하세요"
               />
             </div>
-            <div className="save">
-              <Savebtn btnText="저장" className="save" />
-            </div>
+
+            <button type="submit" className="save">
+              <Savebtn btnText="저장" />
+            </button>
           </form>
         </div>
       </div>
