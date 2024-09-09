@@ -1,7 +1,7 @@
 // server.js
 const express = require("express");
 const bodyParser = require("body-parser");
-const cookieParser = require('cookie-parser');
+const cookieParser = require("cookie-parser");
 const http = require("http");
 const cors = require("cors");
 const mysql = require("mysql");
@@ -14,9 +14,13 @@ require("dotenv").config();
 const app = express();
 const server = http.createServer(app);
 
+app.get("/", (req, res) => {
+  res.send("서버가 정상적으로 실행되고 있습니다.");
+});
+
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "http://localhost:3000", // 클라이언트 URL
     methods: ["GET", "POST"],
     credentials: true,
   })
@@ -79,3 +83,10 @@ app.use(signupRoutes(conn));
 
 // 'images' 디렉토리의 경로를 절대 경로로 설정
 app.use("/images", express.static(path.join(__dirname, "images")));
+
+//프로필변경 라우터
+const editProfileRoutes = require("./controllers/editProfile");
+app.use(editProfileRoutes);
+
+// 'uploads' 디렉토리의 경로를 절대 경로로 설정
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));

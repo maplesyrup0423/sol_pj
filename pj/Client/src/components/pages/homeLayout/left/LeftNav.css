@@ -78,6 +78,20 @@
   justify-content: center;
   align-items: center;
 }
+/* 말풍선꼬리부분 */
+/* .dropdown-menu-up::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border: 22px solid transparent;
+  border-top-color: inherit;
+  border-bottom: 0;
+  margin-left: -22px;
+  margin-bottom: -22px;
+} */
 
 .dropdown-menu-up ul {
   text-align: center;
