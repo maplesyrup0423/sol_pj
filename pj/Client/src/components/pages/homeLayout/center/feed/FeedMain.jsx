@@ -3,7 +3,7 @@ import Feeds from "./Feeds";
 import FeedDetail from "./FeedDetail";
 import Writing from "./Writing";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../../../../Context/AuthContext";
 import api from "../../../../auth/api";
@@ -11,10 +11,34 @@ import api from "../../../../auth/api";
 function FeedMain() {
   const { userInfo } = useContext(AuthContext);
   const { boardId: paramBoardId } = useParams(); // URL 파라미터로 게시판 ID 가져오기
-  //! 메인 화면 첫 페이지에 보여줄 게시판 1번으로 하드코딩 <--메인 화면 첫 페이지는 전체 게시글도 괜찮을듯?
-  //todo 추후 유저가 선택한 게시판 중 가장 높은 id 번호로 지정되게 수정 예정
-  const boardId = paramBoardId || 1; // boardId가 undefined일 때 기본값 1 설정
   const [data, setData] = useState([]);
+  const [defaultBoardId, setDefaultBoardId] = useState([]);
+  const navigate = useNavigate(); // useNavigate 훅 추가
+
+  const fetchBoardInfoUser = async () => {
+    try {
+      const response = await api.get(
+        `/api/boardInfoUser?user_no=${userInfo.user_no}`
+      );
+      const boardIds = response.data.map((item) => item.board_info_id);
+
+      if (boardIds.length > 0) {
+        // 가장 작은 값 찾기
+        const minBoardId = Math.min(...boardIds);
+        setDefaultBoardId(minBoardId); // 가장 작은값
+        // URL에 기본 게시판 ID로 리디렉션
+        if (!paramBoardId) {
+          navigate(`/post/${minBoardId}`, { replace: true });
+        }
+      } else {
+        setDefaultBoardId(1); // 데이터가 없는 경우 1로 설정
+      }
+    } catch (err) {
+      console.error("Error fetching board info:", err);
+    }
+  };
+  const boardId = paramBoardId || defaultBoardId; // boardId가 undefined일 때 기본값 설정
+
   const fetchData = async () => {
     try {
       const response = await api.get(
@@ -42,6 +66,9 @@ function FeedMain() {
     setActiveTab("post_date");
     //fetchData();
   };
+  useEffect(() => {
+    fetchBoardInfoUser();
+  }, [userInfo]);
 
   useEffect(() => {
     const container = document.querySelector(".homeContainer"); // 스크롤이 발생하는 컨테이너 선택
@@ -49,7 +76,7 @@ function FeedMain() {
       container.scrollTop = 0;
     }
     fetchData();
-  }, [boardId, activeTab]);
+  }, [boardId, activeTab, defaultBoardId]);
 
   let [btnActive, setBtnActive] = useState(false);
 

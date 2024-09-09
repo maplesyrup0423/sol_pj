@@ -66,9 +66,7 @@ function LeftNav({ userInfo }) {
             </button>
           </div>
         </li>
-        <li>
-          <BoardInfo />
-        </li>
+        <li>{userInfo ? <BoardInfo user_no={userInfo.user_no} /> : ""}</li>
 
         <li id="ProfileCard_li">
           <Link to={"/myPage"}>

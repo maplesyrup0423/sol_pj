@@ -1,4 +1,5 @@
 import "./ImageViewer.css";
+import ReactDOM from "react-dom";
 const baseUrl = import.meta.env.VITE_BASE_URL;
 const ImageViewer = ({ images, currentIndex, onClose, onChangeImage }) => {
   const prevImage = () => {
@@ -11,7 +12,7 @@ const ImageViewer = ({ images, currentIndex, onClose, onChangeImage }) => {
     onChangeImage(nextIndex);
   };
 
-  return (
+  return ReactDOM.createPortal(
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <img
@@ -33,7 +34,8 @@ const ImageViewer = ({ images, currentIndex, onClose, onChangeImage }) => {
           &times;
         </span>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

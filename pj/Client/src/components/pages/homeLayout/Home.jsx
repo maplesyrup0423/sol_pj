@@ -6,24 +6,22 @@ import { useContext } from "react";
 import { AuthContext } from "../../../Context/AuthContext";
 
 function HomePage() {
-    const { userInfo } = useContext(AuthContext);
-    //사용 <div>{`${userInfo.user_no}은 있다.`}</div>
-    // 콘솔 로그로 userInfo 확인
-    //console.log("home의 UserInfo: ", userInfo);
-    return (
-        <div className="homeContainer">
-            <div className="leftNav">
-                <LeftNav userInfo={userInfo} />
-            </div>
-            <div className="center">
-                <Outlet />
-            </div>
 
-            <div className="rightNav">
-                <RightNav />
-            </div>
-        </div>
-    );
+  const { userInfo } = useContext(AuthContext);
+  return (
+    <div className="homeContainer">
+      <div className="leftNav">
+        <LeftNav userInfo={userInfo} />
+      </div>
+      <div className="center">
+        <Outlet />
+      </div>
+
+      <div className="rightNav">
+        <RightNav />
+      </div>
+    </div>
+  );
 }
 
 export default HomePage;
