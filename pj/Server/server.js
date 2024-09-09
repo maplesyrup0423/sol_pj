@@ -20,7 +20,7 @@ app.get("/", (req, res) => {
 
 app.use(
   cors({
-    origin: "http://localhost:3000", // 클라이언트 URL
+    origin: "http://localhost:3000",
     methods: ["GET", "POST"],
     credentials: true,
   })
