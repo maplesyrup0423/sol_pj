@@ -12,61 +12,66 @@ import MyProfile from "./components/pages/homeLayout/center/UserProfile/EditProf
 import SignUp from "./components/pages/SignUp";
 import Followers from "./components/pages/homeLayout/right/Followers";
 import EditAccount from "./components/pages/homeLayout/center/UserProfile/EditAccount";
+import Room from "./components/pages/homeLayout/center/chat/Room";
 
 function App() {
-  const router = createBrowserRouter([
-    {
-      path: "/",
+    const router = createBrowserRouter([
+        {
+            path: "/",
 
-      element: <HomePage />,
-      children: [
-        {
-          path: "/",
-          element: <FeedMain />,
-          //처음에 보일 화면은 사용자가 선택한 게시판중 id가 가장 작은값
-          //todo 후추 사용자 경험 바탕으로 정해지는 방안 고민하기
+            element: <HomePage />,
+            children: [
+                {
+                    path: "/",
+                    element: <FeedMain />,
+                    //처음에 보일 화면은 사용자가 선택한 게시판중 id가 가장 작은값
+                    //todo 후추 사용자 경험 바탕으로 정해지는 방안 고민하기
+                },
+                {
+                    path: "/post/:boardId",
+                    element: <FeedMain />, // 게시판 ID에 따라 데이터를 처리할 페이지
+                },
+                {
+                    path: "/myPage",
+                    element: <UserProfile />, // 마이페이지
+                },
+                {
+                    path: "/editProfile",
+                    element: <MyProfile />, // 프로필수정
+                },
+                {
+                    path: "/followers",
+                    element: <Followers />,
+                },
+                {
+                    path: "/account",
+                    element: <EditAccount />,
+                },
+                {
+                    path: "/chatRoom",
+                    element: <Room />,
+                },
+            ],
         },
         {
-          path: "/post/:boardId",
-          element: <FeedMain />, // 게시판 ID에 따라 데이터를 처리할 페이지
+            path: "/login",
+            element: <LoginPage />,
         },
         {
-          path: "/myPage",
-          element: <UserProfile />, // 마이페이지
+            path: "/intro",
+            element: <IntroPage />,
         },
         {
-          path: "/editProfile",
-          element: <MyProfile />, // 프로필수정
+            path: "/signup",
+            element: <SignUp />,
         },
-        {
-          path: "/followers",
-          element: <Followers />,
-        },
-        {
-          path: "/account",
-          element: <EditAccount />,
-        },
-      ],
-    },
-    {
-      path: "/login",
-      element: <LoginPage />,
-    },
-    {
-      path: "/intro",
-      element: <IntroPage />,
-    },
-    {
-      path: "/signup",
-      element: <SignUp />,
-    },
-  ]);
+    ]);
 
-  return (
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
-  );
+    return (
+        <AuthProvider>
+            <RouterProvider router={router} />
+        </AuthProvider>
+    );
 }
 
 export default App;
