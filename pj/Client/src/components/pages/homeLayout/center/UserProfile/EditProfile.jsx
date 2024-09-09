@@ -51,7 +51,7 @@ function MyProfile() {
     }
 
     try {
-      const response = await api.post("/api/mypage", formData, {
+      const response = await api.post("/mypage", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
