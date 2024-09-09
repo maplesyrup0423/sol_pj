@@ -13,7 +13,7 @@ module.exports = (conn) => {
         const address = req.body.address || null;
         const salt = req.body.salt || null;
 
-        console.log("서버 진입 계정정보 :  ", userId, password, email);
+        //console.log("서버 진입 계정정보 :  ", userId, password, email);
 
         // 중복된 user_id 확인 쿼리
         const checkUserIdQuery = `SELECT COUNT(*) AS count FROM User WHERE user_id = ?`;

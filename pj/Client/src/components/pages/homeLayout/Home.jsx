@@ -6,6 +6,7 @@ import { useContext } from "react";
 import { AuthContext } from "../../../Context/AuthContext";
 
 function HomePage() {
+
   const { userInfo } = useContext(AuthContext);
   return (
     <div className="homeContainer">
