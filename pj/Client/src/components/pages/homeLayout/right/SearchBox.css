@@ -1,22 +1,24 @@
 .searchBox {
     width: 300px;
-    height: 40px;
-    line-height: 40px;
+    height: 30px;
+    line-height: 30px;
     display: flex;
-    background-color: gray;
-    border-radius: 50px;
 }
 
 .searchInput {
     border: none;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+    background-color: grey;
     width: 250px;
     height: 30px;
+    background-image: url(http://localhost:5000/images/search_icon/icon-search.png);
+    background-size: 21px;
+    background-position: 8px center;
+    background-repeat: no-repeat;
     text-indent: 30px;
     color: #fae100;
-    background-color: transparent;
-    margin-left: -30px;
-    z-index: 20;
-    margin-top: 5px;
+    
 }
 
 .searchInput::placeholder {
@@ -31,10 +33,9 @@ input.searchInput:focus {
     border: none;
     width: 35px;
     height: 32px;
-    background-color: transparent;
-    margin-left: 10px;
-    line-height: 35px;
-    z-index: 30;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+    background-color: grey;
 }
 
 .searchButton_icon{

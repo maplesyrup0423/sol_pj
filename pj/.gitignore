@@ -26,10 +26,8 @@ dist-ssr
 # 보안관련 파일
 .env
 
-# 업로드 이미지 - 폴더 내 모든 파일 무시
+# 업로드 이미지 - uploads 폴더 내 모든 파일 무시
 Server/images/uploads/*
-Server/images/uploads_feed/*
 
-# 예외 처리 -  폴더 내 'test'로 시작하는 파일은 추적
-!Server/images/uploads_feed/test*
+# 예외 처리 - uploads 폴더 내 'test'로 시작하는 파일은 추적
 !Server/images/uploads/test*

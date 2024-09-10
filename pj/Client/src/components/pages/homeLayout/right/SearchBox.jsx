@@ -21,11 +21,11 @@ function SearchBox() {
     
     return (
         <div className="searchBox">
-            <button className='searchButton' onClick={activeButton}><BiSearch className='searchButton_icon' /></button>
             <input className="searchInput" type="text" placeholder= "검색"
                     onChange={(e) => setInputText(e.target.value)}
-                    onKeyDown={(e) => activeEnter(e)} />      
-
+                    onKeyDown={(e) => activeEnter(e)} />
+        
+            <button className='searchButton' onClick={activeButton}><BiSearch className='searchButton_icon' /></button>
         </div>
     );
 }

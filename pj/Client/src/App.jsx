@@ -13,7 +13,6 @@ import Followers from "./components/pages/homeLayout/right/Followers";
 import EditAccount from "./components/pages/homeLayout/center/UserProfile/EditAccount";
 import Room from "./components/pages/homeLayout/center/chat/Room";
 import PrivateRoute from "./components/auth/privateRoute";
-import FeedDetail from "./components/pages/homeLayout/center/feed/FeedDetail";
 
 function App() {
     const router = createBrowserRouter([
@@ -28,10 +27,6 @@ function App() {
                 {
                     path: "/post/:boardId",
                     element: <PrivateRoute element={<FeedMain />} />, // 수정됨
-                },
-                {
-                    path: "/post/:boardId/:postId",
-                    element: <PrivateRoute element={<FeedDetail />} />, // 추가됨
                 },
                 {
                     path: "/myPage",

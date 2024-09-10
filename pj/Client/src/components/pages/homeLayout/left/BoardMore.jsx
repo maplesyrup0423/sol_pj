@@ -1,12 +1,10 @@
 import { useState, useEffect, useContext } from "react";
 import "./BoardMore.css";
-import { IoSettingsSharp } from "react-icons/io5";
+import { FaCog } from "react-icons/fa"; // 설정 아이콘
 import ReactDOM from "react-dom";
 import api from "../../../auth/api.js";
 import BoardName from "./BoardName.jsx";
 import { AuthContext } from "../../../../Context/AuthContext";
-import Closebtn from "../../../utills/buttons/Closebtn.jsx";
-import BasicButton from "../../../utills/buttons/BasicButton.jsx";
 
 function BoardMore({ onClose }) {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -82,17 +80,14 @@ function BoardMore({ onClose }) {
       <div className="modalContainer">
         {/* 모달 상단 닫기 버튼 */}
         <button className="closeButton" onClick={onClose}>
-          <Closebtn />
+          X
         </button>
 
         {/* 기본 화면 */}
         {!isSettingsOpen && (
           <div className="defaultView">
-            {/* 설정 버튼 */}
-            <button className="settings-board-button" onClick={toggleSettings}>
-              <IoSettingsSharp size={25} />
-            </button>
-            {/* 더보기 게시판 목록*/}
+            <h2>게시판 더보기</h2>
+            {/* 전체 게시판 목록*/}
             <ul>
               {boardName.length > 0
                 ? boardName
@@ -108,23 +103,27 @@ function BoardMore({ onClose }) {
                     ))
                 : ""}
             </ul>
+            {/* 설정 버튼 */}
+            <button className="settings-board-button" onClick={toggleSettings}>
+              <FaCog size={20} />
+            </button>
           </div>
         )}
 
         {/* 설정 화면 */}
         {isSettingsOpen && (
           <div className="settingsView">
+            <h2>게시판 설정</h2>
             {/* 게시판 설정 목록 */}
             <ul>
               {boardName.length > 0 ? (
                 boardName.map((bn) => (
                   <li key={bn.board_info_id}>
-                    <label className="form-check-label">
+                    <label>
                       <input
                         type="checkbox"
                         checked={checkedBoardIds.has(bn.board_info_id)}
                         onChange={() => handleCheckboxChange(bn.board_info_id)}
-                        className="form-check-input"
                       />
                       <div className="gameContainer">
                         <div className="gameInfo gameImg">
@@ -141,24 +140,8 @@ function BoardMore({ onClose }) {
                 <h1>Loading...</h1>
               )}
             </ul>
-            <div className="settingsView-btn">
-              <BasicButton
-                btnOn={false}
-                btnSize="widthButton"
-                btnColor="blackButton"
-                action={handleCancel}
-                btnText="취소"
-              />
-            </div>
-            <div className="settingsView-btn">
-              <BasicButton
-                btnOn={false}
-                btnSize="widthButton"
-                btnColor="yellowButton"
-                action={handleApply}
-                btnText="적용"
-              />
-            </div>
+            <button onClick={handleCancel}>취소</button>
+            <button onClick={handleApply}>적용</button>
           </div>
         )}
       </div>

@@ -74,9 +74,6 @@ app.use(boardInfoRoutes(conn));
 const PostRoutes = require("./controllers/post");
 app.use(PostRoutes(conn));
 
-const PostDetailRoutes = require("./controllers/postDetail");
-app.use(PostDetailRoutes(conn));
-
 //회원가입 라우터
 const signupRoutes = require("./controllers/signup");
 app.use(signupRoutes(conn));
@@ -93,3 +90,6 @@ app.use("/images", express.static(path.join(__dirname, "images")));
 //프로필변경 라우터
 const editProfileRoutes = require("./controllers/editProfile");
 app.use(editProfileRoutes(conn));
+
+// 'uploads' 디렉토리의 경로를 절대 경로로 설정
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));

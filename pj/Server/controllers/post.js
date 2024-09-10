@@ -6,7 +6,7 @@ const multer = require("multer");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, "..", "images", "uploads_feed")); // 업로드할 디렉토리
+    cb(null, path.join(__dirname, "..", "images", "uploads")); // 업로드할 디렉토리
   },
   filename: (req, file, cb) => {
     cb(null, `${Date.now()}-${file.originalname}`); // 파일 이름 설정
@@ -31,8 +31,7 @@ module.exports = (conn) => {
     let period;
     if (orderBy === "pop") {
       orderClause = "ORDER BY like_count DESC, p.views DESC"; // 인기순 (좋아요 수 -> 조회수 순)
-      period =
-        "AND p.createDate BETWEEN DATE_ADD(NOW(), INTERVAL -1 WEEK ) AND NOW()"; //불러오는 날짜를 현재로부터 7일로
+      period = "AND p.createDate BETWEEN DATE_ADD(NOW(), INTERVAL -1 WEEK ) AND NOW()"; //불러오는 날짜를 현재로부터 7일로
     } else {
       orderClause = "ORDER BY p.createDate DESC"; // 최신순
       period = "";

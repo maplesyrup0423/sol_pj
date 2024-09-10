@@ -12,12 +12,14 @@ function MyProfile() {
   const { user_no, nickname, image_url, user_id, introduce } =
     location.state || {};
 
+  // 콘솔에 전달된 state 출력
+  console.log("EditProfile에서 받은 state:", location.state);
+
   const [userInfo, setUser] = useState({
     nickname: nickname || "",
     image_url: image_url || "",
     introduce: introduce || "",
   });
-  const [previewImageUrl, setPreviewImageUrl] = useState(""); // 추가: 미리보기 이미지 URL 상태
 
   const fileInputRef = useRef(null);
 
@@ -32,21 +34,11 @@ function MyProfile() {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // 이미지 파일인지 확인
-      if (file.type.startsWith("image/")) {
-        const imageUrl = URL.createObjectURL(file); // 선택한 파일의 미리보기 URL 생성
-        setUser((prevState) => ({
-          ...prevState,
-          image_url: imageUrl,
-        }));
-        setPreviewImageUrl(imageUrl); // 미리보기 URL 상태 업데이트
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "오류",
-          text: "이미지 파일만 선택할 수 있습니다.",
-        });
-      }
+      const imageUrl = URL.createObjectURL(file); // 선택한 파일의 미리보기 URL 생성
+      setUser((prevState) => ({
+        ...prevState,
+        image_url: imageUrl,
+      }));
     }
   };
 
@@ -69,7 +61,10 @@ function MyProfile() {
         },
       });
 
+      console.log("서버 응답 데이터:", response.data); // 서버 응답을 로그로 확인
+
       if (response && response.data) {
+        console.log("서버 응답 데이터:", response.data); // 이 로그를 통해 응답 확인
         const { message, error } = response.data;
         if (message && message === "프로필 수정 성공!") {
           Swal.fire({
@@ -114,25 +109,14 @@ function MyProfile() {
         const response = await api.post("/user-info"); // 유저 정보를 가져오는 엔드포인트로 수정
         const data = response.data;
 
-        if (data.success) {
-          const baseImageUrl = `${
-            import.meta.env.VITE_BASE_URL
-          }/images/uploads/`; // 기본 이미지 URL
+        console.log("서버 응답 데이터:", data);
 
+        if (data.success) {
           setUser({
             nickname: data.user.nickname || "",
-            image_url: data.user.image_url
-              ? `${baseImageUrl}${data.user.image_url}`
-              : "/default-profile.png", // 기본 이미지 경로
+            image_url: data.user.image_url || "", // 이미지가 없을 경우 기본 이미지 사용
             introduce: data.user.introduce || "자기소개가 없습니다.",
           });
-
-          // 서버에서 받은 이미지 URL로 미리보기 URL 설정
-          setPreviewImageUrl(
-            data.user.image_url
-              ? `${baseImageUrl}${data.user.image_url}`
-              : "/default-profile.png"
-          );
         } else {
           Swal.fire({
             icon: "error",
@@ -174,7 +158,7 @@ function MyProfile() {
                 <figure>
                   <img
                     className="userImage"
-                    src={previewImageUrl || "/default-profile.png"} // 수정된 이미지 미리보기 URL
+                    src={userInfo.image_url || "/default-profile.png"}
                     alt="userImage"
                   />
                   <figcaption onClick={() => fileInputRef.current.click()}>
