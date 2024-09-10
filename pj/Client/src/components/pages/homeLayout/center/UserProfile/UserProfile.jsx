@@ -1,32 +1,13 @@
-import { useState, useEffect } from "react";
-import "./UserProfile.css";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../../../../Context/AuthContext";
+import { NavLink } from "react-router-dom";
 import BackArrow from "../../../../utills/buttons/BackArrow";
 import BasicButton from "../../../../utills/buttons/BasicButton";
-import { NavLink } from "react-router-dom";
-import api from "../../../../../components/auth/api";
+import "./UserProfile.css";
 
 function UserProfile() {
-  const [userInfo, setUserInfo] = useState(null);
+  const { userInfo } = useContext(AuthContext);
   const [activeTab, setActiveTab] = useState("posts");
-
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const response = await api.get("/user-info"); // 서버에서 유저 정보 가져오기
-        const data = response.data;
-
-        if (data.success) {
-          setUserInfo(data.user);
-        } else {
-          console.error("User profile fetch error:", data.message);
-        }
-      } catch (error) {
-        console.error("Error fetching user profile:", error);
-      }
-    };
-
-    fetchUserProfile();
-  }, []);
 
   const showPosts = () => {
     setActiveTab("posts");

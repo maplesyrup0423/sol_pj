@@ -43,11 +43,15 @@ function LeftNav({ userInfo }) {
 
   const handleAccount = async () => {
     try {
-      navigate("/account"); //계정설정 페이지로 리다이렉트
+      navigate("/account"); // 계정 설정 페이지로 리다이렉트
     } catch (error) {
-      console.error("계정설정 이동 오류 : ", error);
-      alert("이동중 오류 발생했습니다. 다시 시도해주세요.");
+      console.error("계정 설정 이동 오류:", error);
+      alert("이동 중 오류가 발생했습니다. 다시 시도해주세요.");
     }
+  };
+
+  const handleProfileCardClick = () => {
+    window.location.href = "/myPage"; // 새로 고침 후 페이지 이동
   };
 
   return (
@@ -69,7 +73,7 @@ function LeftNav({ userInfo }) {
         <li>{userInfo ? <BoardInfo user_no={userInfo.user_no} /> : ""}</li>
 
         <li id="ProfileCard_li">
-          <Link to={"/myPage"}>
+          <div onClick={handleProfileCardClick}>
             {userInfo ? (
               <ProfileCard
                 user_no={userInfo.user_no}
@@ -82,7 +86,7 @@ function LeftNav({ userInfo }) {
                 <Link to={"/login"}>로그인 해주세욤</Link>
               </h5>
             )}
-          </Link>
+          </div>
           <div className="profile-more">
             <IoIosMore onClick={handleMoreClick} />
             {isDropdownVisible && (
@@ -90,7 +94,6 @@ function LeftNav({ userInfo }) {
                 <ul>
                   <li>
                     <button onClick={handleLogout}>로그아웃</button>
-                    {/* 로그아웃 버튼 클릭 시 handleLogout 함수 호출 */}
                   </li>
                   <li>
                     <button onClick={handleAccount}>계정설정</button>
