@@ -4,8 +4,9 @@ const decodeToken = require("../middleware/decodeToken");
 
 module.exports = (conn) => {
   // 게시물 세부 정보 조회 API
-  router.get('/api/postDetail/:postId', decodeToken(), (req, res) => {
-    const { postId } = req.params.postId;
+  router.get("/api/postDetail", decodeToken(), (req, res) => {
+    //const { postId } = req.params.postId;
+    const postId = req.query.postId;
 
     if (!postId) {
       return res.status(400).send("게시물 ID가 필요합니다.");
