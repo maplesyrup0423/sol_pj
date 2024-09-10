@@ -7,7 +7,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../../../../Context/AuthContext";
 import api from "../../../../auth/api";
-import { NavLink } from 'react-router-dom';
 
 function FeedMain() {
   const { userInfo } = useContext(AuthContext);
@@ -117,10 +116,7 @@ function FeedMain() {
             }`}
             onClick={orderBy_date}
           >
-            <div
-            // className={"late" + (btnActive ? "" : " active")}
-            // onClick={toggleActive}
-            >
+            <div>
               최신
             </div>
           </div>
@@ -134,10 +130,7 @@ function FeedMain() {
             className={`switch-pop ${activeTab === "post_pop" ? "active" : ""}`}
             onClick={orderBy_pop}
           >
-            <div
-            // className={"pop" + (btnActive ? " active" : "")}
-            // onClick={toggleActive}
-            >
+            <div>
               인기
             </div>
           </div>
@@ -168,7 +161,6 @@ function FeedMain() {
                     postId={p.post_id}  // 게시글 ID 전달
                     boardId={boardId}   // 게시판 ID 전달
                     {...p}
-                    // onClick={() => handlePostClick(p)}
                   />
                 ))
               ) : (
@@ -185,7 +177,6 @@ function FeedMain() {
                     postId={p.post_id}  // 게시글 ID 전달
                     boardId={boardId}   // 게시판 ID 전달
                     {...p}
-                    // onClick={() => handlePostClick(p)}
                   />
                 ))
               ) : (
@@ -196,13 +187,6 @@ function FeedMain() {
         </div>
       </div>
 
-      {/* <div className="feed">
-        {data.length > 0 ? (
-          data.map((p) => <Feeds key={p.post_id} {...p} />)
-        ) : (
-          <h1>Loading...</h1>
-        )}
-      </div> */}
     </div>
   );
 }
