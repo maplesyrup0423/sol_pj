@@ -7,7 +7,7 @@ const decodeToken = require("../middleware/decodeToken");
 
 module.exports = function (conn) {
   // Multer 설정
-  const uploadPath = path.join(__dirname, "../uploads");
+  const uploadPath = path.join(__dirname, "../images/uploads");
 
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
