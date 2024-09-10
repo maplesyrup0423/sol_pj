@@ -12,13 +12,11 @@ import ImageViewer from "./ImageViewer";
 import { useState } from "react";
 import Carousel from "react-bootstrap/Carousel";
 import { useParams } from "react-router-dom";
-import { NavLink } from 'react-router-dom';
+import { NavLink } from "react-router-dom";
 import { useEffect } from "react";
 import api from "../../../../auth/api";
-import axios from 'axios';
 
 function FeedDetail() {
-
   const { boardId, postId } = useParams(); // URL에서 postId 가져오기
   const [postDetail, setPostDetail] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -28,14 +26,13 @@ function FeedDetail() {
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-
   // useEffect(() => {
   //   // postId를 이용해 게시물 데이터를 가져오는 API 호출
   //   const fetchPost = async () => {
   //     try {
   //       const response = await api.get(`/api/post/${postId}`);
   //       console.log(response.data);
-  //       console.log(response.data); 
+  //       console.log(response.data);
   //       setPostDetail(response.data);
   //     } catch (error) {
   //       console.error("Error fetching post detail:", error);
@@ -45,12 +42,11 @@ function FeedDetail() {
   //   fetchPost();
   // }, [postId]);
 
-
   useEffect(() => {
     const fetchPostDetail = async () => {
       try {
-        const response = await axios.get(`/api/postDetail/${postId}`);
-        setPostDetail(response.data);  // 게시물 데이터 설정
+        const response = await api.get(`/api/postDetail/?postId=${postId}`);
+        setPostDetail(response.data); // 게시물 데이터 설정
         setLoading(false);
       } catch (err) {
         setError(err);
@@ -76,21 +72,17 @@ function FeedDetail() {
     setSelectedImageIndex(null);
   };
 
-
   return (
     <div className="feed_detail">
-      
       <div className="feed_detail_top">
         <NavLink to={`post/${boardId}`}>
           <IoMdArrowRoundBack /> 뒤로 가기
         </NavLink>
       </div>
-      
 
       {/* <h2>{post.post_text}</h2>
     <p>작성자: {post.nickname}</p>
     <p>조회수: {post.views}</p> */}
-
 
       <div className="feed-container">
         <div className="feed-header">
@@ -153,7 +145,6 @@ function FeedDetail() {
           <span> 조회수 {postDetail.views}</span>
         </div>
 
-
         <div className="feed-actions">
           <div className="like-comment">
             {/* 좋아요 댓글등 왼쪽 부분 */}
@@ -171,12 +162,8 @@ function FeedDetail() {
           </div>
         </div>
       </div>
-
-
-
     </div>
   );
-
 }
 
 export default FeedDetail;

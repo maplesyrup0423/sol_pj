@@ -74,6 +74,9 @@ app.use(boardInfoRoutes(conn));
 const PostRoutes = require("./controllers/post");
 app.use(PostRoutes(conn));
 
+const PostDetailRoutes = require("./controllers/postDetail");
+app.use(PostDetailRoutes(conn));
+
 //회원가입 라우터
 const signupRoutes = require("./controllers/signup");
 app.use(signupRoutes(conn));
