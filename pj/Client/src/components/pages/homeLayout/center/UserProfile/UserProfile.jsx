@@ -1,27 +1,22 @@
-import { useState } from "react";
-import "./UserProfile.css";
-import BackArrow from "../../../../utills/buttons/BackArrow";
-import BasicButton from "../../../../utills/buttons/BasicButton";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../../../../Context/AuthContext";
 import { NavLink } from "react-router-dom";
+import BackArrow from "../../../../utills/buttons/BackArrow";
+import BasicButton from "../../../../utills/buttons/BasicButton";
+import "./UserProfile.css";
 
 function UserProfile() {
   const { userInfo } = useContext(AuthContext);
-  // 현재 선택된 탭 관리
   const [activeTab, setActiveTab] = useState("posts");
 
-  // switch-posts 클릭 시 호출
   const showPosts = () => {
     setActiveTab("posts");
   };
 
-  // switch-comments 클릭 시 호출
   const showComments = () => {
     setActiveTab("comments");
   };
 
-  // userInfo가 존재하는지 확인
   const isUserInfoAvailable = userInfo && userInfo.nickname;
 
   return (
