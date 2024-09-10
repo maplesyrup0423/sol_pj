@@ -11,122 +11,172 @@ import ProfileImg from "../../../../utills/ProfileImg";
 import ImageViewer from "./ImageViewer";
 import { useState } from "react";
 import Carousel from "react-bootstrap/Carousel";
+import { useParams } from "react-router-dom";
+import { NavLink } from 'react-router-dom';
+import { useEffect } from "react";
+import api from "../../../../auth/api";
+import axios from 'axios';
 
-function FeedDetail({ post, onBack }) {
+function FeedDetail() {
 
-    const baseUrl = import.meta.env.VITE_BASE_URL;
-    const [selectedImageIndex, setSelectedImageIndex] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-  
-    const images = post.file_paths ? post.file_paths.split(", ") : [];
-  
-    const openModal = (index) => {
-      setSelectedImageIndex(index);
-      setIsModalOpen(true);
+  const { boardId, postId } = useParams(); // URL에서 postId 가져오기
+  const [postDetail, setPostDetail] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const baseUrl = import.meta.env.VITE_BASE_URL;
+  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+  // useEffect(() => {
+  //   // postId를 이용해 게시물 데이터를 가져오는 API 호출
+  //   const fetchPost = async () => {
+  //     try {
+  //       const response = await api.get(`/api/post/${postId}`);
+  //       console.log(response.data);
+  //       console.log(response.data); 
+  //       setPostDetail(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching post detail:", error);
+  //     }
+  //   };
+
+  //   fetchPost();
+  // }, [postId]);
+
+
+  useEffect(() => {
+    const fetchPostDetail = async () => {
+      try {
+        const response = await axios.get(`/api/postDetail/${postId}`);
+        setPostDetail(response.data);  // 게시물 데이터 설정
+        setLoading(false);
+      } catch (err) {
+        setError(err);
+        setLoading(false);
+      }
     };
-  
-    const closeModal = () => {
-      setIsModalOpen(false);
-      setSelectedImageIndex(null);
-    };
+
+    fetchPostDetail();
+  }, [postId]);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>오류가 발생했습니다: {error.message}</p>;
+
+  const images = postDetail.file_paths ? postDetail.file_paths.split(", ") : [];
+
+  const openModal = (index) => {
+    setSelectedImageIndex(index);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedImageIndex(null);
+  };
 
 
-    return(
-        <div className="feed_detail">
-            <div className="feed_detail_top">
-                <button className="back_to_FeedMain" onClick={onBack}><IoMdArrowRoundBack /> 뒤로 가기</button>
-            </div>
-           
-            {/* <h2>{post.post_text}</h2>
-            <p>작성자: {post.nickname}</p>
-            <p>조회수: {post.views}</p> */}
-
-
-<div className="feed-container">
-      <div className="feed-header">
-        {/* 피드 헤더 */}
-        <div className="user-info">
-          <ProfileImg image_url={post.image_url} />
-          <span className="user-name">{post.nickname}</span>
-          <span className="user-id">@{post.user_id}</span>
-        </div>
-        <a className="moreA" href=" ">
-          <IoIosMore />
-        </a>
+  return (
+    <div className="feed_detail">
+      
+      <div className="feed_detail_top">
+        <NavLink to={`post/${boardId}`}>
+          <IoMdArrowRoundBack /> 뒤로 가기
+        </NavLink>
       </div>
+      
 
-      <div className="feed-image">
-        {/* 피드이미지 */}
-        {images.length > 0 &&
-          (images.length === 1 ? (
-            <img
-              src={`${baseUrl}/images/uploads/${images[0]}`}
-              alt={`Post ${post.post_id} image 1`}
-              className="feedImg1"
-              onClick={() => openModal(0)} // 이미지 클릭 시 모달 열기
+      {/* <h2>{post.post_text}</h2>
+    <p>작성자: {post.nickname}</p>
+    <p>조회수: {post.views}</p> */}
+
+
+      <div className="feed-container">
+        <div className="feed-header">
+          {/* 피드 헤더 */}
+          <div className="user-info">
+            <ProfileImg image_url={postDetail.image_url} />
+            <span className="user-name">{postDetail.nickname}</span>
+            <span className="user-id">@{postDetail.user_id}</span>
+          </div>
+          <a className="moreA" href=" ">
+            <IoIosMore />
+          </a>
+        </div>
+
+        <div className="feed-image">
+          {/* 피드이미지 */}
+          {images.length > 0 &&
+            (images.length === 1 ? (
+              <img
+                src={`${baseUrl}/images/uploads/${images[0]}`}
+                alt={`Post ${postDetail.post_id} image 1`}
+                className="feedImg1"
+                onClick={() => openModal(0)} // 이미지 클릭 시 모달 열기
+              />
+            ) : (
+              <Carousel interval={null}>
+                {images.map((filePath, index) => (
+                  <Carousel.Item key={index}>
+                    <img
+                      src={`${baseUrl}/images/uploads/${filePath}`}
+                      alt={`Post ${postDetail.post_id} image ${index + 1}`}
+                      className="feedImg1"
+                      onClick={() => openModal(index)} // 이미지 클릭 시 모달 열기
+                    />
+                  </Carousel.Item>
+                ))}
+              </Carousel>
+            ))}
+
+          {/* 모달 컴포넌트 */}
+          {isModalOpen && selectedImageIndex !== null && (
+            <ImageViewer
+              images={images}
+              currentIndex={selectedImageIndex}
+              onClose={closeModal}
+              onChangeImage={(index) => setSelectedImageIndex(index)}
             />
-          ) : (
-            <Carousel interval={null}>
-              {images.map((filePath, index) => (
-                <Carousel.Item key={index}>
-                  <img
-                    src={`${baseUrl}/images/uploads/${filePath}`}
-                    alt={`Post ${post.post_id} image ${index + 1}`}
-                    className="feedImg1"
-                    onClick={() => openModal(index)} // 이미지 클릭 시 모달 열기
-                  />
-                </Carousel.Item>
-              ))}
-            </Carousel>
-          ))}
+          )}
+        </div>
 
-        {/* 모달 컴포넌트 */}
-        {isModalOpen && selectedImageIndex !== null && (
-          <ImageViewer
-            images={images}
-            currentIndex={selectedImageIndex}
-            onClose={closeModal}
-            onChangeImage={(index) => setSelectedImageIndex(index)}
-          />
-        )}
-      </div>
+        <div className="feed-text-container">
+          <div className="feed-text">
+            {/* 피드텍스트 */}
+            <h5>{postDetail.post_text}</h5>
+          </div>
+        </div>
+        <div className="feed-CreationDate">
+          {/* 작성일/조회수 등 상세 정보 */}
+          <span> {postDetail.createDate}</span>
+          <span> 조회수 {postDetail.views}</span>
+        </div>
 
-      <div className="feed-text-container">
-        <div className="feed-text">
-          {/* 피드텍스트 */}
-          <h5>{post.post_text}</h5>
+
+        <div className="feed-actions">
+          <div className="like-comment">
+            {/* 좋아요 댓글등 왼쪽 부분 */}
+            {/* 좋아요는 로그인한 사람에 따라 하트가 달라짐 */}
+            <AiFillHeart size="30" />
+            <AiOutlineHeart size="30" />
+            <span> &nbsp;{postDetail.like_count} &nbsp; </span>
+            <IoChatbubbleOutline size="30" />
+            <span> &nbsp;{postDetail.comment_count} </span>
+          </div>
+          <div className="share-icons">
+            {/* 공유 등 오른쪽 부분 */}
+            <FaRegBookmark size="30" />
+            <FaBookmark size="30" />
+          </div>
         </div>
       </div>
-      <div className="feed-CreationDate">
-        {/* 작성일/조회수 등 상세 정보 */}
-        <span> {post.createDate}</span>
-        <span> 조회수 {post.views}</span>
-      </div>
 
 
-      <div className="feed-actions">
-        <div className="like-comment">
-          {/* 좋아요 댓글등 왼쪽 부분 */}
-          {/* 좋아요는 로그인한 사람에 따라 하트가 달라짐 */}
-          <AiFillHeart size="30" />
-          <AiOutlineHeart size="30" />
-          <span> &nbsp;{post.like_count} &nbsp; </span>
-          <IoChatbubbleOutline size="30" />
-          <span> &nbsp;{post.comment_count} </span>
-        </div>
-        <div className="share-icons">
-          {/* 공유 등 오른쪽 부분 */}
-          <FaRegBookmark size="30" />
-          <FaBookmark size="30" />
-        </div>
-      </div>
+
     </div>
+  );
 
-
-
-        </div>
-
-    );
 }
 
 export default FeedDetail;

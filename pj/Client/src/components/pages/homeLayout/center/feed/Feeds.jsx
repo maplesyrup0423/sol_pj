@@ -9,8 +9,10 @@ import ProfileImg from "../../../../utills/ProfileImg";
 import ImageViewer from "./ImageViewer";
 import { useState } from "react";
 import Carousel from "react-bootstrap/Carousel";
+import { NavLink } from "react-router-dom";
 
 function Feeds(props) {
+  const { boardId, postId } = props;
   const baseUrl = import.meta.env.VITE_BASE_URL;
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,7 +29,6 @@ function Feeds(props) {
     setSelectedImageIndex(null);
   };
 
-  const { onClick } = props;
 
   return (
     <div className="feed-container">
@@ -79,19 +80,19 @@ function Feeds(props) {
         )}
       </div>
 
-      <div  onClick={onClick}>
-      <div className="feed-text-container">
-        <div className="feed-text">
-          {/* 피드텍스트 */}
-          <h5>{props.post_text}</h5>
-        </div>
-      </div>
-      <div className="feed-CreationDate">
-        {/* 작성일/조회수 등 상세 정보 */}
-        <span> {props.createDate}</span>
-        <span> 조회수 {props.views}</span>
-      </div>
-      </div>
+        <NavLink to={`/post/${boardId}/${postId}`} className="feed_click">
+          <div className="feed-text-container">
+            <div className="feed-text">
+              {/* 피드텍스트 */}
+              <h5>{props.post_text}</h5>
+            </div>
+          </div>
+          <div className="feed-CreationDate">
+            {/* 작성일/조회수 등 상세 정보 */}
+            <span> {props.createDate}</span>
+            <span> 조회수 {props.views}</span>
+          </div>
+        </NavLink>
 
       <div className="feed-actions">
         <div className="like-comment">
