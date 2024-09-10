@@ -1,29 +1,86 @@
-.writingArea {
-  width: 100%;
+.write-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
   border-bottom: 1px solid white;
 }
 
-.writingArea textarea {
-  width: 98%;
+.write-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.profile-image {
+  flex-shrink: 0;
+}
+
+.textarea-container {
+  flex-grow: 1;
+}
+.textarea-container textarea {
+  width: 100%;
   resize: none;
   background-color: black;
   border: none;
   color: white;
+  overflow: hidden;
 }
-
-.writingArea textarea:focus {
+.textarea-container textarea:focus {
   outline: none;
 }
 
-/* .Wtable td {
-  border: 1px solid red;
-} */
-.Wtable {
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.custom-swal-title {
+  font-size: 16px; /* 원하는 글자 크기로 설정 */
+  font-weight: bold; /* 필요에 따라 글꼴 두께도 조정 가능 */
+}
+
+#file {
+  display: none;
+}
+
+.file-BsImages {
+  color: #ffcd19;
+  font-size: 40px;
+  padding: 5px;
+  border-radius: 5px;
+}
+.file-BsImages:hover {
+  background-color: rgb(98, 98, 98);
+}
+
+.preview-container {
   width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: flex-start;
 }
-.writingArea .ProfileImg {
-  width: 5%;
+
+.image-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
 }
-.writingArea .btn {
-  text-align: right;
+
+.preview-container .image-preview img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
+.img-delete-button {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  font-size: 30px;
+  color: #ffcd19;
+  cursor: pointer;
 }

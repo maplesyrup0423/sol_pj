@@ -1,15 +1,18 @@
 /* 버튼 사이즈 */
-/* .bigButton {
+.widthButton {
   border: none;
-  width: 100px;
+  width: 100%;
   height: 30px;
-} */
+  border-radius: 30px;
+  font-size: 18px;
+}
 
 .mediumButton {
-    border: none;
-    width: 85px;
-    height: 30px;
-    border-radius: 30px;
+  border: none;
+  width: 85px;
+  height: 30px;
+  border-radius: 30px;
+  font-size: 18px;
 }
 
 /* .smallButton {
@@ -20,19 +23,42 @@
 
 /* 버튼 색 */
 .yellowButton {
-    background-color: #ffcd19;
-    color: white;
+  background-color: #ffcd19;
+  color: black;
+  font-weight: 20px;
+  font-weight: bold;
+}
+.yellowButton:hover {
+  background-color: rgb(215, 173, 20);
+}
+.yellowButton:disabled {
+  background-color: #af9c56;
+  /* cursor: not-allowed; */
 }
 
+/*------------------------------------*/
 .blackButton {
-    background-color: black;
-    color: white;
+  background-color: black;
+  color: white;
+  border: 1px solid white;
+}
+.blackButton:hover {
+  background-color: gray;
+}
+/*------------------------------------*/
+.whiteButton {
+  background-color: white;
+  color: black;
 }
 
-.whiteButton {
-    background-color: white;
-    color: black;
+.inheritButton {
+  background-color: inherit;
+  color: #ffcd19;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
 }
+
 button {
-    cursor: pointer;
+  cursor: pointer;
 }

@@ -1,62 +1,98 @@
-import { useState } from "react";
-import "./UserProfile.css";
-import BackArrow from "../../../../utills/buttons/BackArrow";
-import BasicButton from "../../../../utills/buttons/BasicButton";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../../../../Context/AuthContext";
 import { NavLink } from "react-router-dom";
+import BackArrow from "../../../../utills/buttons/BackArrow";
+import BasicButton from "../../../../utills/buttons/BasicButton";
+import "./UserProfile.css";
 
 function UserProfile() {
   const { userInfo } = useContext(AuthContext);
-  //현재 선택된 탭 관리
   const [activeTab, setActiveTab] = useState("posts");
+  const baseUrl = import.meta.env.VITE_BASE_URL;
 
-  //switch-posts 클릭시 호출
+  useEffect(() => {
+    if (userInfo) {
+      console.log("userInfo:", userInfo);
+      console.log("image_url:", userInfo.image_url);
+    }
+  }, [userInfo]);
+
   const showPosts = () => {
     setActiveTab("posts");
   };
 
-  //switch-comments 클릭시 호출
   const showComments = () => {
     setActiveTab("comments");
   };
 
-  console.log("userInfo : ", userInfo);
-  console.log("userInfo.nickname : ", userInfo.nickname);
+  const isUserInfoAvailable = userInfo && userInfo.nickname;
+
+  // 서버에서 제공하는 이미지 경로와 image_url을 조합
+  const imageUrl = isUserInfoAvailable
+    ? `${baseUrl}/images/uploads/${userInfo.image_url}` // 이미지 URL
+    : `${baseUrl}/images/default-profile.jpg`; // 기본 이미지 경로
+
   return (
     <>
-      <header>
+      <header className="profileHeader">
         <div className="backArrow">
-          <BackArrow />
+          <NavLink to="/post/1">
+            <BackArrow />
+          </NavLink>
         </div>
-        <div className="userInfo">
-          <div className="name">{userInfo.nickname}</div>
-          <div className="nickName">@{userInfo.user_id}</div>
+        <div className="userInfo1">
+          {isUserInfoAvailable ? (
+            <>
+              <div className="name">{userInfo.nickname}</div>
+              <div className="nickName">@{userInfo.user_id}</div>
+            </>
+          ) : (
+            <div>Loading...</div>
+          )}
         </div>
       </header>
       <main>
         <div className="userContainer">
           <div className="userPic">
             <div className="pic">
-              <img src={userInfo.image_url} alt="" className="proImg" />
+              <img
+                src={imageUrl} // 이미지 URL 사용
+                alt="프로필 이미지"
+                className="proImg"
+              />
             </div>
           </div>
           <div className="userInfo">
-            <div className="name">{userInfo.nickname}</div>
-            <div className="nickName">@{userInfo.user_id}</div>
-            <div className="introduce">{userInfo.introduce}</div>
-            <div className="editProfile">
-              <NavLink
-                to="/editProfile"
-                state={{
-                  user_no: userInfo.user_no,
-                  nickname: userInfo.nickname,
-                  image_url: userInfo.image_url,
-                  user_id: userInfo.user_id,
-                }}
-              >
-                <BasicButton btnText="프로필수정" />
-              </NavLink>
+            <div className="Info">
+              {isUserInfoAvailable ? (
+                <>
+                  <div className="name">{userInfo.nickname}</div>
+                  <div className="nickName">@{userInfo.user_id}</div>
+                  <div className="introduce">{userInfo.introduce}</div>
+                </>
+              ) : (
+                <div>Loading...</div>
+              )}
+            </div>
+            <div className="edit">
+              <div className="editProfile">
+                <NavLink
+                  to="/editProfile"
+                  state={{
+                    user_no: isUserInfoAvailable ? userInfo.user_no : null,
+                    nickname: isUserInfoAvailable ? userInfo.nickname : "",
+                    image_url: isUserInfoAvailable ? userInfo.image_url : "",
+                    user_id: isUserInfoAvailable ? userInfo.user_id : "",
+                    introduce: isUserInfoAvailable ? userInfo.introduce : "",
+                  }}
+                >
+                  <BasicButton
+                    btnSize="largeButton"
+                    btnColor="inheritButton"
+                    btnText="프로필수정"
+                  />
+                </NavLink>
+              </div>
             </div>
           </div>
         </div>
@@ -90,4 +126,5 @@ function UserProfile() {
     </>
   );
 }
+
 export default UserProfile;

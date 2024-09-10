@@ -11,6 +11,32 @@
   height: 50px;
   border-bottom: 1px solid white;
   box-sizing: border-box;
+
+  &.active {
+    color: #fae100;
+    pointer-events: none;
+    border-bottom: 3px solid #fae100;
+    font-weight: bold;
+  }
+}
+
+/* .pop,
+.late {
+
+  width: 250px;
+  height: 40px;
+
+  &.active {
+    color: orange;
+    border-bottom: 2px solid orange;
+    pointer-events: none;
+  }
+} */
+
+.Latest:hover,
+.popularity:hover {
+  cursor: pointer;
+  color: #fae100;
 }
 
 .Latest > div,
@@ -23,7 +49,20 @@
 }
 .feed_main {
   height: 100vh;
-  overflow-y: auto;
-  scrollbar-width: none; /* 스크롤바의 너비 (auto, thin, none) */
-  scrollbar-color: #2c2c2c #000000; /* 스크롤바 손잡이와 트랙 색상 */
 }
+
+.switch-date,
+.switch-pop {
+  width: 100%;
+  height: 100%;
+}
+
+/*!!!!!임시!!!!!*/
+/*
+.feed_orders {
+  height: 200px;
+  line-height: 200px;
+  font-size: 50pt;
+  border: 5px dotted orange;
+  text-align: center;
+}*/

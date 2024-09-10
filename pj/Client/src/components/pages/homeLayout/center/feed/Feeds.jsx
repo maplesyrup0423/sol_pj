@@ -8,8 +8,12 @@ import { FaBookmark } from "react-icons/fa";
 import ProfileImg from "../../../../utills/ProfileImg";
 import ImageViewer from "./ImageViewer";
 import { useState } from "react";
+import Carousel from "react-bootstrap/Carousel";
+import { NavLink } from "react-router-dom";
 
 function Feeds(props) {
+  const { boardId, postId } = props;
+  const baseUrl = import.meta.env.VITE_BASE_URL;
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -24,6 +28,7 @@ function Feeds(props) {
     setIsModalOpen(false);
     setSelectedImageIndex(null);
   };
+
 
   return (
     <div className="feed-container">
@@ -41,16 +46,28 @@ function Feeds(props) {
 
       <div className="feed-image">
         {/* 피드이미지 */}
-        {/* TODO 캐로셀 처리  */}
-        {images.map((filePath, index) => (
-          <img
-            key={index}
-            src={filePath}
-            alt={`Post ${props.post_id} image ${index + 1}`}
-            className="feedImg1"
-            onClick={() => openModal(index)} // 이미지 클릭 시 모달 열기
-          />
-        ))}
+        {images.length > 0 &&
+          (images.length === 1 ? (
+            <img
+              src={`${baseUrl}/images/uploads_feed/${images[0]}`}
+              alt={`Post ${props.post_id} image 1`}
+              className="feedImg1"
+              onClick={() => openModal(0)} // 이미지 클릭 시 모달 열기
+            />
+          ) : (
+            <Carousel interval={null}>
+              {images.map((filePath, index) => (
+                <Carousel.Item key={index}>
+                  <img
+                    src={`${baseUrl}/images/uploads_feed/${filePath}`}
+                    alt={`Post ${props.post_id} image ${index + 1}`}
+                    className="feedImg1"
+                    onClick={() => openModal(index)} // 이미지 클릭 시 모달 열기
+                  />
+                </Carousel.Item>
+              ))}
+            </Carousel>
+          ))}
 
         {/* 모달 컴포넌트 */}
         {isModalOpen && selectedImageIndex !== null && (
@@ -63,24 +80,30 @@ function Feeds(props) {
         )}
       </div>
 
-      <div className="feed-text">
-        {/* 피드텍스트 */}
-        <h5>{props.post_text}</h5>
-      </div>
-      <div className="feed-CreationDate">
-        {/* 작성일/조회수 등 상세 정보 */}
-        <span> {props.createDate}</span>
-        <span> 조회수 {props.views}</span>
-      </div>
+        <NavLink to={`/post/${boardId}/${postId}`} className="feed_click">
+          <div className="feed-text-container">
+            <div className="feed-text">
+              {/* 피드텍스트 */}
+              <h5>{props.post_text}</h5>
+            </div>
+          </div>
+          <div className="feed-CreationDate">
+            {/* 작성일/조회수 등 상세 정보 */}
+            <span> {props.createDate}</span>
+            <span> 조회수 {props.views}</span>
+          </div>
+        </NavLink>
+
+
       <div className="feed-actions">
         <div className="like-comment">
           {/* 좋아요 댓글등 왼쪽 부분 */}
           {/* 좋아요는 로그인한 사람에 따라 하트가 달라짐 */}
           <AiFillHeart size="30" />
           <AiOutlineHeart size="30" />
-          <span> &nbsp;{props.likes_count} &nbsp; </span>
+          <span> &nbsp;{props.like_count} &nbsp; </span>
           <IoChatbubbleOutline size="30" />
-          <span> &nbsp;5 </span>
+          <span> &nbsp;{props.comment_count} </span>
         </div>
         <div className="share-icons">
           {/* 공유 등 오른쪽 부분 */}

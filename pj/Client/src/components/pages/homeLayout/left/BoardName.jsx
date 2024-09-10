@@ -2,6 +2,11 @@ import "./BoardName.css";
 import { NavLink } from "react-router-dom";
 
 function BoardName(props) {
+  const handleClick = () => {
+    if (props.onClose) {
+      props.onClose(); // onClose 함수가 있을 때만 호출
+    }
+  };
   return (
     <li key={props.board_info_id}>
       <NavLink
@@ -11,6 +16,7 @@ function BoardName(props) {
           color: isActive ? "#ffcd19" : "white", // 선택된 링크의 색상
           textDecoration: "none", // 기본 링크 스타일 제거
         })}
+        onClick={handleClick}
       >
         <div className="gameContainer">
           <div className="gameInfo gameImg">

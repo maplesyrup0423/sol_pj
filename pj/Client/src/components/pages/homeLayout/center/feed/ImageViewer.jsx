@@ -1,5 +1,6 @@
 import "./ImageViewer.css";
-
+import ReactDOM from "react-dom";
+const baseUrl = import.meta.env.VITE_BASE_URL;
 const ImageViewer = ({ images, currentIndex, onClose, onChangeImage }) => {
   const prevImage = () => {
     const prevIndex = (currentIndex - 1 + images.length) % images.length;
@@ -11,11 +12,11 @@ const ImageViewer = ({ images, currentIndex, onClose, onChangeImage }) => {
     onChangeImage(nextIndex);
   };
 
-  return (
+  return ReactDOM.createPortal(
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <img
-          src={images[currentIndex]}
+          src={`${baseUrl}/images/uploads_feed/${images[currentIndex]}`}
           alt="Full view"
           className="modal-image"
         />
@@ -33,7 +34,8 @@ const ImageViewer = ({ images, currentIndex, onClose, onChangeImage }) => {
           &times;
         </span>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

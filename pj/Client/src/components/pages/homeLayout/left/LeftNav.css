@@ -1,13 +1,13 @@
 .sidebar {
-  width: 23%;
+  max-width: 230px;
   background-color: #000000;
-  /* border-right: 1px solid white; */
   box-sizing: border-box;
   color: white;
-  position: fixed;
-  height: 100%;
+  position: relative;
+  height: 100vh;
   padding-top: 20px;
   z-index: 1;
+  float: right;
 }
 
 .sidebar ul {
@@ -16,7 +16,7 @@
 }
 
 .sidebar ul li {
-  padding: 10px 20px;
+  padding: 10px 10px;
   text-align: left;
 }
 
@@ -44,4 +44,103 @@
 .logo {
   width: 30px;
   height: 30px;
+}
+
+#ProfileCard_li {
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.no-hover:hover {
+  background-color: black !important;
+}
+
+.profile-more {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-button {
+  cursor: pointer;
+}
+
+.dropdown-menu-up {
+  width: 200px;
+  height: 70px;
+  display: flex;
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  background-color: inherit;
+  border: 0.5px solid #7f7f7f;
+  border-radius: 20px;
+  box-shadow: 0px 0px 5px 1px rgba(127, 127, 127, 0.75);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+/* 말풍선꼬리부분 */
+/* .dropdown-menu-up::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border: 22px solid transparent;
+  border-top-color: inherit;
+  border-bottom: 0;
+  margin-left: -22px;
+  margin-bottom: -22px;
+} */
+
+.dropdown-menu-up ul {
+  text-align: center;
+  width: 100%;
+  list-style: none;
+  padding: 0;
+}
+
+.dropdown-menu-up ul li {
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  padding: 5px;
+}
+
+.dropdown-menu-up ul li:nth-of-type(1) {
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
+}
+
+.dropdown-menu-up ul li:nth-of-type(2) {
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
+/* .dropdown-menu-up ul li a {
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  background-color: inherit;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+} */
+
+.profile-more:hover {
+  cursor: pointer;
+}
+
+.dropdown-menu-up ul li button {
+  background-color: inherit;
+  color: white;
+  border: none;
+}
+
+.dropdown-menu-up ul li:hover {
+  background-color: #777777;
 }

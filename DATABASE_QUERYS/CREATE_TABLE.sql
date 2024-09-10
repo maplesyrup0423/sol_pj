@@ -9,23 +9,24 @@ use sol;
     테이블 생성 순서 고려해서 slumberUser 테이블 위치 이동
 */
 CREATE TABLE User (
-   user_no   int   NOT NULL,
-   user_id   varchar(256)   NULL,
+   user_no   int   NOT NULL AUTO_INCREMENT,
+   user_id   varchar(256)   NOT NULL UNIQUE,
+   status    varchar(50)    NULL, -- 유저 상태를 나타내는 컬럼 추가
    PRIMARY KEY (user_no)
 );
 
 CREATE TABLE UserProfile (
-   profile_no   int   NOT NULL,
-   user_no   int   NOT NULL,
+   profile_no   int   NOT NULL AUTO_INCREMENT,
+   user_no   int   NOT NULL UNIQUE,
    nickname   varchar(50)   NULL,
-   image_url   varchar(128)   NULL,
-   introduce   varchar(256)   NULL,
-   PRIMARY KEY (profile_no, user_no),
-   FOREIGN KEY (user_no) REFERENCES User(user_no)
+   image_url   varchar(512)   NULL,
+   introduce   varchar(512)   NULL,
+   PRIMARY KEY (profile_no),
+   FOREIGN KEY (user_no) REFERENCES User(user_no) ON DELETE CASCADE
 );
 
 CREATE TABLE Session (
-   login_no  int   NOT NULL,
+   login_no  int   NOT NULL AUTO_INCREMENT,
    user_no   int   NOT NULL,
    login_time   datetime   NULL,
    logout_time   datetime   NULL,
@@ -38,7 +39,7 @@ CREATE TABLE Session (
 );
 
 CREATE TABLE Authentic (
-   auth_no   int   NOT NULL,
+   auth_no   int   NOT NULL AUTO_INCREMENT,
    user_no   int   NOT NULL,
    gender   int   NULL,
    phone   varchar(128)   NULL,
@@ -47,17 +48,27 @@ CREATE TABLE Authentic (
    auth_date   datetime   NULL,
    address   varchar(128)   NULL,
    PRIMARY KEY (auth_no, user_no),
-   FOREIGN KEY (user_no) REFERENCES User(user_no)
+   FOREIGN KEY (user_no) REFERENCES User(user_no) ON DELETE CASCADE
 );
 
 CREATE TABLE Password (
-   password_no   int   NOT NULL,
+   password_no   int   NOT NULL AUTO_INCREMENT,
    user_no   int   NOT NULL,
    salt   varchar(128)   NULL,
    password   varchar(128)   NULL,
    update_date   datetime   NULL,
    PRIMARY KEY (password_no, user_no),
-   FOREIGN KEY (user_no) REFERENCES User(user_no)
+   FOREIGN KEY (user_no) REFERENCES User(user_no) ON DELETE CASCADE
+);
+
+-- 팔로워(친구) 테이블 --
+CREATE TABLE UserFollower (
+    follower_no int NOT NULL,
+    following_no int NOT NULL,
+    follow_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (follower_no, following_no),
+    FOREIGN KEY (follower_no) REFERENCES User(user_no) ON DELETE CASCADE,
+    FOREIGN KEY (following_no) REFERENCES User(user_no) ON DELETE CASCADE
 );
 
 CREATE TABLE slumberUser (
@@ -116,28 +127,35 @@ CREATE TABLE withdrawalUserlog (
 -- -----------------BOARD------------------
 -- ----------------------------------------
 -- ----------------------------------------
-/* NOT NULL 지정, DEFAULT값 추가 
-    TINYINT 디스플레이 폭 지정 삭제
-    modiDate에 ON UPDATE CURRENT_TIMESTAMP 추가*/
+
 -- 게시판 종류
 create table board_info_table(
-   board_info_id INT  primary key,
+   board_info_id INT  primary key  AUTO_INCREMENT,
    board_info_name VARCHAR(1024) NOT NULL,
    board_img VARCHAR(1024)
 );
 
+
+-- 유저-게시판종류 테이블 (User와 board_info_table 간의 다대다 관계를 관리)
+CREATE TABLE UserBoard (
+   user_no INT NOT NULL,
+   board_info_id INT NOT NULL,
+   PRIMARY KEY (user_no, board_info_id),
+   FOREIGN KEY (user_no) REFERENCES User(user_no) ON DELETE CASCADE,
+   FOREIGN KEY (board_info_id) REFERENCES board_info_table(board_info_id) ON DELETE CASCADE
+);
 -- 게시글
-CREATE TABLE posts(
+CREATE TABLE posts (
    post_id INT PRIMARY KEY AUTO_INCREMENT,
-   post_text VARCHAR(1024)NOT NULL,
+   post_text VARCHAR(1024),
    user_no INT,
    createDate DATETIME DEFAULT CURRENT_TIMESTAMP,
    modiDate DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
    board_info_id INT,
    isDeleted TINYINT DEFAULT 0,
    views INT DEFAULT 0,
-   foreign key (user_no) references User(user_no),
-   foreign key (board_info_id) references board_info_table(board_info_id)
+   FOREIGN KEY (user_no) REFERENCES User(user_no) ON DELETE SET NULL,
+   FOREIGN KEY (board_info_id) REFERENCES board_info_table(board_info_id) ON DELETE SET NULL
 );
 
 -- 게시글 파일 테이블 
@@ -146,7 +164,7 @@ CREATE TABLE post_files (
    post_id INT,
    file_path VARCHAR(1024) NOT NULL,
    upload_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-   FOREIGN KEY (post_id) REFERENCES posts(post_id) 
+   FOREIGN KEY (post_id) REFERENCES posts(post_id) ON DELETE CASCADE
 );
 
 -- 게시글 좋아요
@@ -155,8 +173,8 @@ CREATE TABLE post_likes (
     post_id INT,
     user_no INT,
     like_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (post_id) REFERENCES posts(post_id) ,
-    FOREIGN KEY (user_no) REFERENCES User(user_no) 
+    FOREIGN KEY (post_id) REFERENCES posts(post_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_no) REFERENCES User(user_no) ON DELETE SET NULL 
 );
 
 -- 댓글
@@ -169,9 +187,9 @@ CREATE TABLE comments (
     createDate DATETIME DEFAULT CURRENT_TIMESTAMP,
     modiDate DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
     isDeleted TINYINT DEFAULT 0,
-    foreign key (post_id) references posts(post_id),
-    FOREIGN KEY (parent_comment_id) REFERENCES Comments(comment_id),
-    foreign key (user_no) references User(user_no)
+    FOREIGN KEY (post_id) REFERENCES posts(post_id) ON DELETE CASCADE,
+    FOREIGN KEY (parent_comment_id) REFERENCES comments(comment_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_no) REFERENCES User(user_no) ON DELETE SET NULL 
 );
 -- 댓글 좋아요
 CREATE TABLE comment_likes (
@@ -179,52 +197,9 @@ CREATE TABLE comment_likes (
     comment_id INT,
     user_no INT,
     like_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (comment_id) REFERENCES comments(comment_id) ,
-    FOREIGN KEY (user_no) REFERENCES User(user_no) 
+    FOREIGN KEY (comment_id) REFERENCES comments(comment_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_no) REFERENCES User(user_no) ON DELETE SET NULL
 );
-
--- 파일 백업 테이블
--- CREATE TABLE post_files_backup (
---     backup_id INT PRIMARY KEY AUTO_INCREMENT,
---     file_id INT,
---     post_id INT,
---     file_path VARCHAR(1024),
---     delete_date DATETIME DEFAULT CURRENT_TIMESTAMP, 
---     original_upload_date DATETIME 
--- );
--- 게시글 백업 테이블
--- CREATE TABLE posts_backup (
---     backup_id INT PRIMARY KEY AUTO_INCREMENT,
---     original_post_id INT,
---     post_text VARCHAR(1024),
---     post_file1 VARCHAR(1024),
---     post_file2 VARCHAR(1024),
---     post_file3 VARCHAR(1024),
---     post_file4 VARCHAR(1024),
---     user_no INT,
---     createDate DATETIME,
---     modiDate DATETIME,
---     board_info_id INT,
---     isDeleted TINYINT,
---     views INT,
---     likes_count INT,
---     backup_date DATETIME DEFAULT CURRENT_TIMESTAMP
--- );
-
--- 댓글 백업 테이블
--- CREATE TABLE comments_backup (
---     backup_id INT PRIMARY KEY AUTO_INCREMENT,
---     original_comment_id INT,
---     post_id INT,
---     parent_comment_id INT,
---     comment_text VARCHAR(1024),
---     user_no INT,
---     createDate DATETIME,
---     modiDate DATETIME,
---     isDeleted TINYINT,
---     likes_count INT,
---     backup_date DATETIME DEFAULT CURRENT_TIMESTAMP
--- );
 
 
 -- ----------------------------------------
@@ -236,32 +211,37 @@ CREATE TABLE comment_likes (
 -- ChatRoomUser 테이블 last_active_at 컬럼 null 불가 -> 허용 
 
 CREATE TABLE ChatRoom (
-   room_id varchar(256) NOT NULL,
-   room_name varchar(256) NOT NULL,
-   PRIMARY KEY (room_id)
+    room_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    room_name VARCHAR(255) DEFAULT NULL,
+    is_group BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE ChatRoomUser (
-   room_id varchar(256) NOT NULL,
-   user_no int NOT NULL,
-   role varchar(256) NULL,
-   joined_at datetime NOT NULL,
-   last_active_at datetime  NULL,
-   PRIMARY KEY (room_id, user_no),
-   FOREIGN KEY (room_id) REFERENCES ChatRoom(room_id),
-   FOREIGN KEY (user_no) REFERENCES user(user_no)
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    room_id BIGINT UNSIGNED NOT NULL,
+    user_no INT NOT NULL,
+    role ENUM('admin', 'member') DEFAULT 'member',
+    joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_active_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (room_id) REFERENCES ChatRoom(room_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_no) REFERENCES User(user_no) ON DELETE CASCADE,
+    UNIQUE KEY uq_room_user (room_id, user_no)
 );
 
 CREATE TABLE ChatMessage (
-   message_id varchar(256) NOT NULL,
-   room_id varchar(256) NOT NULL,
-   user_no int NOT NULL,
-   message_content varchar(256) NOT NULL,
-   created_at datetime NOT NULL,
-   status varchar(50) NULL,
-   PRIMARY KEY (message_id),
-   FOREIGN KEY (room_id) REFERENCES ChatRoom(room_id),
-   FOREIGN KEY (user_no) REFERENCES user(user_no)
+    message_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    room_id BIGINT UNSIGNED NOT NULL,
+    user_no INT NOT NULL,
+    message_content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status ENUM('sent', 'delivered', 'read') DEFAULT 'sent',
+    is_edited BOOLEAN NOT NULL DEFAULT FALSE,
+    is_deleted BOOLEAN NOT NULL DEFAULT FALSE,
+    FOREIGN KEY (room_id) REFERENCES ChatRoom(room_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_no) REFERENCES User(user_no) ON DELETE CASCADE,
+    INDEX idx_room_id (room_id),
+    INDEX idx_user_no (user_no)
 );
 
 -- 인증용 토큰 저장용

@@ -1,4 +1,7 @@
-.Savebtn{
-    background-color: transparent;
-    border: none;
+.Savebtn {
+  background-color: transparent;
+  border: none;
+  /* color: black; */
+  font-size: 20px;
+  font-weight: bold;
 }

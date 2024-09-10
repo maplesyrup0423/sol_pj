@@ -1,31 +1,23 @@
-header {
+.profileHeader {
   display: flex;
   align-items: center;
-  padding: 20px 0 20px 0;
+  border-bottom: 1px solid #595959;
 }
 
 .backArrow {
   width: 50px;
 }
 
-.userInfo {
-  display: flex;
-  flex-direction: column;
-}
-
 .nickName {
   color: gray;
 }
 
-main {
-  padding: 20px 20px 20px 0;
-  /* display: flex; */
-}
 .userContainer {
   width: 100%;
   display: flex;
   margin-bottom: 60px;
   padding: 20px;
+  align-items: center;
 }
 
 .pic {
@@ -40,18 +32,27 @@ main {
 }
 
 .userInfo {
-  padding: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.Info {
+  width: 300px;
+  flex: 1;
+  margin-right: 0;
 }
 
 .introduce {
   margin-top: 10px;
   font-size: 18px;
 }
+.edit {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
 
 .editProfile {
-  position: absolute;
-  right: 500px;
-  margin: 20px;
   display: flex;
   border: 3px solid #ffcd19;
   border-radius: 50px;
@@ -62,7 +63,7 @@ main {
   align-items: center;
 }
 
-button {
+.bBtn {
   font-size: 24px;
   color: #ffcd19;
   background-color: inherit;
@@ -75,7 +76,7 @@ button {
   align-items: center;
   margin: 0 auto;
   font-size: 18px;
-  border-bottom: 1px solid white;
+  border-bottom: 1px solid #595959;
   margin-bottom: 20px;
   padding-bottom: 10px;
 }
