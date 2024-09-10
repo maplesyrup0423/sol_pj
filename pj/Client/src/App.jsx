@@ -1,4 +1,3 @@
-// src/App.jsx
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { AuthProvider } from "./Context/AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -13,43 +12,41 @@ import SignUp from "./components/pages/SignUp";
 import Followers from "./components/pages/homeLayout/right/Followers";
 import EditAccount from "./components/pages/homeLayout/center/UserProfile/EditAccount";
 import Room from "./components/pages/homeLayout/center/chat/Room";
+import PrivateRoute from "./components/auth/privateRoute";
 
 function App() {
     const router = createBrowserRouter([
         {
             path: "/",
-
-            element: <HomePage />,
+            element: <PrivateRoute element={<HomePage />} />, // 수정됨
             children: [
                 {
                     path: "/",
-                    element: <FeedMain />,
-                    //처음에 보일 화면은 사용자가 선택한 게시판중 id가 가장 작은값
-                    //todo 후추 사용자 경험 바탕으로 정해지는 방안 고민하기
+                    element: <PrivateRoute element={<FeedMain />} />, // 수정됨
                 },
                 {
                     path: "/post/:boardId",
-                    element: <FeedMain />, // 게시판 ID에 따라 데이터를 처리할 페이지
+                    element: <PrivateRoute element={<FeedMain />} />, // 수정됨
                 },
                 {
                     path: "/myPage",
-                    element: <UserProfile />, // 마이페이지
+                    element: <PrivateRoute element={<UserProfile />} />, // 수정됨
                 },
                 {
                     path: "/editProfile",
-                    element: <MyProfile />, // 프로필수정
+                    element: <PrivateRoute element={<MyProfile />} />, // 수정됨
                 },
                 {
                     path: "/followers",
-                    element: <Followers />,
+                    element: <PrivateRoute element={<Followers />} />, // 수정됨
                 },
                 {
                     path: "/account",
-                    element: <EditAccount />,
+                    element: <PrivateRoute element={<EditAccount />} />, // 수정됨
                 },
                 {
                     path: "/chatRoom",
-                    element: <Room />,
+                    element: <PrivateRoute element={<Room />} />, // 수정됨
                 },
             ],
         },

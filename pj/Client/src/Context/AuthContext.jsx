@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
             if (storedToken) {
                 try {
                     // 서버에 토큰을 보내서 사용자 정보를 가져옴
-                    const response = await api.get('/user-info', {
+                    const response = await api.post('/user-info', {
                         headers: { Authorization: `Bearer ${storedToken}` }
                     });
 
@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         try {
-            await api.post('/api/logout', {}, { withCredentials: true });
+            await api.post('/logout', {}, { withCredentials: true });
         } catch (error) {
             console.error("로그아웃 에러:", error);
         } finally {
