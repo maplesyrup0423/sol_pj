@@ -106,7 +106,7 @@ function MyProfile() {
     // 서버에서 유저 정보를 가져오는 함수
     const fetchUserProfile = async () => {
       try {
-        const response = await api.get("/user-info"); // 유저 정보를 가져오는 엔드포인트로 수정
+        const response = await api.post("/user-info"); // 유저 정보를 가져오는 엔드포인트로 수정
         const data = response.data;
 
         console.log("서버 응답 데이터:", data);
