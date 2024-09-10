@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../../../../Context/AuthContext";
 import { NavLink } from "react-router-dom";
 import BackArrow from "../../../../utills/buttons/BackArrow";
@@ -8,6 +8,14 @@ import "./UserProfile.css";
 function UserProfile() {
   const { userInfo } = useContext(AuthContext);
   const [activeTab, setActiveTab] = useState("posts");
+  const baseUrl = import.meta.env.VITE_BASE_URL;
+
+  useEffect(() => {
+    if (userInfo) {
+      console.log("userInfo:", userInfo);
+      console.log("image_url:", userInfo.image_url);
+    }
+  }, [userInfo]);
 
   const showPosts = () => {
     setActiveTab("posts");
@@ -18,6 +26,11 @@ function UserProfile() {
   };
 
   const isUserInfoAvailable = userInfo && userInfo.nickname;
+
+  // 서버에서 제공하는 이미지 경로와 image_url을 조합
+  const imageUrl = isUserInfoAvailable
+    ? `${baseUrl}/images/uploads/${userInfo.image_url}` // 이미지 URL
+    : `${baseUrl}/images/default-profile.jpg`; // 기본 이미지 경로
 
   return (
     <>
@@ -43,12 +56,8 @@ function UserProfile() {
           <div className="userPic">
             <div className="pic">
               <img
-                src={
-                  isUserInfoAvailable
-                    ? userInfo.image_url
-                    : "default-image-url.jpg"
-                }
-                alt=""
+                src={imageUrl} // 이미지 URL 사용
+                alt="프로필 이미지"
                 className="proImg"
               />
             </div>
