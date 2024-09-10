@@ -50,8 +50,13 @@ function MyProfile() {
     formData.append("introduce", userInfo.introduce);
     formData.append("user_no", user_no);
 
+    // 새 파일이 선택된 경우에만 image를 formData에 추가합니다.
     if (fileInputRef.current.files[0]) {
       formData.append("image", fileInputRef.current.files[0]);
+    } else {
+      // 기존의 이미지 URL을 formData에 추가하지 않습니다.
+      // 서버가 기존의 이미지 URL을 유지하도록 처리할 수 있도록 합니다.
+      // (서버에서 기존의 이미지를 처리하는 방법에 따라 다를 수 있습니다.)
     }
 
     try {
@@ -71,6 +76,9 @@ function MyProfile() {
             icon: "success",
             title: "성공",
             text: "프로필이 성공적으로 수정되었습니다.",
+          }).then(() => {
+            // 페이지를 새로고침합니다.
+            window.location.reload();
           });
         } else {
           Swal.fire({
