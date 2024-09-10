@@ -219,8 +219,10 @@ module.exports = function (conn) {
     }
   });
 
-  router.get("/user-info", (req, res) => {
-    const token = req.headers.authorization?.split(" ")[1]; // 'Bearer <token>'에서 <token> 추출
+
+    router.post("/user-info", (req, res) => {
+        const token = req.headers.authorization?.split(" ")[1]; // 'Bearer <token>'에서 <token> 추출
+
 
     if (!token) {
       return res

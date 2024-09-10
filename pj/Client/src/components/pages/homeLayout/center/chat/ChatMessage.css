@@ -1,37 +1,88 @@
-.chat-content {
+.chat-wrapper {
     display: flex;
-    gap: 10px;
+    margin-bottom: 20px;
+    align-items: flex-start;
 }
+
 .my-chat {
-    justify-content: flex-end;
-    color: black;
-    background: none;
+    flex-direction: row-reverse;
 }
-.my-chat p {
-    background-color: #ffcd19;
-}
-.chat-img {
-    background-color: white;
-    min-width: 30px;
-    max-height: 30px;
-    border-radius: 50%;
-}
+
 .other-chat {
-    justify-content: flex-start;
-    color: black;
-    max-width: 70%; /* 최대 너비를 설정하여 너무 길지 않게 제한 */
-    background: none;
+    flex-direction: row;
 }
-.other-chat p {
+
+.chat-user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.chat-img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+.chat-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.chat-nickname {
+    font-size: 12px;
+    color: black;
+    white-space: nowrap;
+    width: auto;
+    /* 고정 너비 제거 */
+    height: auto;
+    /* 고정 높이 제거 */
+    margin-top: 5px;
+    /* 이미지와의 간격 */
+    text-align: center;
+    /* 텍스트 중앙 정렬 */
+    overflow: visible;
+    /* 넘치는 텍스트 표시 */
+}
+
+.chat-bubble-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 70%;
+}
+
+.chat-bubble {
+    padding: 10px;
+    border-radius: 10px;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+.my-chat .chat-bubble {
+    background-color: #ffcd19;
+    align-self: flex-end;
+}
+
+.other-chat .chat-bubble {
     background-color: #f3f3f3;
 }
-.my-chat p,
-.other-chat p {
-    color: black;
-    border-radius: 10px;
-    padding: 5px;
-    max-width: 100%; /* 부모 요소인 chat-content의 최대 너비 내에서만 확장되도록 설정 */
-    word-wrap: break-word; /* 긴 단어를 줄바꿈 */
-    word-break: break-word; /* 긴 단어를 강제로 줄바꿈 */
-    /* display: inline-block; 텍스트 크기에 맞게 div가 확장되도록 설정 */
+
+.chat-bubble p {
+    margin: 0;
+    white-space: pre-wrap;
+}
+
+.time {
+    font-size: 10px;
+    color: #666;
+    margin-top: 5px;
+    align-self: flex-end;
+}
+
+.my-chat .time {
+    text-align: right;
 }

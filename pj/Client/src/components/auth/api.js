@@ -1,4 +1,3 @@
-// api.js
 import axios from "axios";
 
 const api = axios.create({
@@ -31,9 +30,7 @@ api.interceptors.response.use(
       if (isRefreshing) {
         return new Promise((resolve) => {
           refreshSubscribers.push((newAccessToken) => {
-            originalRequest.headers[
-              "Authorization"
-            ] = `Bearer ${newAccessToken}`;
+            originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
             resolve(api(originalRequest));
           });
         });
@@ -62,7 +59,10 @@ api.interceptors.response.use(
       } catch (refreshError) {
         isRefreshing = false;
         localStorage.removeItem("accessToken");
-        window.location.href = "/login";
+        // 여기서 리다이렉트 로직을 확인합니다.
+        if (window.location.pathname !== "/login") {
+          window.location.href = "/login";
+        }
         return Promise.reject(refreshError);
       }
     }
