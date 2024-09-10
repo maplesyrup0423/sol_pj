@@ -8,6 +8,19 @@
   border-bottom: 1px solid white;
 }
 
+.feed_detail_top_back {
+  width: 200px;
+  margin-top: 20px;
+  margin-left: 20px;
+  color: #fae100;
+  font-size: 16pt;
+}
+
+.feed_detail_top_back:hover {
+  cursor: pointer;
+  font-weight: bold;
+}
+
 .back_to_FeedMain {
   border: none;
   background-color: transparent;

@@ -16,7 +16,7 @@ const ImageViewer = ({ images, currentIndex, onClose, onChangeImage }) => {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <img
-          src={`${baseUrl}/images/uploads/${images[currentIndex]}`}
+          src={`${baseUrl}/images/uploads_feed/${images[currentIndex]}`}
           alt="Full view"
           className="modal-image"
         />

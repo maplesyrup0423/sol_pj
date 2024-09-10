@@ -7,6 +7,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../../../../Context/AuthContext";
 import api from "../../../../auth/api";
+import { NavLink } from 'react-router-dom';
 
 function FeedMain() {
   const { userInfo } = useContext(AuthContext);
@@ -164,8 +165,10 @@ function FeedMain() {
                 data.map((p) => (
                   <Feeds
                     key={p.post_id}
+                    postId={p.post_id}  // 게시글 ID 전달
+                    boardId={boardId}   // 게시판 ID 전달
                     {...p}
-                    onClick={() => handlePostClick(p)}
+                    // onClick={() => handlePostClick(p)}
                   />
                 ))
               ) : (
@@ -179,8 +182,10 @@ function FeedMain() {
                 data.map((p) => (
                   <Feeds
                     key={p.post_id}
+                    postId={p.post_id}  // 게시글 ID 전달
+                    boardId={boardId}   // 게시판 ID 전달
                     {...p}
-                    onClick={() => handlePostClick(p)}
+                    // onClick={() => handlePostClick(p)}
                   />
                 ))
               ) : (
