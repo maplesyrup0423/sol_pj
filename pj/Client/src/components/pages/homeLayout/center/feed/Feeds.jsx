@@ -48,7 +48,7 @@ function Feeds(props) {
         {images.length > 0 &&
           (images.length === 1 ? (
             <img
-              src={`${baseUrl}/images/uploads/${images[0]}`}
+              src={`${baseUrl}/images/uploads_feed/${images[0]}`}
               alt={`Post ${props.post_id} image 1`}
               className="feedImg1"
               onClick={() => openModal(0)} // 이미지 클릭 시 모달 열기
@@ -58,7 +58,7 @@ function Feeds(props) {
               {images.map((filePath, index) => (
                 <Carousel.Item key={index}>
                   <img
-                    src={`${baseUrl}/images/uploads/${filePath}`}
+                    src={`${baseUrl}/images/uploads_feed/${filePath}`}
                     alt={`Post ${props.post_id} image ${index + 1}`}
                     className="feedImg1"
                     onClick={() => openModal(index)} // 이미지 클릭 시 모달 열기
@@ -79,18 +79,18 @@ function Feeds(props) {
         )}
       </div>
 
-      <div  onClick={onClick}>
-      <div className="feed-text-container">
-        <div className="feed-text">
-          {/* 피드텍스트 */}
-          <h5>{props.post_text}</h5>
+      <div onClick={onClick}>
+        <div className="feed-text-container">
+          <div className="feed-text">
+            {/* 피드텍스트 */}
+            <h5>{props.post_text}</h5>
+          </div>
         </div>
-      </div>
-      <div className="feed-CreationDate">
-        {/* 작성일/조회수 등 상세 정보 */}
-        <span> {props.createDate}</span>
-        <span> 조회수 {props.views}</span>
-      </div>
+        <div className="feed-CreationDate">
+          {/* 작성일/조회수 등 상세 정보 */}
+          <span> {props.createDate}</span>
+          <span> 조회수 {props.views}</span>
+        </div>
       </div>
 
       <div className="feed-actions">
