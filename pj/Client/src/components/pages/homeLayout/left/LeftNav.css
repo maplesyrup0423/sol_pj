@@ -63,6 +63,10 @@
   display: inline-block;
 }
 
+.profile-button {
+  cursor: pointer;
+}
+
 .dropdown-menu-up {
   width: 200px;
   height: 70px;

@@ -91,5 +91,9 @@ app.use("/images", express.static(path.join(__dirname, "images")));
 const editProfileRoutes = require("./controllers/editProfile");
 app.use(editProfileRoutes(conn));
 
+//프로필조회 라우터
+const userInfoRoutes = require("./controllers/userInfo");
+app.use(userInfoRoutes(conn));
+
 // 'uploads' 디렉토리의 경로를 절대 경로로 설정
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));

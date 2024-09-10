@@ -71,6 +71,9 @@ function MyProfile() {
             icon: "success",
             title: "성공",
             text: "프로필이 성공적으로 수정되었습니다.",
+          }).then(() => {
+            // 페이지를 새로고침합니다.
+            window.location.reload();
           });
         } else {
           Swal.fire({
