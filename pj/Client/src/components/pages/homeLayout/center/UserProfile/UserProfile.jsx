@@ -1,27 +1,41 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./UserProfile.css";
 import BackArrow from "../../../../utills/buttons/BackArrow";
 import BasicButton from "../../../../utills/buttons/BasicButton";
-import { useContext } from "react";
-import { AuthContext } from "../../../../../Context/AuthContext";
 import { NavLink } from "react-router-dom";
+import api from "../../../../../components/auth/api";
 
 function UserProfile() {
-  const { userInfo } = useContext(AuthContext);
-  // 현재 선택된 탭 관리
+  const [userInfo, setUserInfo] = useState(null);
   const [activeTab, setActiveTab] = useState("posts");
 
-  // switch-posts 클릭 시 호출
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const response = await api.get("/user-info"); // 서버에서 유저 정보 가져오기
+        const data = response.data;
+
+        if (data.success) {
+          setUserInfo(data.user);
+        } else {
+          console.error("User profile fetch error:", data.message);
+        }
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
+
   const showPosts = () => {
     setActiveTab("posts");
   };
 
-  // switch-comments 클릭 시 호출
   const showComments = () => {
     setActiveTab("comments");
   };
 
-  // userInfo가 존재하는지 확인
   const isUserInfoAvailable = userInfo && userInfo.nickname;
 
   return (
