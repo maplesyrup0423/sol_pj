@@ -1,24 +1,22 @@
-
-
 .feed_detail {
-    min-width: 550px;
+  min-width: 550px;
 }
 
-.feed_detail_top{
-    width: 100%;
-    height: 50px;
-    border-bottom: 1px solid white;
+.feed_detail_top {
+  width: 100%;
+  height: 50px;
+  border-bottom: 1px solid white;
 }
 
 .back_to_FeedMain {
-    border: none;
-    background-color: transparent;
-    width: 150px;
-    color: #fae100;
-    line-height: 50px;
-    font-size: 15pt;
+  border: none;
+  background-color: transparent;
+  width: 150px;
+  color: #fae100;
+  line-height: 50px;
+  font-size: 15pt;
 }
 
 .back_to_FeedMain:hover {
-    font-weight: bolder;
+  font-weight: bolder;
 }
