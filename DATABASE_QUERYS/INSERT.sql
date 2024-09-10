@@ -10,13 +10,12 @@ INSERT INTO User (user_id, status) VALUES('LIMJ2022', NULL);
 
 
 -- 유저 프로필 여기도 마찬가지
--- 사진 부분에는"파일명.확장자"로 통일 || 현재는 하드코딩
-INSERT INTO UserProfile (user_no, nickname, image_url, introduce) VALUES(1, '체르', 'https://cdn.pixabay.com/photo/2013/05/30/18/21/cat-114782_1280.jpg', '무엇을 해야 할까요?');
-INSERT INTO UserProfile (user_no, nickname, image_url, introduce) VALUES(2, '맹', 'https://cdn.pixabay.com/photo/2014/03/29/09/17/cat-300572_1280.jpg', '자기소개');
-INSERT INTO UserProfile (user_no, nickname, image_url, introduce) VALUES(3, '김한결', 'https://cdn.pixabay.com/photo/2014/11/30/14/11/cat-551554_1280.jpg', '자기소개1');
-INSERT INTO UserProfile (user_no, nickname, image_url, introduce) VALUES(4, '로크만', 'https://cdn.pixabay.com/photo/2024/02/28/07/42/european-shorthair-8601492_1280.jpg', '자기소개2');
-INSERT INTO UserProfile (user_no, nickname, image_url, introduce) VALUES(5, '기둥', 'https://cdn.pixabay.com/photo/2022/05/28/06/39/cat-7226671_1280.jpg', '자기소개3');
-INSERT INTO UserProfile (user_no, nickname, image_url, introduce) VALUES(6, '요이커', 'https://cdn.pixabay.com/photo/2017/03/14/14/49/cat-2143332_1280.jpg', '자기소개4');
+INSERT INTO UserProfile (user_no, nickname, image_url, introduce) VALUES(1, '체르', 'testImg4.jpg', '무엇을 해야 할까요?');
+INSERT INTO UserProfile (user_no, nickname, image_url, introduce) VALUES(2, '맹', 'testImg3.jpg', '자기소개');
+INSERT INTO UserProfile (user_no, nickname, image_url, introduce) VALUES(3, '김한결', 'testImg1.png', '자기소개1');
+INSERT INTO UserProfile (user_no, nickname, image_url, introduce) VALUES(4, '로크만', 'testImg2.jpg', '자기소개2');
+INSERT INTO UserProfile (user_no, nickname, image_url, introduce) VALUES(5, '기둥', 'testImg5.jpg', '자기소개3');
+INSERT INTO UserProfile (user_no, nickname, image_url, introduce) VALUES(6, '요이커', 'testImg6.jpg', '자기소개4');
 
 select * from userprofile;
 update UserProfile set nickname = '체르', introduce ='무엇을 해야 할까요?', image_url='https://cdn.pixabay.com/photo/2013/05/30/18/21/cat-114782_1280.jpg'
@@ -42,7 +41,11 @@ INSERT INTO userfollower (follower_no, following_no) VALUES(6,3);
 INSERT INTO userfollower (follower_no, following_no) VALUES(6,4);
 INSERT INTO userfollower (follower_no, following_no) VALUES(6,5);
 INSERT INTO userfollower (follower_no, following_no) VALUES(6,6);
-
+INSERT INTO userfollower (follower_no, following_no) VALUES(1,2);
+INSERT INTO userfollower (follower_no, following_no) VALUES(1,3);
+INSERT INTO userfollower (follower_no, following_no) VALUES(1,4);
+INSERT INTO userfollower (follower_no, following_no) VALUES(1,5);
+INSERT INTO userfollower (follower_no, following_no) VALUES(1,6);
 
 -- 회원가입 테스트 --
 CALL RegisterUser(
