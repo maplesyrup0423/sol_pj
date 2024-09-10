@@ -73,7 +73,7 @@ function LeftNav({ userInfo }) {
         <li>{userInfo ? <BoardInfo user_no={userInfo.user_no} /> : ""}</li>
 
         <li id="ProfileCard_li">
-          <div onClick={handleProfileCardClick}>
+          <div onClick={handleProfileCardClick} className="profile-button">
             {userInfo ? (
               <ProfileCard
                 user_no={userInfo.user_no}
