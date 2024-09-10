@@ -90,6 +90,3 @@ app.use("/images", express.static(path.join(__dirname, "images")));
 //프로필변경 라우터
 const editProfileRoutes = require("./controllers/editProfile");
 app.use(editProfileRoutes(conn));
-
-// 'uploads' 디렉토리의 경로를 절대 경로로 설정
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
