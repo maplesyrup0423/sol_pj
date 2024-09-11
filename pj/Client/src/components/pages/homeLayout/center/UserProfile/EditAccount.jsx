@@ -10,6 +10,9 @@ function EditAccount() {
   return (
     <>
       <header>
+        <NavLink to="/">
+          <Closebtn />
+        </NavLink>
         <div>계정관리</div>
       </header>
       <main>

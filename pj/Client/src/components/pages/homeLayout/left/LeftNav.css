@@ -142,5 +142,6 @@
 }
 
 .dropdown-menu-up ul li:hover {
-  background-color: #777777;
+  background-color: #313131;
+  transition: 0.3s;
 }

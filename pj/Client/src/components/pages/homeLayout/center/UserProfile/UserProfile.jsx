@@ -115,8 +115,9 @@ function UserProfile() {
         <div className="list">
           <div className="content">
             {activeTab === "posts" && (
-              <div className="posts">게시글 누르면 이게 나옴
-                        {data.length > 0 ? (
+              <div className="posts">
+                게시글 누르면 이게 나옴
+                {/* {data.length > 0 ? (
                 data.map((p) => (
                   <Feeds
                     key={p.post_id}
@@ -127,10 +128,10 @@ function UserProfile() {
                 ))
               ) : (
                 <h1>게시글이 없습니다.</h1>
-              )}
-            )}
+              )} */}
               </div>
-    
+            )}
+
             {activeTab === "comments" && (
               <div className="comments">댓글 누르면 이게 나옴</div>
             )}
