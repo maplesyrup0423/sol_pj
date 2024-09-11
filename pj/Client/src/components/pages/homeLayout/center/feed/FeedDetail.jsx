@@ -96,6 +96,7 @@ function FeedDetail() {
         key={postId}
         postId={postId} // 게시글 ID 전달
         userno={postDetail.userno}
+        user_id={postDetail.user_id}
         post_text={postDetail.post_text}
         createDate={postDetail.createDate}
         modiDate={postDetail.modiDate}
