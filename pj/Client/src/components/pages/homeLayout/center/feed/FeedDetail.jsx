@@ -1,5 +1,7 @@
 import "./FeedDetail.css";
 import "./Feeds.css";
+import FeedComment from "./FeedComment";
+import Writing from "./Writing";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { IoIosMore } from "react-icons/io";
 import { AiFillHeart } from "react-icons/ai";
@@ -14,10 +16,13 @@ import Carousel from "react-bootstrap/Carousel";
 import { useParams } from "react-router-dom";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { useContext } from "react";
+import { AuthContext } from "../../../../../Context/AuthContext";
 import api from "../../../../auth/api";
 
 function FeedDetail() {
-  const { postId } = useParams(); // URL에서 postId 가져오기
+  const { boardId, postId } = useParams(); // URL에서 postId 가져오기
+  const { userInfo } = useContext(AuthContext);
   const [postDetail, setPostDetail] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -30,6 +35,21 @@ function FeedDetail() {
 
   const handleBack = () => {
     navigate(-1); //뒤로가기
+  };
+
+//!나중에 지울꺼
+  const fetchData = async () => {
+    try {
+      const response = await api.get(
+        `/api/post?board_info_id=${boardId}&orderBy=${
+          activeTab === "post_pop" ? "pop" : "date"
+        }`
+      );
+      setData(response.data);
+      // console.log(`Fetching posts with orderBy: ${activeTab === 'post_pop' ? 'pop' : 'date'}`);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
   // useEffect(() => {
@@ -62,6 +82,8 @@ function FeedDetail() {
 
     fetchPostDetail();
   }, [postId]);
+
+  
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>오류가 발생했습니다: {error.message}</p>;
@@ -168,6 +190,21 @@ function FeedDetail() {
           </div>
         </div>
       </div>
+
+      <div className="write-comment">
+        {/* 글쓰기 부분*/}
+        {userInfo ? (
+          <Writing
+            userInfo={userInfo}
+            boardId={boardId}
+            refreshPosts={fetchData} //댓글 가져오는 부분
+          />
+        ) : (
+          ""
+        )}
+      </div>
+
+
     </div>
   );
 }
