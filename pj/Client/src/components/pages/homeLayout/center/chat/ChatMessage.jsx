@@ -1,26 +1,28 @@
 import "./ChatMessage.css";
 
-function ChatMessage({ isMyChat, text, userName, createdAt, userImg }) {
+function ChatMessage({ isMyChat, text, nickname, createdAt, image_url }) {
+
+  
     // 날짜 포맷팅 함수
     const formatDate = (dateString) => {
         const messageDate = new Date(dateString);
         const today = new Date();
-        
-        const isToday = 
+
+        const isToday =
             today.getFullYear() === messageDate.getFullYear() &&
             today.getMonth() === messageDate.getMonth() &&
             today.getDate() === messageDate.getDate();
-        
+
         // 시간 포맷
         const timeOptions = {
             hour: '2-digit',
-            minute: '2-digit'
+            minute: '2-digit',
         };
 
         // 날짜 포맷
         const dateOptions = {
             month: 'numeric',
-            day: 'numeric'
+            day: 'numeric',
         };
 
         return isToday
@@ -33,9 +35,9 @@ function ChatMessage({ isMyChat, text, userName, createdAt, userImg }) {
             {!isMyChat && (
                 <div className="chat-user-info">
                     <div className="chat-img">
-                        <img src={userImg} alt="User" />
+                        <img src={image_url} alt="User" />
                     </div>
-                    <div className="chat-nickname">{userName || "Unknown"}</div>
+                    <div className="chat-nickname">{nickname || "Unknown"}</div>
                 </div>
             )}
             <div className="chat-bubble-container">

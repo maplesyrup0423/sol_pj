@@ -1,106 +1,172 @@
+const mysql = require('mysql');
+
 function setupChatModule(app, io, conn) {
-// 날짜 포맷팅 
+    // 날짜 포맷팅 
     const formatToMySQLDate = (isoDateString) => {
-    const date = new Date(isoDateString);
-    return date.toISOString().replace('T', ' ').slice(0, 19); // 'YYYY-MM-DD HH:MM:SS' 형식으로 변환
-};
+        const date = new Date(isoDateString);
+        return date.toISOString().replace('T', ' ').slice(0, 19); // 'YYYY-MM-DD HH:MM:SS' 형식으로 변환
+    };
+
+    // 분리된 함수: 페이지네이션을 적용한 메시지 조회
+    function fetchPaginatedMessages(room_id, joined_at, page, pageSize) {
+        return new Promise((resolve, reject) => {
+            const offset = (page - 1) * pageSize;
+            const query = `
+                SELECT m.*, up.nickname, up.image_url 
+                FROM ChatMessage m 
+                JOIN User u ON m.user_no = u.user_no 
+                LEFT JOIN UserProfile up ON m.user_no = up.user_no
+                WHERE m.room_id = ? AND m.created_at > ?
+                ORDER BY m.created_at DESC
+                LIMIT ? OFFSET ?
+            `;
+
+            conn.query(query, [room_id, joined_at, pageSize, offset], (error, messages) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(messages);
+                }
+            });
+        });
+    }
+
+    // 분리된 함수: 사용자 정보 조회
+    function getUserProfile(user_no) {
+        return new Promise((resolve, reject) => {
+            const query = 'SELECT image_url, nickname FROM UserProfile WHERE user_no = ?';
+            conn.query(query, [user_no], (error, results) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(results[0]);
+                }
+            });
+        });
+    }
+
+    // 분리된 함수: 메시지 저장
+    function saveMessage(room_id, user_no, message_content, created_at) {
+        return new Promise((resolve, reject) => {
+            const query = `INSERT INTO ChatMessage (room_id, user_no, message_content, created_at, status, is_edited, is_deleted) 
+                           VALUES (?, ?, ?, ?, 'sent', FALSE, FALSE)`;
+            conn.query(query, [room_id, user_no, message_content, created_at], (error) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve();
+                }
+            });
+        });
+    }
+
     // Socket.IO 이벤트 설정
     io.on('connection', (socket) => {
         console.log('새로운 클라이언트 연결');
 
         // 채팅방 참가
-        socket.on('join_room', (room_id, user_no) => {
-            socket.join(room_id);
-            console.log(`${user_no}가 채팅방 ${room_id}에 참가함`);
-        });
-        
-        // 메시지 전송
-        socket.on('chat_message', (data) => {
-            const { room_id, user_no, message_content } = data;
+        socket.on('join_room', async (room_id, user_no) => {
+            try {
+                console.log(`채팅방 참가 요청: room_id=${room_id}, user_no=${user_no}`);
+                
+                const [userInRoom] = await new Promise((resolve, reject) => {
+                    conn.query('SELECT * FROM ChatRoomUser WHERE room_id = ? AND user_no = ?', [room_id, user_no], (error, results) => {
+                        if (error) reject(error);
+                        else resolve(results);
+                    });
+                });
 
-            // 사용자 정보 쿼리
-            const query = 'SELECT image_url, nickname FROM userprofile WHERE user_no = ?';
-            
-            conn.query(query, [user_no], (error, results) => {
-                if (error) {
-                    console.error('쿼리 실행 오류:', error);
-                    return;
+                console.log('채팅방 유저 정보:', userInRoom);
+
+                let joined_at;
+                if (!userInRoom) {
+                    console.log('새 유저입니다. 채팅방에 추가합니다.');
+                    await new Promise((resolve, reject) => {
+                        conn.query('INSERT INTO ChatRoomUser (room_id, user_no) VALUES (?, ?)', [room_id, user_no], (error) => {
+                            if (error) reject(error);
+                            else resolve();
+                        });
+                    });
+                    joined_at = new Date();
+                } else {
+                    console.log('기존 유저입니다. 마지막 활동 시간을 업데이트합니다.');
+                    joined_at = userInRoom.joined_at;
+                    await new Promise((resolve, reject) => {
+                        conn.query('UPDATE ChatRoomUser SET last_active_at = CURRENT_TIMESTAMP WHERE room_id = ? AND user_no = ?', [room_id, user_no], (error) => {
+                            if (error) reject(error);
+                            else resolve();
+                        });
+                    });
                 }
 
-                // 사용자 정보가 존재하는 경우
-                if (results.length > 0) {
-                    const userProfile = results[0];
+                console.log(`소켓 룸 조인: ${room_id}`);
+                socket.join(room_id);
+
+                const initialMessages = await fetchPaginatedMessages(room_id, joined_at, 1, 20);
+                
+                socket.emit('initial_messages', initialMessages);
+
+
+                 // nickname과 image_url을 user_name과 user_img_url로 변경
+             
+
+                socket.emit('initial_messages', initialMessages);
+
+            } catch (error) {
+                console.error('채팅방 참가 오류:', error);
+                socket.emit('error', 'Failed to join the room');
+            }
+        });
+        
+        // 추가 메시지 요청 (페이지네이션)
+        socket.on('fetch_more_messages', async (data) => {
+            try {
+                const { room_id, joined_at, page, pageSize } = data;
+                console.log(`추가 메시지 요청: room_id=${room_id}, joined_at=${joined_at}, page=${page}, pageSize=${pageSize}`);
+                
+                const messages = await fetchPaginatedMessages(room_id, joined_at, page, pageSize);
+                socket.emit('additional_messages', messages);
+            } catch (error) {
+                console.error('페이지네이션 메시지 조회 오류:', error);
+                socket.emit('error', 'Failed to fetch messages');
+            }
+        });
+
+        // 메시지 전송
+        socket.on('chat_message', async (data) => {
+            try {
+                const { room_id, user_no, message_content } = data;
+                console.log(`메시지 전송: room_id=${room_id}, user_no=${user_no}, 내용=${message_content}`);
+
+                const userProfile = await getUserProfile(user_no);
+                if (userProfile) {
                     const { image_url, nickname } = userProfile;
 
-                    // 메시지 데이터에 사용자 정보 추가
                     const messageData = {
                         user_no,
                         message_content,
-                        user_name: nickname, // 사용자 닉네임
-                        user_img_url: image_url, // 사용자 이미지 URL
-                        created_at: new Date().toISOString() // 메시지 전송 시간
+                       nickname,
+                        image_url,
+                        created_at: new Date().toISOString()
                     };
-                    //포맷팅 사용
+
                     const formatTime = formatToMySQLDate(messageData.created_at);
-                    // 해당 채팅방에 있는 모든 클라이언트에게 전송
-                    io.to(room_id).emit('chat_message', messageData);
                     
-                    // // // 메시지를 데이터베이스에 저장
-                  const insertQuery = `INSERT INTO ChatMessage ( room_id,  user_no, message_content, created_at, status, is_edited, is_deleted) VALUES (?, ?, ?, ?, 'sent', FALSE, FALSE)`;
-                    conn.query(insertQuery, [room_id, user_no, message_content, formatTime], (err) => {
-                 if (err) {
-                console.error('메시지 저장 오류:', err);
-                    }
-                });
-                        }
-                    });
-                });
+                    console.log('메시지 데이터:', messageData);
+                    await saveMessage(room_id, user_no, message_content, formatTime);
+                    console.log('메시지 저장 완료');
+
+                    io.to(room_id).emit('chat_message', messageData);
+                }
+            } catch (error) {
+                console.error('메시지 전송 오류:', error);
+                socket.emit('error', 'Failed to send message');
+            }
+        });
 
         // 연결 해제
         socket.on('disconnect', () => {
             console.log('클라이언트 연결 해제');
-        });
-    });
-
-    // 채팅방 생성 API
-    app.post('/chatrooms', (req, res) => {
-        const { room_name } = req.body;
-        const room_id = Date.now().toString();
-
-        const query = 'INSERT INTO ChatRoom (room_id, room_name) VALUES (?, ?)';
-        conn.query(query, [room_id, room_name], (err, result) => {
-            if (err) {
-                res.status(500).json({ error: '채팅방 생성 실패' });
-            } else {
-                res.status(201).json({ room_id, room_name });
-            }
-        });
-    });
-
-    // 채팅방 목록 조회 API
-    app.get('/chatrooms', (req, res) => {
-        const query = 'SELECT * FROM ChatRoom';
-        conn.query(query, (err, results) => {
-            if (err) {
-                res.status(500).json({ error: '채팅방 목록 조회 실패' });
-            } else {
-                res.status(200).json(results);
-            }
-        });
-    });
-
-    // 채팅방 참가 API
-    app.post('/chatrooms/:room_id/join', (req, res) => {
-        const { room_id } = req.params;
-        const { user_no } = req.body;
-
-        const query = 'INSERT INTO ChatRoomUser (room_id, user_no, role, joined_at) VALUES (?, ?, ?, NOW())';
-        conn.query(query, [room_id, user_no, 'member'], (err, result) => {
-            if (err) {
-                res.status(500).json({ error: '채팅방 참가 실패' });
-            } else {
-                res.status(200).json({ message: '채팅방 참가 성공' });
-            }
         });
     });
 }
