@@ -212,7 +212,7 @@ function MyProfile() {
               />
             </div>
 
-            <button type="submit" className="save">
+            <button type="submit" className="savebtn">
               <Savebtn btnText="저장" />
             </button>
           </form>
