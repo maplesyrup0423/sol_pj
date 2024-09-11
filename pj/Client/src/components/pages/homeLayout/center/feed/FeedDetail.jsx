@@ -1,7 +1,7 @@
 import "./FeedDetail.css";
 import "./Feeds.css";
 import FeedComment from "./FeedComment";
-import Writing from "./Writing";
+import WriteComment from "./WriteComment";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { IoIosMore } from "react-icons/io";
 import { AiFillHeart } from "react-icons/ai";
@@ -37,20 +37,7 @@ function FeedDetail() {
     navigate(-1); //뒤로가기
   };
 
-//!나중에 지울꺼
-  const fetchData = async () => {
-    try {
-      const response = await api.get(
-        `/api/post?board_info_id=${boardId}&orderBy=${
-          activeTab === "post_pop" ? "pop" : "date"
-        }`
-      );
-      setData(response.data);
-      // console.log(`Fetching posts with orderBy: ${activeTab === 'post_pop' ? 'pop' : 'date'}`);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+
 
   // useEffect(() => {
   //   // postId를 이용해 게시물 데이터를 가져오는 API 호출
@@ -192,16 +179,12 @@ function FeedDetail() {
       </div>
 
       <div className="write-comment">
-        {/* 글쓰기 부분*/}
-        {userInfo ? (
-          <Writing
-            userInfo={userInfo}
-            boardId={boardId}
-            refreshPosts={fetchData} //댓글 가져오는 부분
-          />
-        ) : (
-          ""
-        )}
+        {/* 댓글 쓰는 부분*/}
+        <WriteComment 
+          userInfo={userInfo}
+          boardId={boardId}
+          postId={postId}
+        />
       </div>
 
 
