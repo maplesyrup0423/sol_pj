@@ -1,5 +1,7 @@
 import "./FeedDetail.css";
 import "./Feeds.css";
+import FeedComment from "./FeedComment";
+import WriteComment from "./WriteComment";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { IoIosMore } from "react-icons/io";
 import { AiFillHeart } from "react-icons/ai";
@@ -14,10 +16,13 @@ import Carousel from "react-bootstrap/Carousel";
 import { useParams } from "react-router-dom";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { useContext } from "react";
+import { AuthContext } from "../../../../../Context/AuthContext";
 import api from "../../../../auth/api";
 
 function FeedDetail() {
-  const { postId } = useParams(); // URL에서 postId 가져오기
+  const { boardId, postId } = useParams(); // URL에서 postId 가져오기
+  const { userInfo } = useContext(AuthContext);
   const [postDetail, setPostDetail] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -31,6 +36,8 @@ function FeedDetail() {
   const handleBack = () => {
     navigate(-1); //뒤로가기
   };
+
+
 
   // useEffect(() => {
   //   // postId를 이용해 게시물 데이터를 가져오는 API 호출
@@ -62,6 +69,8 @@ function FeedDetail() {
 
     fetchPostDetail();
   }, [postId]);
+
+  
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>오류가 발생했습니다: {error.message}</p>;
@@ -168,6 +177,17 @@ function FeedDetail() {
           </div>
         </div>
       </div>
+
+      <div className="write-comment">
+        {/* 댓글 쓰는 부분*/}
+        <WriteComment 
+          userInfo={userInfo}
+          boardId={boardId}
+          postId={postId}
+        />
+      </div>
+
+
     </div>
   );
 }

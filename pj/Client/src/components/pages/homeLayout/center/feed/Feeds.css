@@ -81,3 +81,8 @@
   height: 100%;
   align-items: center;
 }
+
+.feed_click {
+  color: aliceblue;
+  text-decoration-line: none;
+}

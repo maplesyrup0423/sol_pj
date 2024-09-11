@@ -1,0 +1,49 @@
+.write_comment {
+    display: flex;
+    width: 100%;
+    height: 100px;
+    border-bottom: 1px solid white;
+    line-height: 75px;
+}
+
+.comment_profile {
+    width: 50px;
+    margin: 10px;
+}
+
+.comment_box {
+    flex-grow: 1;
+    border: none;
+    height: 75px;
+    margin-top: 10px;
+  }
+
+.comment_box textarea {
+    width: 100%;
+    height: 75px;
+    resize: none;
+    background-color: black;
+    border: none;
+    color: white;
+    overflow: hidden;
+}
+
+.comment_box textarea:focus {
+    outline: none;
+  }
+
+.comment_button {
+    width: 100px;
+    height: 100px;
+    
+}
+
+.post_comment_button {
+    margin-top: 25px;
+    width: 80px;
+    height: 50px;
+    text-align: center;
+    border-radius: 50px;
+    border: none;
+    background-color: #ffcd19;
+}
