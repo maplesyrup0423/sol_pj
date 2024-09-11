@@ -2,7 +2,6 @@ import { useLocation } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import BackArrow from "../../../../utills/buttons/BackArrow";
 import { useState } from "react";
-import "./FeedProfile.css";
 
 function FeedProfile() {
   const location = useLocation();

@@ -49,8 +49,10 @@ module.exports = function (conn) {
         // 2. 프로필 정보 업데이트
         const updateProfile = `
           UPDATE UserProfile
-          SET nickname = ?, introduce = ?, image_url = ?
-          WHERE user_no = ?
+          SET nickname = ?,
+              introduce = ?,
+              image_url = ?
+          WHERE user_no = ? AND nickname REGEXP '^[a-zA-Z가-힣]{1,12}$';
         `;
 
         conn.query(

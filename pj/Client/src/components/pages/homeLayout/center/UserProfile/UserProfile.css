@@ -58,7 +58,6 @@
   border-radius: 50px;
   width: 150px;
   height: 50px;
-
   justify-content: center;
   align-items: center;
 }
@@ -93,4 +92,5 @@
 .switch-comments:hover {
   color: #ffcd19;
   cursor: pointer;
+  transition: 0.5s;
 }

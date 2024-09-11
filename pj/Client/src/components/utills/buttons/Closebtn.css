@@ -2,3 +2,8 @@
   margin: 0;
   color: #fff;
 }
+
+.closebtn span:hover {
+  color: rgb(127, 127, 127);
+  transition: 0.3s;
+}

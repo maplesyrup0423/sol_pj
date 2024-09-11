@@ -19,7 +19,7 @@ function Feeds(props) {
 
   const images = props.file_paths ? props.file_paths.split(", ") : [];
 
-  // console.log("nick : ", props.introduce);
+  console.log("nick : ", props.introduce);
 
   const openModal = (index) => {
     setSelectedImageIndex(index);

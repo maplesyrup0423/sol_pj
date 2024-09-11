@@ -1,0 +1,4 @@
+.backArrow span:hover {
+  color: rgb(127, 127, 127);
+  transition: 0.3s;
+}
