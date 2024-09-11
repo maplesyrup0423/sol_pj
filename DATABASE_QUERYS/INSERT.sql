@@ -18,10 +18,10 @@ INSERT INTO UserProfile (user_no, nickname, image_url, introduce) VALUES(5, '기
 INSERT INTO UserProfile (user_no, nickname, image_url, introduce) VALUES(6, '요이커', 'testImg6.jpg', '자기소개4');
 
 select * from userprofile;
-update UserProfile set nickname = '체르', introduce ='무엇을 해야 할까요?', image_url='https://cdn.pixabay.com/photo/2013/05/30/18/21/cat-114782_1280.jpg'
+update UserProfile set nickname = '체르', introduce ='무엇을 해야 할까요?', image_url='testImg4.jpg'
 where user_no = 1;
 
-update UserProfile set nickname = '김한결', introduce ='자기소개1', image_url='https://cdn.pixabay.com/photo/2014/11/30/14/11/cat-551554_1280.jpg'
+update UserProfile set nickname = '김한결', introduce ='자기소개1', image_url='testImg1.png'
 where user_no = 3;
 
 commit;

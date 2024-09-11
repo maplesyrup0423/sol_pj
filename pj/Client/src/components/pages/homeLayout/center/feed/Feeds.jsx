@@ -19,6 +19,8 @@ function Feeds(props) {
 
   const images = props.file_paths ? props.file_paths.split(", ") : [];
 
+  // console.log("nick : ", props.introduce);
+
   const openModal = (index) => {
     setSelectedImageIndex(index);
     setIsModalOpen(true);
@@ -29,21 +31,31 @@ function Feeds(props) {
     setSelectedImageIndex(null);
   };
 
-
   return (
     <div className="feed-container">
-      <div className="feed-header">
-        {/* 피드 헤더 */}
-        <div className="user-info">
-          <ProfileImg image_url={props.image_url} />
-          <span className="user-name">{props.nickname}</span>
-          <span className="user-id">@{props.user_id}</span>
-        </div>
+      <div className="headerContainer">
+        <NavLink
+          to="/feedProfile"
+          className="Nav"
+          state={{
+            nickname: props.nickname,
+            user_id: props.user_id,
+            image_url: props.image_url,
+            introduce: props.introduce,
+          }}
+        >
+          <div className="feed-header">
+            <div className="user-info">
+              <ProfileImg image_url={props.image_url} />
+              <span className="user-name">{props.nickname}</span>
+              <span className="user-id">@{props.user_id}</span>
+            </div>
+          </div>
+        </NavLink>
         <a className="moreA" href=" ">
           <IoIosMore />
         </a>
       </div>
-
       <div className="feed-image">
         {/* 피드이미지 */}
         {images.length > 0 &&
@@ -80,20 +92,19 @@ function Feeds(props) {
         )}
       </div>
 
-        <NavLink to={`/post/${boardId}/${postId}`} className="feed_click">
-          <div className="feed-text-container">
-            <div className="feed-text">
-              {/* 피드텍스트 */}
-              <h5>{props.post_text}</h5>
-            </div>
+      <NavLink to={`/post/${boardId}/${postId}`} className="feed_click">
+        <div className="feed-text-container">
+          <div className="feed-text">
+            {/* 피드텍스트 */}
+            <h5>{props.post_text}</h5>
           </div>
-          <div className="feed-CreationDate">
-            {/* 작성일/조회수 등 상세 정보 */}
-            <span> {props.createDate}</span>
-            <span> 조회수 {props.views}</span>
-          </div>
-        </NavLink>
-
+        </div>
+        <div className="feed-CreationDate">
+          {/* 작성일/조회수 등 상세 정보 */}
+          <span> {props.createDate}</span>
+          <span> 조회수 {props.views}</span>
+        </div>
+      </NavLink>
 
       <div className="feed-actions">
         <div className="like-comment">

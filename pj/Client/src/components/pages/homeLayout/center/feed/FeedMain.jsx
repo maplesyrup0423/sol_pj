@@ -116,9 +116,7 @@ function FeedMain() {
             }`}
             onClick={orderBy_date}
           >
-            <div>
-              최신
-            </div>
+            <div>최신</div>
           </div>
         </div>
 
@@ -130,9 +128,7 @@ function FeedMain() {
             className={`switch-pop ${activeTab === "post_pop" ? "active" : ""}`}
             onClick={orderBy_pop}
           >
-            <div>
-              인기
-            </div>
+            <div>인기</div>
           </div>
         </div>
       </div>
@@ -158,8 +154,8 @@ function FeedMain() {
                 data.map((p) => (
                   <Feeds
                     key={p.post_id}
-                    postId={p.post_id}  // 게시글 ID 전달
-                    boardId={boardId}   // 게시판 ID 전달
+                    postId={p.post_id} // 게시글 ID 전달
+                    boardId={boardId} // 게시판 ID 전달
                     {...p}
                   />
                 ))
@@ -174,8 +170,8 @@ function FeedMain() {
                 data.map((p) => (
                   <Feeds
                     key={p.post_id}
-                    postId={p.post_id}  // 게시글 ID 전달
-                    boardId={boardId}   // 게시판 ID 전달
+                    postId={p.post_id} // 게시글 ID 전달
+                    boardId={boardId} // 게시판 ID 전달
                     {...p}
                   />
                 ))
@@ -186,7 +182,6 @@ function FeedMain() {
           )}
         </div>
       </div>
-
     </div>
   );
 }

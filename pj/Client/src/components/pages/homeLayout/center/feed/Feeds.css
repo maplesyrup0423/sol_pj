@@ -6,6 +6,20 @@
   box-sizing: border-box;
   border-bottom: 1px solid #595959;
   color: white;
+  text-decoration: none;
+}
+.headerContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.Nav {
+  text-decoration: none;
+  color: white;
+  transition: 0.3s;
+}
+.Nav:hover {
+  color: #979797;
 }
 .moreA {
   text-decoration: none; /* 링크의 밑줄 제거 */
