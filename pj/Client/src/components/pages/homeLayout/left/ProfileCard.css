@@ -3,6 +3,7 @@
   align-items: center;
   padding: 10px;
   background: #000000;
+  border-radius: 15px;
 }
 
 .profile-img {
@@ -26,4 +27,9 @@
   display: flex;
   align-items: center;
   margin-left: 10px;
+}
+
+.profile-card:hover {
+  background-color: #313131;
+  transition: 0.3s;
 }
