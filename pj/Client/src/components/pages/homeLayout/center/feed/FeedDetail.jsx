@@ -1,20 +1,10 @@
 import "./FeedDetail.css";
 import "./Feeds.css";
-import FeedComment from "./FeedComment";
 import WriteComment from "./WriteComment";
 import { IoMdArrowRoundBack } from "react-icons/io";
-import { IoIosMore } from "react-icons/io";
-import { AiFillHeart } from "react-icons/ai";
-import { AiOutlineHeart } from "react-icons/ai";
-import { IoChatbubbleOutline } from "react-icons/io5";
-import { FaRegBookmark } from "react-icons/fa";
-import { FaBookmark } from "react-icons/fa";
-import ProfileImg from "../../../../utills/ProfileImg";
-import ImageViewer from "./ImageViewer";
 import { useState } from "react";
-import Carousel from "react-bootstrap/Carousel";
 import { useParams } from "react-router-dom";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useContext } from "react";
 import { AuthContext } from "../../../../../Context/AuthContext";
@@ -27,10 +17,6 @@ function FeedDetail() {
   const [postDetail, setPostDetail] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  const baseUrl = import.meta.env.VITE_BASE_URL;
-  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -71,18 +57,6 @@ function FeedDetail() {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>오류가 발생했습니다: {error.message}</p>;
-
-  const images = postDetail.file_paths ? postDetail.file_paths.split(", ") : [];
-
-  const openModal = (index) => {
-    setSelectedImageIndex(index);
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedImageIndex(null);
-  };
 
   return (
     <div className="feed_detail">
