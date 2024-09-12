@@ -88,7 +88,7 @@ function FeedDetail() {
 
       <div className="write-comment">
         {/* 댓글 쓰는 부분*/}
-        <WriteComment userInfo={userInfo} boardId={boardId} postId={postId} />
+        <WriteComment userInfo={userInfo} postId={postId} />
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ import "./WriteComment.css";
 import ProfileImg from "../../../../utills/ProfileImg";
 import BasicButton from "../../../../utills/buttons/BasicButton";
 
-function WriteComment({ userInfo, boardId, postId }) {
+function WriteComment({ userInfo, postId }) {
   return (
     <div className="write_comment">
       <div className="comment_profile">

@@ -33,4 +33,27 @@ insert into UserBoard values (5, 5);
 
 insert into posts values (1, "졸령", 1, now(), null, 1, 0, 0);
 
+-- 댓글 등록 쿼리
+insert into comments values(1, 1, null, '댓글 입니다', 1, '2024-09-09', null, 0);
+select * from comments;
+
+
+-- 댓글 가져오는 쿼리
+select c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
+	c.user_no, c.createDate, c.modiDate, c.isDeleted, count(cl.user_no) as like_count,
+    u.nickname, u.image_url
+from comments c
+left join comment_likes cl
+on c.comment_id = cl.comment_id
+join UserProfile u
+on u.user_no = c.user_no
+group by c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
+	c.user_no, c.createDate, c.modiDate, c.isDeleted, u.nickname, u.image_url;
+
+
+-- 좋아요 수
+select count(cl.user_no) from comment_likes cl
+join comments c
+on cl.comment_id = c.comment_id;
+
 commit;
