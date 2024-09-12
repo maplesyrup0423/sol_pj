@@ -43,3 +43,43 @@ BEGIN
 END$$
 
 DELIMITER ;
+ -- 채팅방 생성 프로시저
+DELIMITER //
+
+CREATE PROCEDURE createChatRoom(
+    IN creator_user_no INT,
+    IN room_name VARCHAR(255),
+    IN user_list JSON
+)
+BEGIN
+    DECLARE new_room_id BIGINT UNSIGNED;
+    DECLARE total_users INT;
+    DECLARE i INT DEFAULT 0;
+
+    -- 사용자 수 계산 (본인 포함)
+    SET total_users = JSON_LENGTH(user_list) + 1;
+
+    -- 채팅방 생성
+    INSERT INTO ChatRoom (room_name, is_group) 
+    VALUES (room_name, total_users > 2);
+
+    -- 방 ID 가져오기
+    SET new_room_id = LAST_INSERT_ID();
+
+    -- 본인 추가
+    INSERT INTO ChatRoomUser (room_id, user_no, role, joined_at)
+    VALUES (new_room_id, creator_user_no, 'admin', NOW());
+
+    -- 추가 사용자 추가
+    WHILE i < JSON_LENGTH(user_list) DO
+        INSERT INTO ChatRoomUser (room_id, user_no, role, joined_at)
+        VALUES (new_room_id, JSON_EXTRACT(user_list, CONCAT('$[', i, ']')), 'member', NOW());
+        SET i = i + 1;
+    END WHILE;
+END //
+
+DELIMITER ;
+SHOW PROCEDURE STATUS WHERE Db = 'sol';
+
+
+

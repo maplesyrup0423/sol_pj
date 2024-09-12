@@ -1,12 +1,14 @@
 // src/Context/AuthContext.jsx
 import { createContext, useState, useEffect } from 'react';
 import api from '../components/auth/api';
+import axios from 'axios';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [accessToken, setAccessToken] = useState(localStorage.getItem('accessToken'));
     const [userInfo, setUserInfo] = useState(null);
+    const [loading, setLoading] = useState(true); // 로딩 상태 추가
 
     useEffect(() => {
         const initializeAuth = async () => {
@@ -14,7 +16,7 @@ export const AuthProvider = ({ children }) => {
             if (storedToken) {
                 try {
                     // 서버에 토큰을 보내서 사용자 정보를 가져옴
-                    const response = await api.post('/user-info', {
+                    const response = await api.post('/user-info', {}, {
                         headers: { Authorization: `Bearer ${storedToken}` }
                     });
 
@@ -34,6 +36,7 @@ export const AuthProvider = ({ children }) => {
                     setUserInfo(null);
                 }
             }
+            setLoading(false); // 유저 정보 로드 후 로딩 상태 해제
         };
 
         initializeAuth();
@@ -41,7 +44,7 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (username, password) => {
         try {
-            const response = await api.post('/login', { username, password },{ withCredentials: true });
+            const response = await axios.post('/api/login', { username, password }, { withCredentials: true });
             const { accessToken, user } = response.data;
 
             localStorage.setItem('accessToken', accessToken);
@@ -55,21 +58,24 @@ export const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         try {
-            await api.post('/logout', {}, { withCredentials: true });
+            await api.post('/api/logout', {}, { withCredentials: true });
         } catch (error) {
             console.error("로그아웃 에러:", error);
         } finally {
-            // finally로 에러가 나더라도 로컬스토리지 초기화는 항상 수행
             localStorage.removeItem('accessToken');
             setAccessToken(null);
             setUserInfo(null);
         }
     };
 
+    // 로딩이 끝날 때까지 자식 컴포넌트를 렌더링하지 않음
+    if (loading) {
+        return null; // 로딩 중엔 아무것도 렌더링하지 않음
+    }
 
     return (
-        <AuthContext.Provider value={{ accessToken, userInfo, login, logout }}>
-            {children}
+        <AuthContext.Provider value={{ accessToken, userInfo, setUserInfo, login, logout }}>
+            {children} {/* 로딩 후에만 자식 컴포넌트를 렌더링 */}
         </AuthContext.Provider>
     );
 };
