@@ -57,7 +57,6 @@ function FeedDetail() {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>오류가 발생했습니다: {error.message}</p>;
-
   return (
     <div className="feed_detail">
       <div className="feed_detail_top">
@@ -66,21 +65,26 @@ function FeedDetail() {
         </div>
       </div>
 
-      <Feeds
-        key={postId}
-        postId={postId} // 게시글 ID 전달
-        userno={postDetail.userno}
-        user_id={postDetail.user_id}
-        post_text={postDetail.post_text}
-        createDate={postDetail.createDate}
-        modiDate={postDetail.modiDate}
-        views={postDetail.views}
-        nickname={postDetail.nickname}
-        image_url={postDetail.image_url}
-        file_paths={postDetail.file_paths}
-        like_count={postDetail.like_count}
-        comment_count={postDetail.comment_count}
-      />
+      {userInfo !== null ? (
+        <Feeds
+          key={postId}
+          loginUser_no={userInfo.user_no}
+          postId={postId} // 게시글 ID 전달
+          user_no={postDetail.user_no}
+          user_id={postDetail.user_id}
+          post_text={postDetail.post_text}
+          createDate={postDetail.createDate}
+          modiDate={postDetail.modiDate}
+          views={postDetail.views}
+          nickname={postDetail.nickname}
+          image_url={postDetail.image_url}
+          file_paths={postDetail.file_paths}
+          like_count={postDetail.like_count}
+          comment_count={postDetail.comment_count}
+        />
+      ) : (
+        ""
+      )}
 
       <div className="write-comment">
         {/* 댓글 쓰는 부분*/}

@@ -13,7 +13,7 @@ module.exports = (conn) => {
     }
 
     const query = `
-      SELECT p.post_id, p.post_text, p.createDate, p.modiDate, p.views, 
+      SELECT u.user_no, p.post_id, p.post_text, p.createDate, p.modiDate, p.views, 
              u.user_id, up.nickname, up.image_url,
              GROUP_CONCAT(DISTINCT pf.file_path ORDER BY pf.upload_date SEPARATOR ', ') AS file_paths,
              COUNT(DISTINCT l.p_like_id) AS like_count,
@@ -25,7 +25,7 @@ module.exports = (conn) => {
       LEFT JOIN post_likes l ON p.post_id = l.post_id
       LEFT JOIN comments c ON p.post_id = c.post_id
       WHERE p.post_id = ? AND p.isDeleted = 0
-      GROUP BY p.post_id, p.post_text, p.createDate, p.modiDate, p.views, u.user_id, up.nickname, up.image_url
+      GROUP BY u.user_no, p.post_id, p.post_text, p.createDate, p.modiDate, p.views, u.user_id, up.nickname, up.image_url
     `;
 
     conn.query(query, [postId], (err, rows) => {
