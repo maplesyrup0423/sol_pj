@@ -14,6 +14,19 @@ const onRefreshed = (newAccessToken) => {
   refreshSubscribers = [];
 };
 
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 // 요청 인터셉터
 api.interceptors.response.use(
   (response) => response,
@@ -50,7 +63,8 @@ api.interceptors.response.use(
         const newAccessToken = response.data.accessToken;
 
         localStorage.setItem("accessToken", newAccessToken);
-        api.defaults.headers["Authorization"] = `Bearer ${newAccessToken}`;
+        api.defaults.headers.common["Authorization"] = `Bearer ${newAccessToken}`;
+
 
         isRefreshing = false;
         onRefreshed(newAccessToken);
@@ -59,7 +73,6 @@ api.interceptors.response.use(
       } catch (refreshError) {
         isRefreshing = false;
         localStorage.removeItem("accessToken");
-        // 여기서 리다이렉트 로직을 확인합니다.
         if (window.location.pathname !== "/login") {
           window.location.href = "/login";
         }
