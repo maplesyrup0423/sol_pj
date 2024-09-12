@@ -7,19 +7,20 @@ import { FaRegBookmark } from "react-icons/fa";
 import { FaBookmark } from "react-icons/fa";
 import ProfileImg from "../../../../utills/ProfileImg";
 import ImageViewer from "./ImageViewer";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Carousel from "react-bootstrap/Carousel";
 import { NavLink } from "react-router-dom";
+import api from "../../../../auth/api";
+import Swal from "sweetalert2";
 
 function Feeds(props) {
   const { boardId, postId } = props;
   const baseUrl = import.meta.env.VITE_BASE_URL;
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [liked, setLiked] = useState(false);
 
   const images = props.file_paths ? props.file_paths.split(", ") : [];
-
-  console.log("nick : ", props.introduce);
 
   const openModal = (index) => {
     setSelectedImageIndex(index);
@@ -30,6 +31,46 @@ function Feeds(props) {
     setIsModalOpen(false);
     setSelectedImageIndex(null);
   };
+
+  useEffect(() => {
+    // 페이지 로딩 시 사용자가 이미 좋아요를 눌렀는지 확인
+    api
+      .get(`/api/posts/${postId}/isLikedByUser/${props.loginUser_no}`)
+      .then((res) => setLiked(res.data.liked))
+      .catch((err) => console.error(err));
+  }, [postId, props.loginUser_no]);
+
+  const handleLike = () => {
+    if (props.user_no === props.loginUser_no) {
+      Swal.fire({
+        position: "top",
+        icon: "error",
+        title: "자신의 게시글에는 좋아요를 누를 수 없습니다.",
+        showConfirmButton: false,
+        timer: 1500,
+        width: "300px",
+        customClass: {
+          title: "custom-swal-title",
+        },
+      });
+      return;
+    }
+
+    if (liked) {
+      // 좋아요 취소
+      api
+        .post(`/api/posts/${postId}/unlike/${props.loginUser_no}`)
+        .then(() => setLiked(false))
+        .catch((err) => console.error(err));
+    } else {
+      // 좋아요 등록
+      api
+        .post(`/api/posts/${postId}/like`, { user_no: props.loginUser_no })
+        .then(() => setLiked(true))
+        .catch((err) => console.error(err));
+    }
+  };
+  console.log("좋아요", `${postId} :  ${liked}`);
 
   return (
     <div className="feed-container">
@@ -110,9 +151,28 @@ function Feeds(props) {
         <div className="like-comment">
           {/* 좋아요 댓글등 왼쪽 부분 */}
           {/* 좋아요는 로그인한 사람에 따라 하트가 달라짐 */}
-          <AiFillHeart size="30" />
-          <AiOutlineHeart size="30" />
-          <span> &nbsp;{props.like_count} &nbsp; </span>
+          <div className="like-comment-btn" onClick={handleLike}>
+            {liked ? (
+              <>
+                <AiFillHeart
+                  size="30"
+                  className="heart-icon liked"
+                  id="AiFillHeart"
+                />
+                <span> {`${props.like_count + 1}`} </span>
+              </>
+            ) : (
+              <>
+                <AiOutlineHeart
+                  size="30"
+                  className="heart-icon"
+                  id="AiOutlineHeart"
+                />
+                <span> {props.like_count} </span>
+              </>
+            )}
+          </div>
+
           <IoChatbubbleOutline size="30" />
           <span> &nbsp;{props.comment_count} </span>
         </div>
