@@ -70,7 +70,6 @@ function Feeds(props) {
         .catch((err) => console.error(err));
     }
   };
-  console.log("좋아요", `${postId} :  ${liked}`);
 
   return (
     <div className="feed-container">
