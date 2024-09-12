@@ -1,33 +1,42 @@
 import "./ChatMessage.css";
 
 function ChatMessage({ isMyChat, text, nickname, createdAt, image_url }) {
+    // 한국 시간으로 변환 함수
+    const toKoreanTime = (date) => {
+        const koreanOffset = 9 * 60; // 한국 시간대 오프셋(분 단위)
+        return new Date(date.getTime() + koreanOffset * 60 * 1000);
+    };
 
-  
     // 날짜 포맷팅 함수
     const formatDate = (dateString) => {
-        const messageDate = new Date(dateString);
+        const messageDate = toKoreanTime(new Date(dateString));
         const today = new Date();
-
+        
         const isToday =
             today.getFullYear() === messageDate.getFullYear() &&
             today.getMonth() === messageDate.getMonth() &&
             today.getDate() === messageDate.getDate();
-
-        // 시간 포맷
+        
+        // 포맷 옵션
         const timeOptions = {
             hour: '2-digit',
             minute: '2-digit',
         };
-
-        // 날짜 포맷
+        
         const dateOptions = {
             month: 'numeric',
             day: 'numeric',
         };
 
-        return isToday
-            ? new Intl.DateTimeFormat('ko-KR', timeOptions).format(messageDate)
-            : new Intl.DateTimeFormat('ko-KR', dateOptions).format(messageDate);
+        // 오전/오후 구분
+        const hour = messageDate.getHours();
+        const period = hour >= 12 ? '오후' : '오전';
+        const formattedHour = hour % 12 || 12; // 12시간제로 변환
+
+        // 날짜 포맷
+        const formattedDate = `${messageDate.getMonth() + 1}/${messageDate.getDate()} ${period} ${formattedHour}:${messageDate.getMinutes().toString().padStart(2, '0')}`;
+        
+        return isToday ? new Intl.DateTimeFormat('ko-KR', timeOptions).format(messageDate) : formattedDate;
     };
 
     return (
