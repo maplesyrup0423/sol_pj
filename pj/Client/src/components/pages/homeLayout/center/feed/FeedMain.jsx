@@ -129,10 +129,11 @@ function FeedMain() {
         <div className="feed_contents">
           {activeTab === "post_pop" && (
             <div className="feed">
-              {data.length > 0 ? (
+              {data.length > 0 && userInfo !== null ? (
                 data.map((p) => (
                   <Feeds
                     key={p.post_id}
+                    loginUser_no={userInfo.user_no}
                     postId={p.post_id} // 게시글 ID 전달
                     boardId={boardId} // 게시판 ID 전달
                     {...p}
@@ -145,10 +146,11 @@ function FeedMain() {
           )}
           {activeTab === "post_date" && (
             <div className="feed">
-              {data.length > 0 ? (
+              {data.length > 0 && userInfo !== null ? (
                 data.map((p) => (
                   <Feeds
                     key={p.post_id}
+                    loginUser_no={userInfo.user_no}
                     postId={p.post_id} // 게시글 ID 전달
                     boardId={boardId} // 게시판 ID 전달
                     {...p}

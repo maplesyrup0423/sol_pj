@@ -86,3 +86,45 @@
   color: aliceblue;
   text-decoration-line: none;
 }
+
+.like-comment-btn {
+  display: inline-block;
+  cursor: pointer;
+  border-radius: 50px;
+}
+.like-comment-btn span {
+  padding-right: 10px;
+}
+
+.like-comment-btn:hover {
+  background-color: rgba(247, 43, 37, 0.2);
+}
+#AiOutlineHeart:hover {
+  color: #f72b25;
+}
+
+#AiFillHeart {
+  color: #f72b25;
+}
+
+.heart-icon {
+  transition: opacity 0.3s ease;
+  opacity: 0.8;
+}
+
+.heart-icon.liked {
+  animation: scaleUpDown 0.6s ease;
+  opacity: 1;
+}
+
+@keyframes scaleUpDown {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

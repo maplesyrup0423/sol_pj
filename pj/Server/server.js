@@ -64,6 +64,9 @@ setupChatModule(app, io, conn);
 const port = process.env.PORT || 5000;
 server.listen(port, () => console.log(`서버 동작중 ${port}`));
 
+// 'images' 디렉토리의 경로를 절대 경로로 설정
+app.use("/images", express.static(path.join(__dirname, "images")));
+
 // 라우트 모듈을 가져와서 사용
 const authenticationRoutes = require("./controllers/authentication");
 app.use(authenticationRoutes(conn));
@@ -77,6 +80,9 @@ app.use(PostRoutes(conn));
 const PostDetailRoutes = require("./controllers/postDetail");
 app.use(PostDetailRoutes(conn));
 
+const PostLikeRoutes = require("./controllers/PostLike");
+app.use(PostLikeRoutes(conn));
+
 //회원가입 라우터
 const signupRoutes = require("./controllers/signup");
 app.use(signupRoutes(conn));
@@ -86,9 +92,6 @@ app.use(notificationRoutes(conn));
 
 // const chatServiceRoutes = require("./controllers/chatService");
 // app.use(chatServiceRoutes(conn));
-
-// 'images' 디렉토리의 경로를 절대 경로로 설정
-app.use("/images", express.static(path.join(__dirname, "images")));
 
 //프로필변경 라우터
 const editProfileRoutes = require("./controllers/editProfile");
