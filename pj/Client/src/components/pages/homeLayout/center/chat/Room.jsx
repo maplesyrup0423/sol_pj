@@ -23,7 +23,7 @@ function Room() {
         const checkUserInfo = async () => {
             if (!userInfo || !userInfo.user_no) {
                 try {
-                    const response = await api.post('/user-info', {});
+                    const response = await api.post('/api/user-info', {});
                     setUserInfo(response.data);
                 } catch (error) {
                     console.error("유저정보를 가져올수가 없습니다. :", error);

@@ -24,7 +24,7 @@ function RightNav() {
 
     const followers = async () => {
         try {
-            const response = await api.get("/followers", {
+            const response = await api.get("/api/followers", {
                 userInfo,
             });
 
