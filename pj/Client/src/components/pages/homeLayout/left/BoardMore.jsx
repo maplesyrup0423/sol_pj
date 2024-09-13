@@ -94,19 +94,23 @@ function BoardMore({ onClose }) {
             </button>
             {/* 더보기 게시판 목록*/}
             <ul>
-              {boardName.length > 0
-                ? boardName
-                    .filter((bn) => !boardInfoUser.includes(bn.board_info_id))
-                    .map((bn) => (
-                      <BoardName
-                        key={bn.board_info_id}
-                        board_info_id={bn.board_info_id}
-                        board_info_name={bn.board_info_name}
-                        board_img={bn.board_img}
-                        onClose={onClose}
-                      />
-                    ))
-                : ""}
+              {boardName.length > 0 ? (
+                boardName
+                  .filter((bn) => !boardInfoUser.includes(bn.board_info_id))
+                  .map((bn) => (
+                    <BoardName
+                      key={bn.board_info_id}
+                      board_info_id={bn.board_info_id}
+                      board_info_name={bn.board_info_name}
+                      board_img={bn.board_img}
+                      onClose={onClose}
+                    />
+                  ))
+              ) : (
+                <span className="data-placeholder">
+                  게시판이 존재하지 않습니다.
+                </span>
+              )}
             </ul>
           </div>
         )}
@@ -138,7 +142,9 @@ function BoardMore({ onClose }) {
                   </li>
                 ))
               ) : (
-                <h1>Loading...</h1>
+                <span className="data-placeholder">
+                  게시판이 존재하지 않습니다.
+                </span>
               )}
             </ul>
             <div className="settingsView-btn">

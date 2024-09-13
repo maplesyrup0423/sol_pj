@@ -46,7 +46,6 @@ function Like(props) {
         .then(() => setLiked(true), setLike_count(like_count + 1))
         .catch((err) => console.error(err));
     }
-    //props.refreshData();
   };
 
   return (

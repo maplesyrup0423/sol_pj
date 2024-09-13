@@ -36,9 +36,9 @@ function BoardInfo(props) {
           ))
         ) : (
           <>
-            <span>선택된 게시판이없습니다.</span>
+            <span className="data-placeholder">선택된 게시판이없습니다.</span>
             <br />
-            <span>게시판을 선택해주세요.</span>
+            <span className="data-placeholder">게시판을 선택해주세요.</span>
           </>
         )}
         <More onBoardInfoUpdate={fetchBoardInfoUser} />

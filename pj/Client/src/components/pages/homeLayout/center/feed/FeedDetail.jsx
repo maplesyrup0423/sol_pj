@@ -1,9 +1,5 @@
 import "./FeedDetail.css";
 import "./Feeds.css";
-
-import WriteComment from "./WriteComment";
-import FeedComment from "./FeedComment";
-
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
@@ -101,7 +97,7 @@ function FeedDetail() {
           comment_count={postDetail.comment_count}
         />
       ) : (
-        ""
+        <span className="data-placeholder">로그인후 이용하세요</span>
       )}
 
       <div className="write-comment">
@@ -117,10 +113,10 @@ function FeedDetail() {
             parent_comment_id={null}
           />
         ) : (
-          ""
+          <span className="data-placeholder">로그인후 이용하세요</span>
         )}
       </div>
-      <div>
+      <div className="all_comments">
         {postDetailComment.length > 0 ? (
           postDetailComment.map((c) => (
             <Comments
@@ -134,15 +130,9 @@ function FeedDetail() {
             />
           ))
         ) : (
-          <h1>댓글이 없습니다.</h1>
+          <span className="data-placeholder">댓글이 없습니다.</span>
         )}
       </div>
-
-      <div className="all_comments">
-        {/* 게시물의 댓글 부분*/}
-        <FeedComment />
-      </div>
-
     </div>
   );
 }

@@ -70,7 +70,13 @@ function LeftNav({ userInfo }) {
             </button>
           </div>
         </li>
-        <li>{userInfo ? <BoardInfo user_no={userInfo.user_no} /> : ""}</li>
+        <li>
+          {userInfo ? (
+            <BoardInfo user_no={userInfo.user_no} />
+          ) : (
+            <span className="data-placeholder">로그인후 이용하세요.</span>
+          )}
+        </li>
 
         <li id="ProfileCard_li">
           <div onClick={handleProfileCardClick} className="profile-button">
@@ -83,7 +89,7 @@ function LeftNav({ userInfo }) {
               />
             ) : (
               <h5>
-                <Link to={"/login"}>로그인 해주세욤</Link>
+                <span className="data-placeholder">로그인후 이용하세요.</span>
               </h5>
             )}
           </div>

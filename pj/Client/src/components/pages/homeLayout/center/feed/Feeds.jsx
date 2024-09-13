@@ -10,7 +10,6 @@ import Like from "./like";
 
 function Feeds(props) {
   const { boardId, postId } = props;
-
   return (
     <div className="feed-container">
       <div className="headerContainer">
@@ -48,7 +47,12 @@ function Feeds(props) {
         </div>
         <div className="feed-CreationDate">
           {/* 작성일/조회수 등 상세 정보 */}
-          <span> {props.createDate}</span>
+          {props.modiDate === null ? (
+            <span> {props.createDate}</span>
+          ) : (
+            <span> {props.modiDate} (수정됨)</span>
+          )}
+
           <span> 조회수 {props.views}</span>
         </div>
       </NavLink>
