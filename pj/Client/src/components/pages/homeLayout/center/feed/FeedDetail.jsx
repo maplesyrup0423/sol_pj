@@ -71,7 +71,6 @@ function FeedDetail() {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>오류가 발생했습니다: {error.message}</p>;
 
-  console.log("postDetailComment", postDetailComment);
   return (
     <div className="feed_detail">
       <div className="feed_detail_top">
@@ -122,6 +121,9 @@ function FeedDetail() {
           postDetailComment.map((c) => (
             <Comments
               key={c.comment_id}
+              refreshData={fetchPostDetailComment}
+              boardId={boardId}
+              postId={postId}
               comment_id={c.comment_id}
               user_no={c.user_no}
               {...c}
