@@ -1,6 +1,5 @@
 import "./FeedDetail.css";
 import "./Feeds.css";
-import WriteComment from "./WriteComment";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
@@ -10,11 +9,14 @@ import { useContext } from "react";
 import { AuthContext } from "../../../../../Context/AuthContext";
 import api from "../../../../auth/api";
 import Feeds from "./Feeds";
+import Writing from "./Writing";
+import Comments from "./comments";
 
 function FeedDetail() {
   const { boardId, postId } = useParams(); // URL에서 postId 가져오기
   const { userInfo } = useContext(AuthContext);
   const [postDetail, setPostDetail] = useState(null);
+  const [postDetailComment, setPostDetailComment] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -40,6 +42,17 @@ function FeedDetail() {
   //   fetchPost();
   // }, [postId]);
 
+  const fetchPostDetailComment = async () => {
+    try {
+      const response = await api.get(
+        `/api/postDetailComment/?postId=${postId}`
+      );
+      setPostDetailComment(response.data); // 댓글 데이터 설정
+    } catch (err) {
+      setError(err);
+    }
+  };
+
   useEffect(() => {
     const fetchPostDetail = async () => {
       try {
@@ -51,12 +64,14 @@ function FeedDetail() {
         setLoading(false);
       }
     };
-
+    fetchPostDetailComment();
     fetchPostDetail();
   }, [postId]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>오류가 발생했습니다: {error.message}</p>;
+
+  console.log("postDetailComment", postDetailComment);
   return (
     <div className="feed_detail">
       <div className="feed_detail_top">
@@ -88,7 +103,33 @@ function FeedDetail() {
 
       <div className="write-comment">
         {/* 댓글 쓰는 부분*/}
-        <WriteComment userInfo={userInfo} postId={postId} />
+        {/* <WriteComment userInfo={userInfo} postId={postId} /> */}
+
+        {userInfo ? (
+          <Writing
+            userInfo={userInfo}
+            boardId={boardId}
+            refreshData={fetchPostDetailComment}
+            postID={postId}
+            parent_comment_id={null}
+          />
+        ) : (
+          ""
+        )}
+      </div>
+      <div>
+        {postDetailComment.length > 0 ? (
+          postDetailComment.map((c) => (
+            <Comments
+              key={c.comment_id}
+              comment_id={c.comment_id}
+              user_no={c.user_no}
+              {...c}
+            />
+          ))
+        ) : (
+          <h1>댓글이 없습니다.</h1>
+        )}
       </div>
     </div>
   );

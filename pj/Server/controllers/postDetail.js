@@ -42,5 +42,36 @@ module.exports = (conn) => {
     });
   });
 
+  router.get("/api/postDetailComment", decodeToken(), (req, res) => {
+    //const { postId } = req.params.postId;
+    const postId = req.query.postId;
+
+    if (!postId) {
+      return res.status(400).send("게시물 ID가 필요합니다.");
+    }
+
+    const query = `
+ select c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
+	c.user_no, c.createDate, c.modiDate, c.isDeleted, count(cl.user_no) as like_count,
+    u.nickname, u.image_url
+from comments c
+left join comment_likes cl
+on c.comment_id = cl.comment_id
+join UserProfile u
+on u.user_no = c.user_no
+WHERE c.post_id=?
+group by c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
+	c.user_no, c.createDate, c.modiDate, c.isDeleted, u.nickname, u.image_url;
+    `;
+    conn.query(query, [postId], (err, rows, fields) => {
+      if (err) {
+        console.error("쿼리 실행 오류:", err);
+        res.status(500).send("서버 오류");
+      } else {
+        res.send(rows);
+      }
+    });
+  });
+
   return router;
 };

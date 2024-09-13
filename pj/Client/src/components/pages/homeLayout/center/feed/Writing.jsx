@@ -8,7 +8,13 @@ import { BsImages } from "react-icons/bs";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { v4 as uuidv4 } from "uuid"; // UUID 생성 라이브러리
 
-function Writing({ userInfo, boardId, refreshPosts }) {
+function Writing({
+  userInfo,
+  boardId,
+  refreshData,
+  postID,
+  parent_comment_id,
+}) {
   const [, setContent] = useState(""); //textarea 높이 처리
   const [postContent, setPostContent] = useState(""); // 사용자 입력값 처리
   const [selectedFiles, setSelectedFiles] = useState([]); // 이미지 파일들
@@ -22,7 +28,6 @@ function Writing({ userInfo, boardId, refreshPosts }) {
     setContent(textarea.value);
     setPostContent(event.target.value); //사용자 입력 값
   };
-
   // 이미지 파일 선택 처리
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
@@ -95,7 +100,7 @@ function Writing({ userInfo, boardId, refreshPosts }) {
           title: "custom-swal-title",
         },
       });
-      refreshPosts(); // 글목록 갱신
+      refreshData(); // 글목록 갱신
       setPostContent(""); // textarea값 초기화
       setSelectedFiles([]); // 선택된 이미지 초기화
       setPreviewUrls([]); // 미리보기 이미지 초기화
