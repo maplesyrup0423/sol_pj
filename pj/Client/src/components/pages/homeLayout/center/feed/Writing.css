@@ -40,17 +40,16 @@
   font-size: 16px; /* 원하는 글자 크기로 설정 */
   font-weight: bold; /* 필요에 따라 글꼴 두께도 조정 가능 */
 }
-
-#file {
+.file-input {
   display: none;
 }
-
 .file-BsImages {
   color: #ffcd19;
   font-size: 40px;
   padding: 5px;
   border-radius: 5px;
 }
+
 .file-BsImages:hover {
   background-color: rgb(98, 98, 98);
 }

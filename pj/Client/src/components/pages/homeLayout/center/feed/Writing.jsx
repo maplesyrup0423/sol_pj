@@ -1,7 +1,7 @@
 import ProfileImg from "../../../../utills/ProfileImg";
 import "./Writing.css";
 import BasicButton from "../../../../utills/buttons/BasicButton";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import api from "../../../../auth/api";
 import Swal from "sweetalert2";
 import { BsImages } from "react-icons/bs";
@@ -19,6 +19,7 @@ function Writing({
   const [postContent, setPostContent] = useState(""); // 사용자 입력값 처리
   const [selectedFiles, setSelectedFiles] = useState([]); // 이미지 파일들
   const [previewUrls, setPreviewUrls] = useState([]); // 이미지 미리보기 URL
+  const fileInputRef = useRef(null);
 
   //textarea 높이 처리
   const handleInputChange = (event) => {
@@ -136,7 +137,16 @@ function Writing({
       });
     }
   };
-
+  let fileId;
+  if (parent_comment_id !== null) {
+    fileId = "parent_comment_id" + parent_comment_id;
+  } else if (postID !== null) {
+    fileId = "post_id" + postID;
+  } else if (boardId !== null) {
+    fileId = "boardId" + boardId;
+  } else {
+    fileId = "err";
+  }
   return (
     <div className="write-container">
       <form onSubmit={handleSubmit}>
@@ -168,16 +178,18 @@ function Writing({
         </div>
         <div className="buttons">
           <div className="inputImg">
-            <label htmlFor="file">
+            <label htmlFor={`file-${fileId || uuidv4()}`}>
               <BsImages className="file-BsImages" />
+              <input
+                type="file"
+                name="file"
+                id={`file-${fileId || uuidv4()}`} // 고유한 ID 부여
+                multiple
+                onChange={handleFileChange}
+                className="file-input"
+                ref={fileInputRef}
+              />
             </label>
-            <input
-              type="file"
-              name="file"
-              id="file"
-              multiple
-              onChange={handleFileChange}
-            />
           </div>
           <div className="button-row">
             <BasicButton
