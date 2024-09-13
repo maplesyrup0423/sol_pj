@@ -55,3 +55,33 @@ select ub.board_info_id, bi.board_info_name, bi.board_img
 from userboard ub
 LEFT JOIN board_info_table bi on bi.board_info_id=ub.board_info_id
  where ub.user_no=1;
+ 
+ 
+ 
+ select c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
+	c.user_no, c.createDate, c.modiDate, c.isDeleted, count(cl.user_no) as like_count,
+    u.nickname, u.image_url
+from comments c
+left join comment_likes cl
+on c.comment_id = cl.comment_id
+join UserProfile u
+on u.user_no = c.user_no
+WHERE c.post_id=16
+group by c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
+	c.user_no, c.createDate, c.modiDate, c.isDeleted, u.nickname, u.image_url;
+    
+    select * from comments;
+    select * from comments_files;
+    
+        select c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
+	  c.user_no, c.createDate, c.modiDate, c.isDeleted, count(cl.user_no) as like_count,
+    u.nickname, u.image_url,
+    GROUP_CONCAT(DISTINCT cf.comments_file_path ORDER BY cf.upload_date SEPARATOR ', ') AS file_paths
+    from comments c
+    left join comment_likes cl
+    on c.comment_id = cl.comment_id
+    join UserProfile u
+    on u.user_no = c.user_no
+    LEFT JOIN comments_files cf ON c.comment_id = cf.comment_id
+    group by c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
+	  c.user_no, c.createDate, c.modiDate, c.isDeleted, u.nickname, u.image_url;

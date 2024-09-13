@@ -118,7 +118,9 @@ function FeedMain() {
           <Writing
             userInfo={userInfo}
             boardId={boardId}
-            refreshPosts={fetchData}
+            refreshData={fetchData}
+            postID={null}
+            parent_comment_id={null}
           />
         ) : (
           ""

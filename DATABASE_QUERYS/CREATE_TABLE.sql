@@ -191,6 +191,16 @@ CREATE TABLE comments (
     FOREIGN KEY (parent_comment_id) REFERENCES comments(comment_id) ON DELETE CASCADE,
     FOREIGN KEY (user_no) REFERENCES User(user_no) ON DELETE SET NULL 
 );
+
+-- 댓글 파일 테이블 
+CREATE TABLE comments_files (
+   comments_file_id INT PRIMARY KEY AUTO_INCREMENT,
+   comment_id INT,
+   comments_file_path VARCHAR(1024) NOT NULL,
+   upload_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+   FOREIGN KEY (comment_id) REFERENCES comments(comment_id) ON DELETE CASCADE
+);
+
 -- 댓글 좋아요
 CREATE TABLE comment_likes (
     c_like_id INT PRIMARY KEY AUTO_INCREMENT,
