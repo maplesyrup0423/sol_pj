@@ -1,63 +1,15 @@
 import "./Feeds.css";
 import { IoIosMore } from "react-icons/io";
-import { AiFillHeart } from "react-icons/ai";
-import { AiOutlineHeart } from "react-icons/ai";
 import { IoChatbubbleOutline } from "react-icons/io5";
 import { FaRegBookmark } from "react-icons/fa";
 import { FaBookmark } from "react-icons/fa";
 import ProfileImg from "../../../../utills/ProfileImg";
-
-import { useState, useEffect } from "react";
-
 import { NavLink } from "react-router-dom";
-import api from "../../../../auth/api";
-import Swal from "sweetalert2";
 import FeedImages from "./FeedImages";
+import Like from "./like";
 
 function Feeds(props) {
   const { boardId, postId } = props;
-
-  const [liked, setLiked] = useState(false);
-
-  useEffect(() => {
-    // 페이지 로딩 시 사용자가 이미 좋아요를 눌렀는지 확인
-    api
-      .get(`/api/posts/${postId}/isLikedByUser/${props.loginUser_no}`)
-      .then((res) => setLiked(res.data.liked))
-      .catch((err) => console.error(err));
-  }, [postId, props.loginUser_no]);
-
-  const handleLike = () => {
-    if (props.user_no === props.loginUser_no) {
-      Swal.fire({
-        position: "top",
-        icon: "error",
-        title: "자신의 게시글에는 좋아요를 누를 수 없습니다.",
-        showConfirmButton: false,
-        timer: 1500,
-        width: "300px",
-        customClass: {
-          title: "custom-swal-title",
-        },
-      });
-      return;
-    }
-
-    if (liked) {
-      // 좋아요 취소
-      api
-        .post(`/api/posts/${postId}/unlike/${props.loginUser_no}`)
-        .then(() => setLiked(false))
-        .catch((err) => console.error(err));
-    } else {
-      // 좋아요 등록
-      api
-        .post(`/api/posts/${postId}/like`, { user_no: props.loginUser_no })
-        .then(() => setLiked(true))
-        .catch((err) => console.error(err));
-    }
-  };
-
   return (
     <div className="feed-container">
       <div className="headerContainer">
@@ -83,6 +35,7 @@ function Feeds(props) {
           <IoIosMore />
         </a>
       </div>
+      {/* 이미지 모달/캐로셀 컴포넌트 */}
       <FeedImages file_paths={props.file_paths} post_id={props.post_id} />
 
       <NavLink to={`/post/${boardId}/${postId}`} className="feed_click">
@@ -94,7 +47,12 @@ function Feeds(props) {
         </div>
         <div className="feed-CreationDate">
           {/* 작성일/조회수 등 상세 정보 */}
-          <span> {props.createDate}</span>
+          {props.modiDate === null ? (
+            <span> {props.createDate}</span>
+          ) : (
+            <span> {props.modiDate} (수정됨)</span>
+          )}
+
           <span> 조회수 {props.views}</span>
         </div>
       </NavLink>
@@ -103,28 +61,12 @@ function Feeds(props) {
         <div className="like-comment">
           {/* 좋아요 댓글등 왼쪽 부분 */}
           {/* 좋아요는 로그인한 사람에 따라 하트가 달라짐 */}
-          <div className="like-comment-btn" onClick={handleLike}>
-            {liked ? (
-              <>
-                <AiFillHeart
-                  size="30"
-                  className="heart-icon liked"
-                  id="AiFillHeart"
-                />
-                <span> {`${props.like_count + 1}`} </span>
-              </>
-            ) : (
-              <>
-                <AiOutlineHeart
-                  size="30"
-                  className="heart-icon"
-                  id="AiOutlineHeart"
-                />
-                <span> {props.like_count} </span>
-              </>
-            )}
-          </div>
-
+          <Like
+            postId={postId}
+            loginUser_no={props.loginUser_no}
+            user_no={props.user_no}
+            like_count={props.like_count}
+          />
           <IoChatbubbleOutline size="30" />
           <span> &nbsp;{props.comment_count} </span>
         </div>

@@ -85,3 +85,17 @@ group by c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
     LEFT JOIN comments_files cf ON c.comment_id = cf.comment_id
     group by c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
 	  c.user_no, c.createDate, c.modiDate, c.isDeleted, u.nickname, u.image_url;
+      
+      
+      select * from post_likes;
+      
+      
+      INSERT INTO posts (post_text, user_no, board_info_id)
+VALUES ('1번게시판 1번 게시글', 1, 1);
+   select * from posts;
+UPDATE posts
+SET post_text = '수정합니다'
+WHERE post_id = 5;
+
+DELETE FROM board_info_table
+WHERE board_info_id = 5;

@@ -123,7 +123,7 @@ function FeedMain() {
             parent_comment_id={null}
           />
         ) : (
-          ""
+          <span className="data-placeholder">로그인후 이용해주세요</span>
         )}
       </div>
 
@@ -142,7 +142,7 @@ function FeedMain() {
                   />
                 ))
               ) : (
-                <h1>Loading...</h1>
+                <span className="data-placeholder">게시글이 없습니다.</span>
               )}
             </div>
           )}
@@ -159,7 +159,7 @@ function FeedMain() {
                   />
                 ))
               ) : (
-                <h1>게시글이 없습니다.</h1>
+                <span className="data-placeholder">게시글이 없습니다.</span>
               )}
             </div>
           )}
