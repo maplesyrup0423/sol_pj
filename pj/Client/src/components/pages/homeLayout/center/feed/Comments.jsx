@@ -2,6 +2,7 @@ import "./Comments.css";
 import { AuthContext } from "../../../../../Context/AuthContext";
 import { useContext } from "react";
 import Writing from "./Writing";
+import FeedImages from "./FeedImages";
 function Comments(props) {
   const { userInfo } = useContext(AuthContext);
   return (
@@ -12,6 +13,8 @@ function Comments(props) {
       <div>comment_text : {props.comment_text}</div>
       <div>createDate : {props.createDate}</div>
       <div>postId : {props.postId}</div>
+
+      <FeedImages file_paths={props.file_paths} comment_id={props.comment_id} />
 
       {userInfo ? (
         <Writing

@@ -6,31 +6,18 @@ import { IoChatbubbleOutline } from "react-icons/io5";
 import { FaRegBookmark } from "react-icons/fa";
 import { FaBookmark } from "react-icons/fa";
 import ProfileImg from "../../../../utills/ProfileImg";
-import ImageViewer from "./ImageViewer";
+
 import { useState, useEffect } from "react";
-import Carousel from "react-bootstrap/Carousel";
+
 import { NavLink } from "react-router-dom";
 import api from "../../../../auth/api";
 import Swal from "sweetalert2";
+import FeedImages from "./FeedImages";
 
 function Feeds(props) {
   const { boardId, postId } = props;
-  const baseUrl = import.meta.env.VITE_BASE_URL;
-  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [liked, setLiked] = useState(false);
-
-  const images = props.file_paths ? props.file_paths.split(", ") : [];
-
-  const openModal = (index) => {
-    setSelectedImageIndex(index);
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedImageIndex(null);
-  };
 
   useEffect(() => {
     // 페이지 로딩 시 사용자가 이미 좋아요를 눌렀는지 확인
@@ -96,41 +83,7 @@ function Feeds(props) {
           <IoIosMore />
         </a>
       </div>
-      <div className="feed-image">
-        {/* 피드이미지 */}
-        {images.length > 0 &&
-          (images.length === 1 ? (
-            <img
-              src={`${baseUrl}/images/uploads_feed/${images[0]}`}
-              alt={`Post ${props.post_id} image 1`}
-              className="feedImg1"
-              onClick={() => openModal(0)} // 이미지 클릭 시 모달 열기
-            />
-          ) : (
-            <Carousel interval={null}>
-              {images.map((filePath, index) => (
-                <Carousel.Item key={index}>
-                  <img
-                    src={`${baseUrl}/images/uploads_feed/${filePath}`}
-                    alt={`Post ${props.post_id} image ${index + 1}`}
-                    className="feedImg1"
-                    onClick={() => openModal(index)} // 이미지 클릭 시 모달 열기
-                  />
-                </Carousel.Item>
-              ))}
-            </Carousel>
-          ))}
-
-        {/* 모달 컴포넌트 */}
-        {isModalOpen && selectedImageIndex !== null && (
-          <ImageViewer
-            images={images}
-            currentIndex={selectedImageIndex}
-            onClose={closeModal}
-            onChangeImage={(index) => setSelectedImageIndex(index)}
-          />
-        )}
-      </div>
+      <FeedImages file_paths={props.file_paths} post_id={props.post_id} />
 
       <NavLink to={`/post/${boardId}/${postId}`} className="feed_click">
         <div className="feed-text-container">

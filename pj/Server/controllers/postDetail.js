@@ -66,14 +66,16 @@ module.exports = (conn) => {
     }
 
     const query = `
-    select c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
+select c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
 	  c.user_no, c.createDate, c.modiDate, c.isDeleted, count(cl.user_no) as like_count,
-    u.nickname, u.image_url
+    u.nickname, u.image_url,
+    GROUP_CONCAT(DISTINCT cf.comments_file_path ORDER BY cf.upload_date SEPARATOR ', ') AS file_paths
     from comments c
     left join comment_likes cl
     on c.comment_id = cl.comment_id
     join UserProfile u
     on u.user_no = c.user_no
+    LEFT JOIN comments_files cf ON c.comment_id = cf.comment_id
     WHERE c.post_id=?
     group by c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
 	  c.user_no, c.createDate, c.modiDate, c.isDeleted, u.nickname, u.image_url;
