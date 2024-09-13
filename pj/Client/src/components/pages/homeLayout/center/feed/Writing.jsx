@@ -1,18 +1,25 @@
 import ProfileImg from "../../../../utills/ProfileImg";
 import "./Writing.css";
 import BasicButton from "../../../../utills/buttons/BasicButton";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import api from "../../../../auth/api";
 import Swal from "sweetalert2";
 import { BsImages } from "react-icons/bs";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { v4 as uuidv4 } from "uuid"; // UUID 생성 라이브러리
 
-function Writing({ userInfo, boardId, refreshPosts }) {
+function Writing({
+  userInfo,
+  boardId,
+  refreshData,
+  postID,
+  parent_comment_id,
+}) {
   const [, setContent] = useState(""); //textarea 높이 처리
   const [postContent, setPostContent] = useState(""); // 사용자 입력값 처리
   const [selectedFiles, setSelectedFiles] = useState([]); // 이미지 파일들
   const [previewUrls, setPreviewUrls] = useState([]); // 이미지 미리보기 URL
+  const fileInputRef = useRef(null);
 
   //textarea 높이 처리
   const handleInputChange = (event) => {
@@ -22,7 +29,6 @@ function Writing({ userInfo, boardId, refreshPosts }) {
     setContent(textarea.value);
     setPostContent(event.target.value); //사용자 입력 값
   };
-
   // 이미지 파일 선택 처리
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
@@ -69,6 +75,12 @@ function Writing({ userInfo, boardId, refreshPosts }) {
     postData.append("postContent", postContent); // 글 내용 추가
     postData.append("user_no", userInfo.user_no); // 유저 ID 추가
     postData.append("board_info_id", boardId); // 게시판 ID 추가
+    if (postID !== null) {
+      postData.append("post_id", postID); // 게시글 ID 추가
+    }
+    if (parent_comment_id !== null) {
+      postData.append("parent_comment_id", parent_comment_id); // 부모댓글 ID 추가
+    }
 
     // 선택한 파일들을 formData에 추가
     selectedFiles.forEach(({ file }) => {
@@ -76,18 +88,27 @@ function Writing({ userInfo, boardId, refreshPosts }) {
     });
 
     try {
-      const response = await api.post("/api/postInsert", postData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      let response;
+      if (postID === null) {
+        response = await api.post("/api/postInsert", postData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+      } else {
+        response = await api.post("/api/commentInsert", postData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+      }
 
       console.log("Response:", response.data);
       //글 입력 성공시
       Swal.fire({
         position: "top",
         icon: "success",
-        title: "글이 성공적으로 등록되었습니다!",
+        title: "성공적으로 등록되었습니다!",
         showConfirmButton: false,
         timer: 1500,
         width: "300px",
@@ -95,7 +116,7 @@ function Writing({ userInfo, boardId, refreshPosts }) {
           title: "custom-swal-title",
         },
       });
-      refreshPosts(); // 글목록 갱신
+      refreshData(); // 글목록 갱신
       setPostContent(""); // textarea값 초기화
       setSelectedFiles([]); // 선택된 이미지 초기화
       setPreviewUrls([]); // 미리보기 이미지 초기화
@@ -106,7 +127,7 @@ function Writing({ userInfo, boardId, refreshPosts }) {
       Swal.fire({
         position: "top",
         icon: "error",
-        title: "글 등록에 실패했습니다. 다시 시도해주세요.",
+        title: "등록에 실패했습니다. 다시 시도해주세요.",
         showConfirmButton: false,
         timer: 1500,
         width: "300px",
@@ -116,7 +137,16 @@ function Writing({ userInfo, boardId, refreshPosts }) {
       });
     }
   };
-
+  let fileId;
+  if (parent_comment_id !== null) {
+    fileId = "parent_comment_id" + parent_comment_id;
+  } else if (postID !== null) {
+    fileId = "post_id" + postID;
+  } else if (boardId !== null) {
+    fileId = "boardId" + boardId;
+  } else {
+    fileId = "err";
+  }
   return (
     <div className="write-container">
       <form onSubmit={handleSubmit}>
@@ -130,7 +160,7 @@ function Writing({ userInfo, boardId, refreshPosts }) {
               onChange={handleInputChange}
               name="postContent"
               rows={2}
-              placeholder={`게시판 아이디 : ${boardId} || 글을 작성해주세요.`}
+              placeholder={`게시판 아이디 : ${boardId} || 게시글 아이디 : ${postID} || 부모댓글 아이디 : ${parent_comment_id} ||글을 작성해주세요.`}
             />
           </div>
         </div>
@@ -148,16 +178,18 @@ function Writing({ userInfo, boardId, refreshPosts }) {
         </div>
         <div className="buttons">
           <div className="inputImg">
-            <label htmlFor="file">
+            <label htmlFor={`file-${fileId || uuidv4()}`}>
               <BsImages className="file-BsImages" />
+              <input
+                type="file"
+                name="file"
+                id={`file-${fileId || uuidv4()}`} // 고유한 ID 부여
+                multiple
+                onChange={handleFileChange}
+                className="file-input"
+                ref={fileInputRef}
+              />
             </label>
-            <input
-              type="file"
-              name="file"
-              id="file"
-              multiple
-              onChange={handleFileChange}
-            />
           </div>
           <div className="button-row">
             <BasicButton
