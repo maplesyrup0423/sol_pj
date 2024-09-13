@@ -1,5 +1,9 @@
 import "./FeedDetail.css";
 import "./Feeds.css";
+
+import WriteComment from "./WriteComment";
+import FeedComment from "./FeedComment";
+
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
@@ -133,6 +137,12 @@ function FeedDetail() {
           <h1>댓글이 없습니다.</h1>
         )}
       </div>
+
+      <div className="all_comments">
+        {/* 게시물의 댓글 부분*/}
+        <FeedComment />
+      </div>
+
     </div>
   );
 }
