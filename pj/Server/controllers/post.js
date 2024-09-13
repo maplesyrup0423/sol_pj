@@ -69,6 +69,8 @@ module.exports = (conn) => {
     });
   });
 
+  //------------------------------------------------------------------
+
   router.post(
     "/api/postInsert",
     upload.array("images"),
@@ -102,6 +104,48 @@ module.exports = (conn) => {
             });
           } else {
             res.send("Post successfully inserted without images");
+          }
+        }
+      );
+    }
+  );
+
+  //------------------------------------------------------------------
+
+  router.post(
+    "/api/commentInsert",
+    upload.array("images"),
+    decodeToken(),
+    (req, res) => {
+      const { post_id, parent_comment_id, postContent, user_no } = req.body;
+      conn.query(
+        "INSERT INTO comments(post_id,parent_comment_id,comment_text,user_no) VALUES (?,?,?,?)",
+        [post_id, parent_comment_id, postContent, user_no],
+        (err, result) => {
+          if (err) {
+            console.error("쿼리 실행 오류:", err);
+            res.status(500).send("서버 오류");
+          }
+          const post_id = result.insertId; // 삽입된 글의 ID
+
+          // 이미지 삽입
+          if (req.files && req.files.length > 0) {
+            const imageInserts = req.files.map((file) => [
+              post_id,
+              file.filename,
+            ]);
+
+            const sql =
+              "INSERT INTO comments_files (comment_id, comments_file_path) VALUES ?";
+            conn.query(sql, [imageInserts], (err) => {
+              if (err) {
+                console.error("Image Insertion Error:", err);
+                return res.status(500).send("Error inserting images");
+              }
+              res.send("comments and images successfully inserted");
+            });
+          } else {
+            res.send("comments successfully inserted without images");
           }
         }
       );

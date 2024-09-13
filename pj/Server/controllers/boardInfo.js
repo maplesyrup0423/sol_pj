@@ -24,7 +24,9 @@ module.exports = (conn) => {
       }
     });
   });
+
   // ---------------------------------------------------------------------------
+
   // 사용자 게시판 정보 조회
   router.get("/api/boardInfoUser", decodeToken(), (req, res) => {
     const query = `select ub.board_info_id, bi.board_info_name, bi.board_img  
@@ -51,6 +53,7 @@ module.exports = (conn) => {
       }
     });
   });
+
   // ---------------------------------------------------------------------------
 
   // 사용자 게시판 정보 업데이트

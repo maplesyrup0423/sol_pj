@@ -74,6 +74,12 @@ function Writing({
     postData.append("postContent", postContent); // 글 내용 추가
     postData.append("user_no", userInfo.user_no); // 유저 ID 추가
     postData.append("board_info_id", boardId); // 게시판 ID 추가
+    if (postID !== null) {
+      postData.append("post_id", postID); // 게시글 ID 추가
+    }
+    if (parent_comment_id !== null) {
+      postData.append("parent_comment_id", parent_comment_id); // 부모댓글 ID 추가
+    }
 
     // 선택한 파일들을 formData에 추가
     selectedFiles.forEach(({ file }) => {
@@ -81,18 +87,27 @@ function Writing({
     });
 
     try {
-      const response = await api.post("/api/postInsert", postData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      let response;
+      if (postID === null) {
+        response = await api.post("/api/postInsert", postData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+      } else {
+        response = await api.post("/api/commentInsert", postData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+      }
 
       console.log("Response:", response.data);
       //글 입력 성공시
       Swal.fire({
         position: "top",
         icon: "success",
-        title: "글이 성공적으로 등록되었습니다!",
+        title: "성공적으로 등록되었습니다!",
         showConfirmButton: false,
         timer: 1500,
         width: "300px",
@@ -111,7 +126,7 @@ function Writing({
       Swal.fire({
         position: "top",
         icon: "error",
-        title: "글 등록에 실패했습니다. 다시 시도해주세요.",
+        title: "등록에 실패했습니다. 다시 시도해주세요.",
         showConfirmButton: false,
         timer: 1500,
         width: "300px",
@@ -135,7 +150,7 @@ function Writing({
               onChange={handleInputChange}
               name="postContent"
               rows={2}
-              placeholder={`게시판 아이디 : ${boardId} || 글을 작성해주세요.`}
+              placeholder={`게시판 아이디 : ${boardId} || 게시글 아이디 : ${postID} || 부모댓글 아이디 : ${parent_comment_id} ||글을 작성해주세요.`}
             />
           </div>
         </div>
