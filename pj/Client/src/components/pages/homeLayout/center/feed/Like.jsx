@@ -7,6 +7,20 @@ import "./Like.css";
 function Like(props) {
   const [like_count, setLike_count] = useState(props.like_count);
   const [liked, setLiked] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const formatNumber = (num) => {
+    if (num >= 1e9) {
+      return (num / 1e9).toFixed(1) + "B";
+    } else if (num >= 1e6) {
+      return (num / 1e6).toFixed(1) + "M";
+    } else if (num >= 1e3) {
+      return (num / 1e3).toFixed(1) + "K";
+    } else {
+      return num.toString();
+    }
+  };
+
   useEffect(() => {
     // 페이지 로딩 시 사용자가 이미 좋아요를 눌렀는지 확인
     api
@@ -50,7 +64,12 @@ function Like(props) {
 
   return (
     <>
-      <div className="like-comment-btn" onClick={handleLike}>
+      <div
+        className="like-comment-btn"
+        onClick={handleLike}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         {liked ? (
           <>
             <AiFillHeart
@@ -68,7 +87,17 @@ function Like(props) {
             />
           </>
         )}
-        <span> {like_count} </span>
+        <span>
+          {isHovered
+            ? new Intl.NumberFormat().format(like_count)
+            : formatNumber(like_count)}
+        </span>
+        {/* 좋아요 수 많은 경우 KMB 표기 테스트 */}
+        {/* <span>
+          {isHovered
+            ? new Intl.NumberFormat().format("123456789")
+            : formatNumber(123456789)}
+        </span> */}
       </div>
     </>
   );

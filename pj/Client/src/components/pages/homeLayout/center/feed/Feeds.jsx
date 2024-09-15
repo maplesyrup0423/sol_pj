@@ -57,7 +57,7 @@ function Feeds(props) {
             <span> {props.modiDate} (수정됨)</span>
           )}
 
-          <span> 조회수 {props.views}</span>
+          <span> 조회수 {new Intl.NumberFormat().format(props.views)}</span>
         </div>
       </NavLink>
 
