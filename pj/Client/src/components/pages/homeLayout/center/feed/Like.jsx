@@ -3,7 +3,7 @@ import { AiOutlineHeart } from "react-icons/ai";
 import api from "../../../../auth/api";
 import Swal from "sweetalert2";
 import { useState, useEffect } from "react";
-
+import "./Like.css";
 function Like(props) {
   const [like_count, setLike_count] = useState(props.like_count);
   const [liked, setLiked] = useState(false);

@@ -1,11 +1,9 @@
 import "./FeedDetail.css";
 import "./Feeds.css";
 import { IoMdArrowRoundBack } from "react-icons/io";
-import { useState } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-import { useContext } from "react";
 import { AuthContext } from "../../../../../Context/AuthContext";
 import api from "../../../../auth/api";
 import Feeds from "./Feeds";
@@ -19,29 +17,14 @@ function FeedDetail() {
   const [postDetailComment, setPostDetailComment] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   const navigate = useNavigate();
+  const hasIncremented = useRef(false); // 조회수 증가가 한 번만 실행되도록 제어할 useRef
 
   const handleBack = () => {
     navigate(-1); //뒤로가기
   };
 
-  // useEffect(() => {
-  //   // postId를 이용해 게시물 데이터를 가져오는 API 호출
-  //   const fetchPost = async () => {
-  //     try {
-  //       const response = await api.get(`/api/post/${postId}`);
-  //       console.log(response.data);
-  //       console.log(response.data);
-  //       setPostDetail(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching post detail:", error);
-  //     }
-  //   };
-
-  //   fetchPost();
-  // }, [postId]);
-
+  //댓글가져오기
   const fetchPostDetailComment = async () => {
     try {
       const response = await api.get(
@@ -53,19 +36,24 @@ function FeedDetail() {
     }
   };
 
+  //조회수 +1 및 게시글 데이터 가져오기
+  const fetchPostDetail = async () => {
+    try {
+      const response = await api.get(`/api/postDetail/?postId=${postId}`);
+      setPostDetail(response.data); // 게시물 데이터 설정
+      setLoading(false);
+    } catch (err) {
+      setError(err);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchPostDetail = async () => {
-      try {
-        const response = await api.get(`/api/postDetail/?postId=${postId}`);
-        setPostDetail(response.data); // 게시물 데이터 설정
-        setLoading(false);
-      } catch (err) {
-        setError(err);
-        setLoading(false);
-      }
-    };
+    if (!hasIncremented.current) {
+      fetchPostDetail();
+      hasIncremented.current = true;
+    }
     fetchPostDetailComment();
-    fetchPostDetail();
   }, [postId]);
 
   if (loading) return <p>Loading...</p>;
@@ -97,7 +85,7 @@ function FeedDetail() {
           comment_count={postDetail.comment_count}
         />
       ) : (
-        <span className="data-placeholder">로그인후 이용하세요</span>
+        <span className="data-placeholder">로그인후 이용하세요.</span>
       )}
 
       <div className="write-comment">
@@ -113,7 +101,7 @@ function FeedDetail() {
             parent_comment_id={null}
           />
         ) : (
-          <span className="data-placeholder">로그인후 이용하세요</span>
+          <span className="data-placeholder">로그인후 이용하세요.</span>
         )}
       </div>
       <div className="all_comments">
