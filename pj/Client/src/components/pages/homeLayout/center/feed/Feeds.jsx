@@ -1,5 +1,5 @@
 import "./Feeds.css";
-import { IoIosMore } from "react-icons/io";
+
 import { IoChatbubbleOutline } from "react-icons/io5";
 import { FaRegBookmark } from "react-icons/fa";
 import { FaBookmark } from "react-icons/fa";
@@ -7,6 +7,7 @@ import ProfileImg from "../../../../utills/ProfileImg";
 import { NavLink } from "react-router-dom";
 import FeedImages from "./FeedImages";
 import Like from "./like";
+import FeedMoreBtn from "./feedMoreBtn";
 
 function Feeds(props) {
   const { boardId, postId } = props;
@@ -31,9 +32,12 @@ function Feeds(props) {
             </div>
           </div>
         </NavLink>
-        <a className="moreA" href=" ">
-          <IoIosMore />
-        </a>
+        {/* 더보기 버튼 */}
+        <FeedMoreBtn
+          postId={postId}
+          loginUser_no={props.loginUser_no}
+          user_no={props.user_no}
+        />
       </div>
       {/* 이미지 모달/캐로셀 컴포넌트 */}
       <FeedImages file_paths={props.file_paths} post_id={props.post_id} />
