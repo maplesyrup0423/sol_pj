@@ -39,3 +39,12 @@
     transform: scale(1);
   }
 }
+.custom-tooltip .tooltip-inner {
+  background-color: rgb(255, 120, 120);
+  color: #fff;
+  border-radius: 4px;
+  margin-bottom: 1px;
+}
+.custom-tooltip .tooltip-arrow {
+  display: none; /* 화살표 숨기기 */
+}
