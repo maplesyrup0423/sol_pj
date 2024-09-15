@@ -4,10 +4,12 @@ import api from "../../../../auth/api";
 import Swal from "sweetalert2";
 import { useState, useEffect } from "react";
 import "./Like.css";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
+
 function Like(props) {
   const [like_count, setLike_count] = useState(props.like_count);
   const [liked, setLiked] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
 
   const formatNumber = (num) => {
     if (num >= 1e9) {
@@ -20,6 +22,17 @@ function Like(props) {
       return num.toString();
     }
   };
+  // 상세 좋아요 수를 포맷하는 함수
+  const detailedNumber = (num) => new Intl.NumberFormat().format(num);
+
+  // 좋아요 수가 축약되지 않았을 때만 툴팁을 표시
+  const isAbbreviated = like_count >= 1e3;
+
+  const renderTooltip = (props) => (
+    <Tooltip id="button-tooltip" {...props} className="custom-tooltip">
+      {detailedNumber(like_count)}
+    </Tooltip>
+  );
 
   useEffect(() => {
     // 페이지 로딩 시 사용자가 이미 좋아요를 눌렀는지 확인
@@ -64,12 +77,7 @@ function Like(props) {
 
   return (
     <>
-      <div
-        className="like-comment-btn"
-        onClick={handleLike}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
+      <div className="like-comment-btn" onClick={handleLike}>
         {liked ? (
           <>
             <AiFillHeart
@@ -87,17 +95,17 @@ function Like(props) {
             />
           </>
         )}
-        <span>
-          {isHovered
-            ? new Intl.NumberFormat().format(like_count)
-            : formatNumber(like_count)}
-        </span>
-        {/* 좋아요 수 많은 경우 KMB 표기 테스트 */}
-        {/* <span>
-          {isHovered
-            ? new Intl.NumberFormat().format("123456789")
-            : formatNumber(123456789)}
-        </span> */}
+        {isAbbreviated ? (
+          <OverlayTrigger
+            placement="top"
+            delay={{ show: 250, hide: 400 }}
+            overlay={renderTooltip}
+          >
+            <span>{formatNumber(like_count)}</span>
+          </OverlayTrigger>
+        ) : (
+          <span>{formatNumber(like_count)}</span>
+        )}
       </div>
     </>
   );
