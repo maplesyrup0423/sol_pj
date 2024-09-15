@@ -123,7 +123,7 @@ function FeedMain() {
             parent_comment_id={null}
           />
         ) : (
-          <span className="data-placeholder">로그인후 이용해주세요</span>
+          <span className="data-placeholder">로그인후 이용해주세요.</span>
         )}
       </div>
 

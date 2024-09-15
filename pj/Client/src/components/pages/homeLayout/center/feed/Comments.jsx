@@ -25,7 +25,7 @@ function Comments(props) {
           parent_comment_id={props.comment_id}
         />
       ) : (
-        <span className="data-placeholder">로그인후 이용하세요</span>
+        <span className="data-placeholder">로그인후 이용하세요.</span>
       )}
     </div>
   );
