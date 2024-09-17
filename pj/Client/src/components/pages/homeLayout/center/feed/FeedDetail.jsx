@@ -83,6 +83,7 @@ function FeedDetail() {
           file_paths={postDetail.file_paths}
           like_count={postDetail.like_count}
           comment_count={postDetail.comment_count}
+          Expanded={"Expanded"}
         />
       ) : (
         <span className="data-placeholder">로그인후 이용하세요.</span>

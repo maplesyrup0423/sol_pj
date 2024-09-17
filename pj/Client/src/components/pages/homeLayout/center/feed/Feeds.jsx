@@ -11,6 +11,13 @@ import FeedMoreBtn from "./feedMoreBtn";
 
 function Feeds(props) {
   const { boardId, postId } = props;
+  let Expanded;
+  if (props.Expanded === undefined) {
+    Expanded = "feedTextShort";
+  } else {
+    Expanded = "";
+  }
+
   return (
     <div className="feed-container">
       <div className="headerContainer">
@@ -44,7 +51,7 @@ function Feeds(props) {
 
       <NavLink to={`/post/${boardId}/${postId}`} className="feed_click">
         <div className="feed-text-container">
-          <div className="feed-text">
+          <div className="feed-text" id={Expanded}>
             {/* 피드텍스트 */}
             <h5>{props.post_text}</h5>
           </div>
