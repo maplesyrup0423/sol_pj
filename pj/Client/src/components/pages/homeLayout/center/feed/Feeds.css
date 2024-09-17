@@ -52,6 +52,15 @@
 .feed-text-container {
   width: 550px;
 }
+#feedTextShort {
+  display: -webkit-box; /* 웹킷 기반 브라우저용 */
+  -webkit-box-orient: vertical; /* 웹킷 기반 브라우저용 */
+  -webkit-line-clamp: 3; /* 줄 수 제한 */
+  overflow: hidden; /* 초과 텍스트 숨기기 */
+  text-overflow: ellipsis;
+  position: relative;
+}
+
 .feed-text {
   margin-bottom: 15px;
   font-size: 20px;
