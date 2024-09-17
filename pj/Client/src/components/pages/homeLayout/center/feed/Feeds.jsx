@@ -8,6 +8,7 @@ import { NavLink } from "react-router-dom";
 import FeedImages from "./FeedImages";
 import Like from "./like";
 import FeedMoreBtn from "./feedMoreBtn";
+import BoardImg from "./BoardImg";
 
 function Feeds(props) {
   const { boardId, postId } = props;
@@ -37,8 +38,14 @@ function Feeds(props) {
               <span className="user-name">{props.nickname}</span>
               <span className="user-id">@{props.user_id}</span>
             </div>
+            {props.board_img === undefined ? (
+              <BoardImg boardId={boardId} />
+            ) : (
+              ""
+            )}
           </div>
         </NavLink>
+
         {/* 더보기 버튼 */}
         <FeedMoreBtn
           postId={postId}

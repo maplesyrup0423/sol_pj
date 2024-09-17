@@ -78,5 +78,32 @@ module.exports = (conn) => {
       }
     );
   });
+
+  // ---------------------------------------------------------------------------
+
+  // 게시판 이미지 정보 조회
+  router.get("/api/board_img/:boardId", decodeToken(), (req, res) => {
+    const { boardId } = req.params;
+    conn.query(
+      "SELECT board_img FROM board_info_table WHERE board_info_id = ?",
+      [boardId],
+      (err, rows, fields) => {
+        if (err) {
+          console.error("쿼리 실행 오류:", err);
+          res.status(500).send("서버 오류");
+        } else {
+          if (rows.length > 0) {
+            const board_img = rows[0].board_img
+              ? `${process.env.BASE_URL}/images/board_img/${rows[0].board_img}`
+              : null;
+            res.send({ board_img });
+          } else {
+            // 이미지가 없을 때 null 값을 반환합니다.
+            res.send({ board_img: null });
+          }
+        }
+      }
+    );
+  });
   return router; // 라우터 반환
 };
