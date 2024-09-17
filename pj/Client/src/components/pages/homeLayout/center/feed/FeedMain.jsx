@@ -152,6 +152,7 @@ function FeedMain() {
                 data.map((p) => (
                   <Feeds
                     key={p.post_id}
+                    board_img="hide"
                     loginUser_no={userInfo.user_no}
                     postId={p.post_id} // 게시글 ID 전달
                     boardId={boardId} // 게시판 ID 전달

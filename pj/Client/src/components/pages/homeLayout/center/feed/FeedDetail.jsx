@@ -72,6 +72,7 @@ function FeedDetail() {
           key={postId}
           loginUser_no={userInfo.user_no}
           postId={postId} // 게시글 ID 전달
+          boardId={boardId}
           user_no={postDetail.user_no}
           user_id={postDetail.user_id}
           post_text={postDetail.post_text}

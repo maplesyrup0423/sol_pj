@@ -20,7 +20,7 @@ function BoardName(props) {
       >
         <div className="gameContainer">
           <div className="gameInfo gameImg">
-            <img src={props.board_img} alt="" />
+            <img src={props.board_img} alt="게시판이미지" />
           </div>
           <div className="gameInfo gameTitle">
             &nbsp; {props.board_info_name}
