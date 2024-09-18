@@ -15,16 +15,19 @@ function Bookmark(props) {
       .catch((err) => console.error(err));
   }, [props.postId, props.loginUser_no]);
 
-  const handleBookmark = () => {
+  const handleBookmark = async () => {
     if (bookmark) {
       // 북마크 취소
-      api
+      await api
         .post(`/api/posts/${props.postId}/unBookmark/${props.loginUser_no}`)
         .then(() => setBookmark(false))
         .catch((err) => console.error(err));
+      if (props.fetchBookmarkView !== undefined) {
+        props.fetchBookmarkView();
+      }
     } else {
       // 북마크 등록
-      api
+      await api
         .post(`/api/posts/${props.postId}/bookmark`, {
           user_no: props.loginUser_no,
         })

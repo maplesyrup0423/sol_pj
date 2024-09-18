@@ -12,10 +12,9 @@
 .Bookmark-comment-btn:hover {
   background-color: rgba(37, 93, 247, 0.2);
 }
-#FaRegBookmark:hover {
+.Bookmark-comment-btn:hover #FaRegBookmark {
   color: #255df7;
 }
-
 #FaBookmark {
   color: #255df7;
 }
