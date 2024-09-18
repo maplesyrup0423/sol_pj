@@ -83,6 +83,9 @@ app.use(PostDetailRoutes(conn));
 const PostLikeRoutes = require("./controllers/PostLike");
 app.use(PostLikeRoutes(conn));
 
+const PostBookmarkRoutes = require("./controllers/postBookmark");
+app.use(PostBookmarkRoutes(conn));
+
 //회원가입 라우터
 const signupRoutes = require("./controllers/signup");
 app.use(signupRoutes(conn));
