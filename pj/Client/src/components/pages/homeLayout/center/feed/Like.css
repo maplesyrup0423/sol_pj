@@ -10,7 +10,8 @@
 .like-comment-btn:hover {
   background-color: rgba(247, 43, 37, 0.2);
 }
-#AiOutlineHeart:hover {
+
+.like-comment-btn:hover #AiOutlineHeart {
   color: #f72b25;
 }
 

@@ -90,7 +90,11 @@ function Feeds(props) {
         </div>
         <div className="share-icons">
           {/* 공유 등 오른쪽 부분 */}
-          <Bookmark postId={postId} loginUser_no={props.loginUser_no} />
+          <Bookmark
+            postId={postId}
+            loginUser_no={props.loginUser_no}
+            fetchBookmarkView={props.fetchBookmarkView}
+          />
         </div>
       </div>
     </div>

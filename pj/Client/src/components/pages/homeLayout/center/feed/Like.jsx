@@ -42,7 +42,7 @@ function Like(props) {
       .catch((err) => console.error(err));
   }, [props.postId, props.loginUser_no]);
 
-  const handleLike = () => {
+  const handleLike = async () => {
     if (props.user_no === props.loginUser_no) {
       Swal.fire({
         position: "top",
@@ -60,13 +60,13 @@ function Like(props) {
 
     if (liked) {
       // 좋아요 취소
-      api
+      await api
         .post(`/api/posts/${props.postId}/unlike/${props.loginUser_no}`)
         .then(() => setLiked(false), setLike_count(like_count - 1))
         .catch((err) => console.error(err));
     } else {
       // 좋아요 등록
-      api
+      await api
         .post(`/api/posts/${props.postId}/like`, {
           user_no: props.loginUser_no,
         })
