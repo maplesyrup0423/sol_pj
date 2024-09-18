@@ -15,6 +15,7 @@ import Room from "./components/pages/homeLayout/center/chat/Room";
 import PrivateRoute from "./components/auth/privateRoute";
 import FeedDetail from "./components/pages/homeLayout/center/feed/FeedDetail";
 import FeedProfile from "./components/pages/homeLayout/center/UserProfile/FeedProfile";
+import BookmarkView from "./components/pages/homeLayout/center/feed/BookmarkView";
 
 function App() {
   const router = createBrowserRouter([
@@ -57,6 +58,10 @@ function App() {
         {
           path: "/feedProfile",
           element: <PrivateRoute element={<FeedProfile />} />, // 수정됨
+        },
+        {
+          path: "/Bookmark",
+          element: <BookmarkView element={<FeedProfile />} />,
         },
       ],
     },

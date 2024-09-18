@@ -94,8 +94,54 @@ group by c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
 VALUES ('1번게시판 1번 게시글', 1, 1);
    select * from posts;
 UPDATE posts
-SET post_text = '수정합니다'
-WHERE post_id = 5;
+SET post_text = '수정합니다222',  views=123456789
+WHERE post_id = 25;
 
 DELETE FROM board_info_table
 WHERE board_info_id = 5;
+
+select board_img from board_info_table where board_info_id=1;
+
+SELECT * FROM bookmarks WHERE post_id = 1 AND user_no = 1;
+INSERT INTO bookmarks (post_id, user_no) VALUES (1, 1);
+DELETE FROM bookmarks WHERE post_id = 1 AND user_no = 1;
+
+SELECT * FROM bookmarks WHERE user_no = 1;
+
+
+          SELECT u.user_no, p.post_id, p.post_text, p.createDate, p.modiDate, p.views, 
+          u.user_id, up.nickname, up.image_url,
+          GROUP_CONCAT(DISTINCT pf.file_path ORDER BY pf.upload_date SEPARATOR ', ') AS file_paths,
+          COUNT(DISTINCT l.p_like_id) AS like_count,
+          COUNT(DISTINCT c.comment_id) AS comment_count
+          FROM posts p
+          LEFT JOIN post_files pf ON p.post_id = pf.post_id
+          LEFT JOIN User u ON p.user_no = u.user_no
+            LEFT JOIN bookmarks bk on bk.user_no = u.user_no
+          LEFT JOIN UserProfile up ON u.user_no = up.user_no
+          LEFT JOIN post_likes l ON p.post_id = l.post_id
+          LEFT JOIN comments c ON p.post_id = c.post_id
+          GROUP BY u.user_no, p.post_id, p.post_text, p.createDate, p.modiDate, p.views, u.user_id, up.nickname, up.image_url;
+          
+select  u.user_id, post_text, p.post_id, p.user_no
+from User u
+LEFT JOIN bookmarks bk on bk.user_no = u.user_no
+LEFT JOIN posts p on p.post_id=bk.post_id
+where bk.user_no=1;
+
+SELECT u.user_no, p.post_id, p.post_text, p.createDate, p.modiDate, p.views, 
+       u.user_id, up.nickname, up.image_url,p.board_info_id,
+       GROUP_CONCAT(DISTINCT pf.file_path ORDER BY pf.upload_date SEPARATOR ', ') AS file_paths,
+       COUNT(DISTINCT l.p_like_id) AS like_count,
+       COUNT(DISTINCT c.comment_id) AS comment_count
+FROM posts p
+LEFT JOIN post_files pf ON p.post_id = pf.post_id
+LEFT JOIN User u ON p.user_no = u.user_no
+LEFT JOIN bookmarks bk ON p.post_id = bk.post_id
+LEFT JOIN UserProfile up ON u.user_no = up.user_no
+LEFT JOIN post_likes l ON p.post_id = l.post_id
+LEFT JOIN comments c ON p.post_id = c.post_id
+WHERE bk.user_no = 1 AND p.isDeleted = 0
+GROUP BY u.user_no, p.post_id, p.post_text, p.createDate, p.modiDate, p.views, u.user_id, up.nickname, up.image_url, p.board_info_id;
+
+

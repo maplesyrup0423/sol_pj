@@ -1,12 +1,12 @@
 import "./Feeds.css";
 
 import { IoChatbubbleOutline } from "react-icons/io5";
-import { FaRegBookmark } from "react-icons/fa";
-import { FaBookmark } from "react-icons/fa";
+
 import ProfileImg from "../../../../utills/ProfileImg";
 import { NavLink } from "react-router-dom";
 import FeedImages from "./FeedImages";
 import Like from "./like";
+import Bookmark from "./Bookmark";
 import FeedMoreBtn from "./feedMoreBtn";
 import BoardImg from "./BoardImg";
 
@@ -90,8 +90,7 @@ function Feeds(props) {
         </div>
         <div className="share-icons">
           {/* 공유 등 오른쪽 부분 */}
-          <FaRegBookmark size="30" />
-          <FaBookmark size="30" />
+          <Bookmark postId={postId} loginUser_no={props.loginUser_no} />
         </div>
       </div>
     </div>
