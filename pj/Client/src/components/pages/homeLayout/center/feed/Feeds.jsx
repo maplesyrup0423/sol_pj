@@ -51,6 +51,7 @@ function Feeds(props) {
           postId={postId}
           loginUser_no={props.loginUser_no}
           user_no={props.user_no}
+          refreshData={props.refreshData}
         />
       </div>
       {/* 이미지 모달/캐로셀 컴포넌트 */}

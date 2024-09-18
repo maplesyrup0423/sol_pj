@@ -14,8 +14,8 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// post DB값 받아오기
 module.exports = (conn) => {
+  // post DB값 받아오기
   router.get("/api/post", decodeToken(), (req, res) => {
     const board_info_id = req.query.board_info_id; // 쿼리 파라미터로 게시판 ID 받아오기
     const orderBy = req.query.orderBy || "date";
@@ -38,23 +38,21 @@ module.exports = (conn) => {
       period = "";
     }
 
-    const query = `
-    SELECT p.board_info_id, p.post_id, p.post_text, p.user_no, p.createDate, p.modiDate, p.views,
-           GROUP_CONCAT(DISTINCT pf.file_path ORDER BY pf.upload_date SEPARATOR ', ') AS file_paths,
-           u.user_id, up.nickname, up.image_url,
-           COUNT(DISTINCT l.p_like_id) AS like_count,
-           COUNT(DISTINCT c.comment_id) AS comment_count, up.introduce
-    FROM posts p
-    LEFT JOIN post_files pf ON p.post_id = pf.post_id
-    LEFT JOIN User u ON p.user_no = u.user_no
-    LEFT JOIN UserProfile up ON u.user_no = up.user_no
-    LEFT JOIN post_likes l ON p.post_id = l.post_id
-    LEFT JOIN comments c ON p.post_id = c.post_id
-    WHERE p.board_info_id = ? AND p.isDeleted = 0
-      ${period}
-    GROUP BY p.post_id, p.post_text, p.user_no, p.createDate, p.modiDate, p.views, u.user_id, up.nickname, up.image_url
-    ${orderClause}
-  `;
+    const query = `SELECT p.board_info_id, p.post_id, p.post_text, p.user_no, p.createDate, p.modiDate, p.views,
+          GROUP_CONCAT(DISTINCT pf.file_path ORDER BY pf.upload_date SEPARATOR ', ') AS file_paths,
+          u.user_id, up.nickname, up.image_url,
+          COUNT(DISTINCT l.p_like_id) AS like_count,
+          COUNT(DISTINCT c.comment_id) AS comment_count, up.introduce
+          FROM posts p
+          LEFT JOIN post_files pf ON p.post_id = pf.post_id
+          LEFT JOIN User u ON p.user_no = u.user_no
+          LEFT JOIN UserProfile up ON u.user_no = up.user_no
+          LEFT JOIN post_likes l ON p.post_id = l.post_id
+          LEFT JOIN comments c ON p.post_id = c.post_id
+          WHERE p.board_info_id = ? AND p.isDeleted = 0
+          ${period}
+          GROUP BY p.post_id, p.post_text, p.user_no, p.createDate, p.modiDate, p.views, u.user_id, up.nickname, up.image_url
+          ${orderClause}`;
 
     // 로그로 쿼리와 정렬 조건을 출력하여 디버깅
     //console.log('Executing query:', query);
@@ -70,7 +68,7 @@ module.exports = (conn) => {
   });
 
   //------------------------------------------------------------------
-
+  // 게시글 입력+사진
   router.post(
     "/api/postInsert",
     upload.array("images"),
@@ -111,6 +109,19 @@ module.exports = (conn) => {
   );
 
   //------------------------------------------------------------------
+  //게시글 삭제
+  router.post("/api/posts/:postId/delete", decodeToken(), (req, res) => {
+    // 게시글 소프트 삭제 (isDeleted 값을 1로 업데이트)
+    const postId = req.params.postId;
+    const query = "UPDATE posts SET isDeleted = 1 WHERE post_id = ?";
+    conn.query(query, [postId], (err, rows) => {
+      if (err) {
+        console.error("쿼리 실행 오류:", err);
+        return res.status(500).send("서버 오류");
+      }
+      res.status(204).send();
+    });
+  });
 
   return router; // 라우터 반환
 };

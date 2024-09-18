@@ -47,7 +47,6 @@ function FeedMain() {
         }`
       );
       setData(response.data);
-      // console.log(`Fetching posts with orderBy: ${activeTab === 'post_pop' ? 'pop' : 'date'}`);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -55,12 +54,10 @@ function FeedMain() {
 
   const orderBy_pop = () => {
     setActiveTab("post_pop");
-    //fetchData();
   };
 
   const orderBy_date = () => {
     setActiveTab("post_date");
-    //fetchData();
   };
   useEffect(() => {
     fetchBoardInfoUser();
@@ -138,6 +135,7 @@ function FeedMain() {
                     loginUser_no={userInfo.user_no}
                     postId={p.post_id} // 게시글 ID 전달
                     boardId={boardId} // 게시판 ID 전달
+                    refreshData={fetchData} // 피드 목록 갱신 함수
                     {...p}
                   />
                 ))
@@ -156,6 +154,7 @@ function FeedMain() {
                     loginUser_no={userInfo.user_no}
                     postId={p.post_id} // 게시글 ID 전달
                     boardId={boardId} // 게시판 ID 전달
+                    refreshData={fetchData} // 피드 목록 갱신 함수
                     {...p}
                   />
                 ))

@@ -145,3 +145,6 @@ WHERE bk.user_no = 1 AND p.isDeleted = 0
 GROUP BY u.user_no, p.post_id, p.post_text, p.createDate, p.modiDate, p.views, u.user_id, up.nickname, up.image_url, p.board_info_id;
 
 
+UPDATE posts SET isDeleted = 0 WHERE post_id = 22;
+
+select * from posts;
