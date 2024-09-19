@@ -47,7 +47,6 @@ function FeedMain() {
         }`
       );
       setData(response.data);
-      // console.log(`Fetching posts with orderBy: ${activeTab === 'post_pop' ? 'pop' : 'date'}`);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -55,12 +54,10 @@ function FeedMain() {
 
   const orderBy_pop = () => {
     setActiveTab("post_pop");
-    //fetchData();
   };
 
   const orderBy_date = () => {
     setActiveTab("post_date");
-    //fetchData();
   };
   useEffect(() => {
     fetchBoardInfoUser();
@@ -118,10 +115,12 @@ function FeedMain() {
           <Writing
             userInfo={userInfo}
             boardId={boardId}
-            refreshPosts={fetchData}
+            refreshData={fetchData}
+            postID={null}
+            parent_comment_id={null}
           />
         ) : (
-          ""
+          <span className="data-placeholder">로그인후 이용해주세요.</span>
         )}
       </div>
 
@@ -136,11 +135,12 @@ function FeedMain() {
                     loginUser_no={userInfo.user_no}
                     postId={p.post_id} // 게시글 ID 전달
                     boardId={boardId} // 게시판 ID 전달
+                    refreshData={fetchData} // 피드 목록 갱신 함수
                     {...p}
                   />
                 ))
               ) : (
-                <h1>Loading...</h1>
+                <span className="data-placeholder">게시글이 없습니다.</span>
               )}
             </div>
           )}
@@ -150,14 +150,16 @@ function FeedMain() {
                 data.map((p) => (
                   <Feeds
                     key={p.post_id}
+                    board_img="hide"
                     loginUser_no={userInfo.user_no}
                     postId={p.post_id} // 게시글 ID 전달
                     boardId={boardId} // 게시판 ID 전달
+                    refreshData={fetchData} // 피드 목록 갱신 함수
                     {...p}
                   />
                 ))
               ) : (
-                <h1>게시글이 없습니다.</h1>
+                <span className="data-placeholder">게시글이 없습니다.</span>
               )}
             </div>
           )}

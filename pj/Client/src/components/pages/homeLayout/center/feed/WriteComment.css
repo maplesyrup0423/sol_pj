@@ -8,14 +8,19 @@
 
 .comment_profile {
   width: 50px;
-  margin: 10px;
+  margin: 15px;
+  display: flex;
+  justify-content: center;  /* 가로 중앙 정렬 */
+  align-items: center;      /* 세로 중앙 정렬 */
 }
 
 .comment_box {
   flex-grow: 1;
   border: none;
-  height: 75px;
-  margin-top: 10px;
+  height: 100px;
+  display: flex;
+  justify-content: center;  /* 가로 중앙 정렬 */
+  align-items: center;      /* 세로 중앙 정렬 */
 }
 
 .comment_box textarea {
@@ -25,7 +30,7 @@
   background-color: black;
   border: none;
   color: white;
-  overflow: hidden;
+  overflow: scroll;
 }
 
 .comment_box textarea:focus {
@@ -33,16 +38,11 @@
 }
 
 .comment_button {
+  margin-left: 10px;
   width: 100px;
   height: 100px;
+  display: flex;
+  justify-content: center;  /* 가로 중앙 정렬 */
+  align-items: center;      /* 세로 중앙 정렬 */
 }
 
-.post_comment_button {
-  margin-top: 25px;
-  width: 80px;
-  height: 50px;
-  text-align: center;
-  border-radius: 50px;
-  border: none;
-  background-color: #ffcd19;
-}

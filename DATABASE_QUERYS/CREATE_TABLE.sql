@@ -147,10 +147,10 @@ CREATE TABLE UserBoard (
 -- 게시글
 CREATE TABLE posts (
    post_id INT PRIMARY KEY AUTO_INCREMENT,
-   post_text VARCHAR(1024),
+   post_text TEXT,
    user_no INT,
    createDate DATETIME DEFAULT CURRENT_TIMESTAMP,
-   modiDate DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+   modiDate DATETIME DEFAULT NULL,
    board_info_id INT,
    isDeleted TINYINT DEFAULT 0,
    views INT DEFAULT 0,
@@ -174,7 +174,8 @@ CREATE TABLE post_likes (
     user_no INT,
     like_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (post_id) REFERENCES posts(post_id) ON DELETE CASCADE,
-    FOREIGN KEY (user_no) REFERENCES User(user_no) ON DELETE SET NULL 
+    FOREIGN KEY (user_no) REFERENCES User(user_no) ON DELETE SET NULL,
+    UNIQUE (user_no, post_id)
 );
 
 -- 댓글
@@ -182,7 +183,7 @@ CREATE TABLE comments (
     comment_id INT PRIMARY KEY AUTO_INCREMENT, 
     post_id INT,
     parent_comment_id INT DEFAULT NULL,
-    comment_text VARCHAR(1024) NOT NULL,
+    comment_text TEXT NOT NULL,
     user_no INT,
     createDate DATETIME DEFAULT CURRENT_TIMESTAMP,
     modiDate DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
@@ -191,6 +192,16 @@ CREATE TABLE comments (
     FOREIGN KEY (parent_comment_id) REFERENCES comments(comment_id) ON DELETE CASCADE,
     FOREIGN KEY (user_no) REFERENCES User(user_no) ON DELETE SET NULL 
 );
+
+-- 댓글 파일 테이블 
+CREATE TABLE comments_files (
+   comments_file_id INT PRIMARY KEY AUTO_INCREMENT,
+   comment_id INT,
+   comments_file_path VARCHAR(1024) NOT NULL,
+   upload_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+   FOREIGN KEY (comment_id) REFERENCES comments(comment_id) ON DELETE CASCADE
+);
+
 -- 댓글 좋아요
 CREATE TABLE comment_likes (
     c_like_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -198,9 +209,33 @@ CREATE TABLE comment_likes (
     user_no INT,
     like_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (comment_id) REFERENCES comments(comment_id) ON DELETE CASCADE,
-    FOREIGN KEY (user_no) REFERENCES User(user_no) ON DELETE SET NULL
+    FOREIGN KEY (user_no) REFERENCES User(user_no) ON DELETE SET NULL,
+    UNIQUE (user_no, comment_id)
 );
 
+-- 북마크
+CREATE TABLE bookmarks (
+   bookmark_id INT PRIMARY KEY AUTO_INCREMENT,
+   user_no INT,
+   post_id INT,
+   createDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+   FOREIGN KEY (user_no) REFERENCES User(user_no) ON DELETE CASCADE,
+   FOREIGN KEY (post_id) REFERENCES posts(post_id) ON DELETE CASCADE,
+   UNIQUE (user_no, post_id)
+);
+
+-- 신고 테이블
+CREATE TABLE reported_posts (
+    report_id INT AUTO_INCREMENT PRIMARY KEY,  
+    post_id INT NOT NULL, 
+    user_no INT NOT NULL, 
+    report_reason ENUM('불법 콘텐츠', '스팸', '모욕적 언어', '기타') NOT NULL,
+    other_reason VARCHAR(255),  
+    report_date DATETIME DEFAULT CURRENT_TIMESTAMP, 
+    status ENUM('처리 대기', '처리 완료', '무효') DEFAULT '처리 대기', 
+    FOREIGN KEY (post_id) REFERENCES posts(post_id), 
+    FOREIGN KEY (user_no) REFERENCES User(user_no) 
+);
 
 -- ----------------------------------------
 -- ----------------------------------------
@@ -218,7 +253,9 @@ CREATE TABLE ChatRoom (
 );
 
 CREATE TABLE ChatRoomUser (
+
     id BIGINT UNSIGNED  PRIMARY KEY,
+
     room_id BIGINT UNSIGNED NOT NULL,
     user_no INT NOT NULL,
     role ENUM('admin', 'member') DEFAULT 'member',
