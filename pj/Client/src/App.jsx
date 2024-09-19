@@ -16,74 +16,84 @@ import PrivateRoute from "./components/auth/privateRoute";
 import FeedDetail from "./components/pages/homeLayout/center/feed/FeedDetail";
 import FeedProfile from "./components/pages/homeLayout/center/UserProfile/FeedProfile";
 import BookmarkView from "./components/pages/homeLayout/center/feed/BookmarkView";
+import MyNotifications from "./components/pages/homeLayout/center/feed/MyNotifications";
+import ChatFriendList from "./components/pages/homeLayout/center/chat/ChatFriendList";
 
 function App() {
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <PrivateRoute element={<HomePage />} />, // 수정됨
-      children: [
+    const router = createBrowserRouter([
         {
-          path: "/",
-          element: <PrivateRoute element={<FeedMain />} />, // 수정됨
+            path: "/",
+            element: <PrivateRoute element={<HomePage />} />, // 수정됨
+            children: [
+                {
+                    path: "/",
+                    element: <PrivateRoute element={<FeedMain />} />, // 수정됨
+                },
+                {
+                    path: "/post/:boardId",
+                    element: <PrivateRoute element={<FeedMain />} />, // 수정됨
+                },
+                {
+                    path: "/post/:boardId/:postId",
+                    element: <PrivateRoute element={<FeedDetail />} />, // 추가됨
+                },
+                {
+                    path: "/myPage",
+                    element: <PrivateRoute element={<UserProfile />} />, // 수정됨
+                },
+                {
+                    path: "/editProfile",
+                    element: <PrivateRoute element={<MyProfile />} />, // 수정됨
+                },
+                {
+                    path: "/followers",
+                    element: <PrivateRoute element={<Followers />} />, // 수정됨
+                },
+                {
+                    path: "/account",
+                    element: <PrivateRoute element={<EditAccount />} />, // 수정됨
+                },
+                {
+                    path: "/chatRoom",
+                    element: <PrivateRoute element={<Room />} />, // 수정됨
+                },
+                {
+                    path: "/feedProfile",
+                    element: <PrivateRoute element={<FeedProfile />} />, // 수정됨
+                },
+                {
+                    path: "/Bookmark",
+                    element: <BookmarkView element={<FeedProfile />} />,
+                },
+                {
+                    path: "/myNotifications",
+                    element: <PrivateRoute element={<MyNotifications />} />,
+                },
+                {
+                    path: "/ChatFriendList",
+                    element: <PrivateRoute element={<ChatFriendList />} />,
+                },
+            ],
         },
         {
-          path: "/post/:boardId",
-          element: <PrivateRoute element={<FeedMain />} />, // 수정됨
+            path: "/login",
+            element: <LoginPage />,
         },
         {
-          path: "/post/:boardId/:postId",
-          element: <PrivateRoute element={<FeedDetail />} />, // 추가됨
+            path: "/intro",
+            element: <IntroPage />,
         },
         {
-          path: "/myPage",
-          element: <PrivateRoute element={<UserProfile />} />, // 수정됨
+            path: "/signup",
+            element: <SignUp />,
         },
-        {
-          path: "/editProfile",
-          element: <PrivateRoute element={<MyProfile />} />, // 수정됨
-        },
-        {
-          path: "/followers",
-          element: <PrivateRoute element={<Followers />} />, // 수정됨
-        },
-        {
-          path: "/account",
-          element: <PrivateRoute element={<EditAccount />} />, // 수정됨
-        },
-        {
-          path: "/chatRoom",
-          element: <PrivateRoute element={<Room />} />, // 수정됨
-        },
-        {
-          path: "/feedProfile",
-          element: <PrivateRoute element={<FeedProfile />} />, // 수정됨
-        },
-        {
-          path: "/Bookmark",
-          element: <BookmarkView element={<FeedProfile />} />,
-        },
-      ],
-    },
-    {
-      path: "/login",
-      element: <LoginPage />,
-    },
-    {
-      path: "/intro",
-      element: <IntroPage />,
-    },
-    {
-      path: "/signup",
-      element: <SignUp />,
-    },
-  ]);
+    ]);
 
-  return (
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
-  );
+    return (
+        <AuthProvider>
+            <RouterProvider router={router} />
+        </AuthProvider>
+    );
 }
 
 export default App;

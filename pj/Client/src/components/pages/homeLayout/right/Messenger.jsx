@@ -1,6 +1,7 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import "./Messenger.css";
 import MessengerUser from "./MessengerUser";
+import { FaPlus } from "react-icons/fa";
 
 function Messenger() {
     const chatList = [
@@ -17,12 +18,23 @@ function Messenger() {
 
     return (
         <div className="messenger">
-            {chatList.map((chat) => (
-                // <Link to={`/chatRoom/${chat.chat_no}`} key={chat.chat_no}>
+            {/* {chatList.map((chat) => (
                 <Link to="chatRoom" key={chat.chat_no}>
                     <MessengerUser {...chat} />
                 </Link>
-            ))}
+            ))} */}
+            <div className="addMessengerbtn">
+                <NavLink
+                    to={"chatFriendList"}
+                    style={{
+                        textDecoration: "none", // 밑줄 제거
+                        color: "inherit", // 기본 텍스트 색상 유지
+                    }}
+                >
+                    <FaPlus size={40} />
+                    <span>새로운 채팅방</span>
+                </NavLink>
+            </div>
         </div>
     );
 }

@@ -3,4 +3,12 @@
     border: 1px solid whitesmoke;
     border-radius: 30px;
     padding: 15px;
+    display: flex;
+    align-items: center;
+}
+.addMessengerbtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
 }
