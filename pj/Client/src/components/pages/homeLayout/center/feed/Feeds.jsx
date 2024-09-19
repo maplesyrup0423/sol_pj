@@ -13,12 +13,16 @@ import FeedMoreBtn from "./FeedMoreBtn";
 
 function Feeds(props) {
   const { boardId, postId } = props;
+
+  // ↓↓↓↓↓↓↓↓↓↓게시글 줄임 확인 코드
   let Expanded;
   if (props.Expanded === undefined) {
     Expanded = "feedTextShort";
+    //feedTextShort일 경우 post_text를 3줄로 표기
   } else {
     Expanded = "";
   }
+  // ↑↑↑↑↑↑↑↑↑↑게시글 줄임 확인 코드
 
   // 팔로우 상태 확인 코드
   const [isFollowing, setIsFollowing] = useState(false);
@@ -31,6 +35,34 @@ function Feeds(props) {
     fetchFollowStatus(); // 팔로우 상태 확인 함수 호출
   }, [props.loginUser_no, props.user_no]);
   // 여기까지 팔로우 상태 확인 코드
+
+  // ↓↓↓↓↓↓↓↓↓↓DATETIME 관련 코드
+  // 날짜 시간 포맷팅 함수
+  const formatDate = (datetime) => {
+    const date = new Date(datetime);
+
+    const options = {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+      timeZone: "Asia/Seoul",
+    };
+
+    const formatter = new Intl.DateTimeFormat("ko-KR", options);
+    return formatter.format(date);
+  };
+  // 등록일
+  const formatCreateDate = formatDate(props.createDate);
+
+  // 수정일
+  const formatModiDate = props.modiDate
+    ? formatDate(props.modiDate) + " (수정됨)"
+    : "";
+
+  // ↑↑↑↑↑↑↑↑↑↑DATETIME 관련 코드 끝
 
   return (
     <div className="feed-container">
@@ -83,9 +115,9 @@ function Feeds(props) {
         <div className="feed-CreationDate">
           {/* 작성일/조회수 등 상세 정보 */}
           {props.modiDate === null ? (
-            <span> {props.createDate}</span>
+            <span> {formatCreateDate}</span>
           ) : (
-            <span> {props.modiDate} (수정됨)</span>
+            <span> {formatModiDate}</span>
           )}
 
           <span> 조회수 {new Intl.NumberFormat().format(props.views)}</span>

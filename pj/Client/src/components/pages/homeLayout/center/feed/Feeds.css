@@ -77,3 +77,14 @@
   color: aliceblue;
   text-decoration-line: none;
 }
+
+.feed-CreationDate span {
+  color: gray;
+}
+.FeedImages-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
