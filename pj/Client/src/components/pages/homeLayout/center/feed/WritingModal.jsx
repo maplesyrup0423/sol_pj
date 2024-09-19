@@ -29,6 +29,7 @@ function WritingModal({
           refreshData={refreshData}
           parent_comment_id={parent_comment_id}
           isEditMode={isEditMode}
+          onClose={onClose}
         />
       </div>
     </div>

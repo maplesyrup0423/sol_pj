@@ -123,5 +123,73 @@ module.exports = (conn) => {
     });
   });
 
+  //------------------------------------------------------------------
+  //게시글 수정
+  router.post(
+    "/api/postUpdate",
+    upload.array("images"), // 새로운 이미지 파일들을 업로드 처리
+    decodeToken(),
+    (req, res) => {
+      const { post_id, postContent, user_no, existingImages } = req.body;
+
+      // 게시글 내용 수정
+      const updatePostQuery =
+        "UPDATE posts SET post_text = ?, modiDate = NOW() WHERE post_id = ? AND user_no = ?";
+
+      conn.query(
+        updatePostQuery,
+        [postContent, post_id, user_no],
+        (err, result) => {
+          if (err) {
+            console.error("Post update query error:", err);
+            return res.status(500).send("게시글 수정에 실패했습니다.");
+          }
+
+          // 기존 이미지 처리: 삭제되지 않은 기존 이미지만 유지
+          const existingImageArray = Array.isArray(existingImages)
+            ? existingImages
+            : [existingImages]; // 기존 이미지가 배열인지 확인
+
+          // 기존 이미지 중 삭제된 이미지를 DB에서 제거
+          const deleteImagesQuery =
+            "DELETE FROM post_files WHERE post_id = ? AND file_path NOT IN (?)";
+          conn.query(
+            deleteImagesQuery,
+            [post_id, existingImageArray],
+            (err) => {
+              if (err) {
+                console.error("Existing image deletion error:", err);
+                return res.status(500).send("기존 이미지 삭제에 실패했습니다.");
+              }
+
+              // 새롭게 추가된 이미지 파일 처리
+              if (req.files && req.files.length > 0) {
+                const newImageInserts = req.files.map((file) => [
+                  post_id,
+                  file.filename,
+                ]);
+
+                const insertImagesQuery =
+                  "INSERT INTO post_files (post_id, file_path) VALUES ?";
+                conn.query(insertImagesQuery, [newImageInserts], (err) => {
+                  if (err) {
+                    console.error("Image insertion error:", err);
+                    return res
+                      .status(500)
+                      .send("새 이미지 추가에 실패했습니다.");
+                  }
+
+                  res.send("게시글과 이미지가 성공적으로 수정되었습니다.");
+                });
+              } else {
+                // 이미지가 없는 경우
+                res.send("게시글이 성공적으로 수정되었습니다.");
+              }
+            }
+          );
+        }
+      );
+    }
+  );
   return router; // 라우터 반환
 };

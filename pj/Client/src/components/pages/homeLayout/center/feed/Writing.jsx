@@ -12,11 +12,13 @@ function Writing({
   userInfo,
   boardId,
   refreshData,
-  postID,
-  parent_comment_id,
+  postID = null,
+  parent_comment_id = null,
+  comment_id = null,
   isEditMode = false, // 수정 모드 여부
   existingPostContent = "", // 기존 글 내용
   existingImages = [], // 기존 이미지 URL
+  onClose = null,
 }) {
   const [, setContent] = useState(""); //textarea 높이 처리
   const [postContent, setPostContent] = useState(existingPostContent); // 사용자 입력값 처리 (수정 모드 시 기존 내용)
@@ -25,6 +27,8 @@ function Writing({
   const fileInputRef = useRef(null);
   const [existingPreviewUrls, setExistingPreviewUrls] =
     useState(existingImages); // 기존 이미지 미리보기(수정시)
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true); // 버튼 비활성화 여부
+
   const baseUrl = import.meta.env.VITE_BASE_URL;
 
   //textarea 높이 처리
@@ -53,6 +57,27 @@ function Writing({
     updatedFiles.forEach((file) => existingFilesMap.set(file.file.name, file));
     setSelectedFiles(Array.from(existingFilesMap.values()));
   };
+
+  useEffect(() => {
+    const isPostContentChanged = postContent !== existingPostContent; // 수정 모드에서 글 내용이 변경되었는지
+    const isImagesChanged =
+      selectedFiles.length > 0 ||
+      existingPreviewUrls.length !== existingImages.length; // 이미지가 변경되었는지
+
+    // 수정 모드에서는 변경이 있는지 확인, 입력 모드에서는 빈 내용인지 확인
+    if (isEditMode) {
+      setIsButtonDisabled(!isPostContentChanged && !isImagesChanged); // 수정 모드에서는 변경된 내용이 없으면 비활성화
+    } else {
+      setIsButtonDisabled(postContent === "" && selectedFiles.length === 0); // 입력 모드에서는 내용이 없으면 비활성화
+    }
+  }, [
+    postContent,
+    selectedFiles,
+    existingPreviewUrls,
+    existingPostContent,
+    existingImages,
+    isEditMode,
+  ]);
 
   useEffect(() => {
     return () => {
@@ -84,7 +109,27 @@ function Writing({
   //form submit 버튼 클릭시  처리
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // 수정 모드일 때만 확인 창 띄우기
+    if (isEditMode) {
+      const result = await Swal.fire({
+        title: "수정하시겠습니까?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "확인",
+        cancelButtonText: "취소",
+        width: "300px",
+        customClass: {
+          title: "custom-swal-title",
+        },
+      });
 
+      if (!result.isConfirmed) {
+        // "취소"를 누르면 아무 작업도 하지 않음
+        return;
+      }
+    }
     const postData = new FormData();
     postData.append("postContent", postContent); // 글 내용 추가
     postData.append("user_no", userInfo.user_no); // 유저 ID 추가
@@ -100,12 +145,14 @@ function Writing({
     selectedFiles.forEach(({ file }) => {
       postData.append("images", file);
     });
-    postData.append("existingImages", existingPreviewUrls); // 남은 기존 이미지들(수정시)
+    existingPreviewUrls.forEach((url, index) => {
+      postData.append(`existingImages[${index}]`, url); // 기존 이미지 URL들을 개별적으로 추가
+    }); // 남은 기존 이미지들(수정시)
     try {
       let response;
       if (isEditMode) {
         //todo update 호출문
-        if (postID === null) {
+        if (comment_id === null) {
           response = await api.post("/api/postUpdate", postData, {
             headers: {
               "Content-Type": "multipart/form-data",
@@ -151,6 +198,11 @@ function Writing({
       setSelectedFiles([]); // 선택된 이미지 초기화
       setPreviewUrls([]); // 미리보기 이미지 초기화
       setExistingPreviewUrls([]); // 기본 이미지 미리보기 초기화(수정시)
+
+      if (onClose !== null) {
+        onClose(); // 글 수정 완료시 모달 닫기
+      }
+
       document.querySelector("textarea").style.height = "auto"; // textarea크기 초기화
     } catch (err) {
       // 글 입력 실패시
@@ -238,7 +290,7 @@ function Writing({
           </div>
           <div className="button-row">
             <BasicButton
-              btnOn={postContent === "" && selectedFiles.length === 0}
+              btnOn={isButtonDisabled}
               btnSize="mediumButton"
               btnColor="yellowButton"
               action={null}
