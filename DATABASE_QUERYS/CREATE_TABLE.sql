@@ -288,6 +288,22 @@ token varchar(256) not null,
 foreign key(user_no) references user(user_no)
 );
 
+-- 알림과 공지사항--
+CREATE TABLE Notifications (
+  notification_id INT PRIMARY KEY AUTO_INCREMENT,
+  user_no INT,
+  message TEXT,
+  type VARCHAR(50), -- 'alert', 'announcement' 등
+  is_read BOOLEAN DEFAULT FALSE,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_no) REFERENCES User(user_no) ON DELETE CASCADE
+);
+CREATE TABLE Announcements (
+  announcement_id INT PRIMARY KEY AUTO_INCREMENT,
+  title VARCHAR(255),
+  content TEXT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
 
 
 

@@ -3,7 +3,6 @@ import SearchBox from "./SearchBox";
 import Notice from "./Notice";
 import Messenger from "./Messenger";
 import Footer from "./Footer";
-import AddMessenger from "./AddMessenger";
 import { useState, useContext, useEffect } from "react";
 import { BsChatLeftDotsFill } from "react-icons/bs";
 import { FaUserGroup } from "react-icons/fa6";
@@ -24,8 +23,10 @@ function RightNav() {
 
     const followers = async () => {
         try {
-            const response = await api.get("/api/followers", {
-                userInfo,
+            const response = await api.get("/followers", {
+                params: {
+                    user_no: userInfo.user_no,
+                },
             });
 
             const data = response.data;
@@ -55,7 +56,7 @@ function RightNav() {
                         <SearchBox />
                     </li>
                     <li>
-                        <Notice />
+                        <Notice user_no={userInfo.user_no} />
                     </li>
                     <li>
                         <div className="activeTab">
