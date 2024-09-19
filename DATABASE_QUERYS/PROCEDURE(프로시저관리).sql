@@ -44,7 +44,8 @@ END$$
 
 DELIMITER ;
  -- 채팅방 생성 프로시저
-DELIMITER //
+ -- 채팅방 생성 프로시저
+DELIMITER $$
 
 CREATE PROCEDURE createChatRoom(
     IN creator_user_no INT,
@@ -52,33 +53,49 @@ CREATE PROCEDURE createChatRoom(
     IN user_list JSON
 )
 BEGIN
-    DECLARE new_room_id BIGINT UNSIGNED;
+    DECLARE new_room_id BIGINT;
+    DECLARE user_index INT DEFAULT 0;
     DECLARE total_users INT;
-    DECLARE i INT DEFAULT 0;
+    DECLARE next_id INT;
 
-    -- 사용자 수 계산 (본인 포함)
+    -- ChatRoom에 새 채팅방 생성
+    INSERT INTO ChatRoom (room_name, is_group, created_at)
+    VALUES (room_name, (JSON_LENGTH(user_list) > 1), NOW());
+    
+    -- 새로 생성된 room_id 가져오기
+    SET new_room_id = LAST_INSERT_ID();
+    
+    -- 총 사용자 수 계산 (본인을 포함해야 하므로 +1)
     SET total_users = JSON_LENGTH(user_list) + 1;
 
-    -- 채팅방 생성
-    INSERT INTO ChatRoom (room_name, is_group) 
-    VALUES (room_name, total_users > 2);
+    -- 먼저 만든 사람 (방장) 추가
+    SELECT IFNULL(MAX(id), 0) + 1 INTO next_id FROM ChatRoomUser WHERE room_id = new_room_id;
+    INSERT INTO ChatRoomUser (id, room_id, user_no, role, joined_at)
+    VALUES (next_id, new_room_id, creator_user_no, 'admin', NOW());
 
-    -- 방 ID 가져오기
-    SET new_room_id = LAST_INSERT_ID();
+    -- 나머지 사용자 추가
+    WHILE user_index < JSON_LENGTH(user_list) DO
+        -- user_list에서 사용자 번호 가져오기
+        SET @user_no = JSON_UNQUOTE(JSON_EXTRACT(user_list, CONCAT('$[', user_index, ']')));
 
-    -- 본인 추가
-    INSERT INTO ChatRoomUser (room_id, user_no, role, joined_at)
-    VALUES (new_room_id, creator_user_no, 'admin', NOW());
+        -- 해당 room_id의 현재 최대 id 값에 +1을 해서 순번 계산
+        SELECT IFNULL(MAX(id), 0) + 1 INTO next_id FROM ChatRoomUser WHERE room_id = new_room_id;
 
-    -- 추가 사용자 추가
-    WHILE i < JSON_LENGTH(user_list) DO
-        INSERT INTO ChatRoomUser (room_id, user_no, role, joined_at)
-        VALUES (new_room_id, JSON_EXTRACT(user_list, CONCAT('$[', i, ']')), 'member', NOW());
-        SET i = i + 1;
+        -- 사용자 추가
+        INSERT INTO ChatRoomUser (id, room_id, user_no, role, joined_at)
+        VALUES (next_id, new_room_id, @user_no, 'member', NOW());
+
+        -- 다음 사용자로 이동
+        SET user_index = user_index + 1;
     END WHILE;
-END //
+END$$
 
 DELIMITER ;
+
+
+
+
+
 SHOW PROCEDURE STATUS WHERE Db = 'sol';
 
 
