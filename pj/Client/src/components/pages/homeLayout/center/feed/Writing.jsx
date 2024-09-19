@@ -14,12 +14,18 @@ function Writing({
   refreshData,
   postID,
   parent_comment_id,
+  isEditMode = false, // 수정 모드 여부
+  existingPostContent = "", // 기존 글 내용
+  existingImages = [], // 기존 이미지 URL
 }) {
   const [, setContent] = useState(""); //textarea 높이 처리
-  const [postContent, setPostContent] = useState(""); // 사용자 입력값 처리
+  const [postContent, setPostContent] = useState(existingPostContent); // 사용자 입력값 처리 (수정 모드 시 기존 내용)
   const [selectedFiles, setSelectedFiles] = useState([]); // 이미지 파일들
   const [previewUrls, setPreviewUrls] = useState([]); // 이미지 미리보기 URL
   const fileInputRef = useRef(null);
+  const [existingPreviewUrls, setExistingPreviewUrls] =
+    useState(existingImages); // 기존 이미지 미리보기(수정시)
+  const baseUrl = import.meta.env.VITE_BASE_URL;
 
   //textarea 높이 처리
   const handleInputChange = (event) => {
@@ -67,6 +73,14 @@ function Writing({
     }, 0);
   };
 
+  // 기존 이미지 삭제 처리 (수정시)
+  const handleDeleteExistingImage = (url) => {
+    const updatedExistingUrls = existingPreviewUrls.filter(
+      (imgUrl) => imgUrl !== url
+    );
+    setExistingPreviewUrls(updatedExistingUrls);
+  };
+
   //form submit 버튼 클릭시  처리
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -86,23 +100,39 @@ function Writing({
     selectedFiles.forEach(({ file }) => {
       postData.append("images", file);
     });
-
+    postData.append("existingImages", existingPreviewUrls); // 남은 기존 이미지들(수정시)
     try {
       let response;
-      if (postID === null) {
-        response = await api.post("/api/postInsert", postData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+      if (isEditMode) {
+        //todo update 호출문
+        if (postID === null) {
+          response = await api.post("/api/postUpdate", postData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+        } else {
+          response = await api.post("/api/commentUpdate", postData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+        }
       } else {
-        response = await api.post("/api/commentInsert", postData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        if (postID === null) {
+          response = await api.post("/api/postInsert", postData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+        } else {
+          response = await api.post("/api/commentInsert", postData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+        }
       }
-
       console.log("Response:", response.data);
       //글 입력 성공시
       Swal.fire({
@@ -120,6 +150,7 @@ function Writing({
       setPostContent(""); // textarea값 초기화
       setSelectedFiles([]); // 선택된 이미지 초기화
       setPreviewUrls([]); // 미리보기 이미지 초기화
+      setExistingPreviewUrls([]); // 기본 이미지 미리보기 초기화(수정시)
       document.querySelector("textarea").style.height = "auto"; // textarea크기 초기화
     } catch (err) {
       // 글 입력 실패시
@@ -166,6 +197,20 @@ function Writing({
         </div>
 
         <div className="preview-container">
+          {/* 기존이미지 미리보기 (수정시) */}
+          {existingPreviewUrls.map((url, index) => (
+            <div key={url} className="image-preview">
+              <img
+                src={`${baseUrl}/images/uploads_feed/${url}`}
+                alt={`existing-preview-${index}`}
+              />
+              <AiFillCloseCircle
+                onClick={() => handleDeleteExistingImage(url)}
+                className="img-delete-button"
+              />
+            </div>
+          ))}
+          {/* 이미지 미리보기 */}
           {selectedFiles.map(({ id, previewUrl }, index) => (
             <div key={id} className="image-preview">
               <img src={previewUrl} alt={`preview-${index}`} />
@@ -197,7 +242,7 @@ function Writing({
               btnSize="mediumButton"
               btnColor="yellowButton"
               action={null}
-              btnText="전송"
+              btnText={isEditMode ? "수정" : "전송"}
               type="submit"
             />
           </div>
