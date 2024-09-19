@@ -16,9 +16,9 @@ const onRefreshed = (newAccessToken) => {
 
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem("accessToken");
     if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;
+      config.headers["Authorization"] = `Bearer ${token}`;
     }
     return config;
   },
@@ -33,7 +33,6 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    // error.response가 undefined인 경우를 처리합니다.
     if (!error.response) {
       console.error("Network error or server not reachable.");
       return Promise.reject(error);
@@ -43,7 +42,9 @@ api.interceptors.response.use(
       if (isRefreshing) {
         return new Promise((resolve) => {
           refreshSubscribers.push((newAccessToken) => {
-            originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+            originalRequest.headers[
+              "Authorization"
+            ] = `Bearer ${newAccessToken}`;
             resolve(api(originalRequest));
           });
         });
@@ -63,8 +64,9 @@ api.interceptors.response.use(
         const newAccessToken = response.data.accessToken;
 
         localStorage.setItem("accessToken", newAccessToken);
-        api.defaults.headers.common["Authorization"] = `Bearer ${newAccessToken}`;
-
+        api.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${newAccessToken}`;
 
         isRefreshing = false;
         onRefreshed(newAccessToken);

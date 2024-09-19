@@ -3,34 +3,46 @@ import { AuthContext } from "../../../../../Context/AuthContext";
 import { NavLink } from "react-router-dom";
 import BackArrow from "../../../../utills/buttons/BackArrow";
 import BasicButton from "../../../../utills/buttons/BasicButton";
+import api from "../../../../auth/api";
+import Feeds from "../feed/Feeds";
 import "./UserProfile.css";
 
 function UserProfile() {
   const { userInfo } = useContext(AuthContext);
   const [activeTab, setActiveTab] = useState("posts");
   const baseUrl = import.meta.env.VITE_BASE_URL;
+  const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    if (userInfo) {
-      console.log("userInfo:", userInfo);
-      console.log("image_url:", userInfo.image_url);
+    const fetchPosts = async () => {
+      try {
+        console.log("11111");
+        const response = await api.get(`/userPosts/${userInfo.user_no}`);
+        console.log("22222");
+        console.log("서버 응답 데이터:", response.data);
+        setPosts(response.data);
+      } catch (error) {
+        console.error("게시글 가져오기 오류:", error);
+      }
+    };
+
+    if (userInfo && activeTab === "posts") {
+      console.log("fetchPosts 호출됨");
+      fetchPosts();
     }
-  }, [userInfo]);
+  }, [userInfo, activeTab]);
 
-  const showPosts = () => {
-    setActiveTab("posts");
-  };
+  useEffect(() => {
+    console.log("현재 posts 상태:", posts);
+  }, [posts]);
 
-  const showComments = () => {
-    setActiveTab("comments");
-  };
+  const showPosts = () => setActiveTab("posts");
+  const showComments = () => setActiveTab("comments");
 
   const isUserInfoAvailable = userInfo && userInfo.nickname;
-
-  // 서버에서 제공하는 이미지 경로와 image_url을 조합
   const imageUrl = isUserInfoAvailable
-    ? `${baseUrl}/images/uploads/${userInfo.image_url}` // 이미지 URL
-    : `${baseUrl}/images/default-profile.jpg`; // 기본 이미지 경로
+    ? `${baseUrl}/images/uploads/${userInfo.image_url}`
+    : `${baseUrl}/images/default-profile.jpg`;
 
   return (
     <>
@@ -55,11 +67,7 @@ function UserProfile() {
         <div className="userContainer">
           <div className="userPic">
             <div className="pic">
-              <img
-                src={imageUrl} // 이미지 URL 사용
-                alt="프로필 이미지"
-                className="proImg"
-              />
+              <img src={imageUrl} alt="프로필 이미지" className="proImg" />
             </div>
           </div>
           <div className="userInfo">
@@ -116,22 +124,20 @@ function UserProfile() {
           <div className="content">
             {activeTab === "posts" && (
               <div className="posts">
-                게시글 누르면 이게 나옴
-                {/* {data.length > 0 ? (
-                data.map((p) => (
-                  <Feeds
-                    key={p.post_id}
-                    postId={p.post_id} // 게시글 ID 전달
-                    boardId={boardId} // 게시판 ID 전달
-                    {...p}
-                  />
-                ))
-              ) : (
-                <h1>게시글이 없습니다.</h1>
-              )} */}
+                {posts.length > 0 ? (
+                  posts.map((p) => (
+                    <Feeds
+                      key={p.post_id}
+                      postId={p.post_id}
+                      boardId={p.board_info_id}
+                      {...p}
+                    />
+                  ))
+                ) : (
+                  <h1>게시글이 없습니다.</h1>
+                )}
               </div>
             )}
-
             {activeTab === "comments" && (
               <div className="comments">댓글 누르면 이게 나옴</div>
             )}
