@@ -1,16 +1,15 @@
-// src/components/auth/privateRoute.js
 import { Navigate } from 'react-router-dom';
 import { useContext } from 'react';
-import { AuthContext } from '../../Context/AuthContext'; // 상대 경로 확인
+import { AuthContext } from '../../Context/AuthContext';
 
-const PrivateRoute = ({ element }) => {
+const PrivateRoute = ({ children }) => {
     const { accessToken } = useContext(AuthContext);
 
     if (!accessToken) {
         return <Navigate to="/login" />;
     }
 
-    return element;
+    return children;
 };
 
 export default PrivateRoute;

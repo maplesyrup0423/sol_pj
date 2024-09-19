@@ -1,13 +1,16 @@
 const express = require("express");
-const router = express.Router();
+const router = express.Router(); // 중복 선언 제거
 const decodeToken = require("../middleware/decodeToken");
 
 module.exports = (conn) => {
-    const router = express.Router(); // 여기에 router 선언
-
-    //팔로워 목록 불러오는 함수
+    // 팔로워 목록 불러오는 함수
     router.get("/followers", async (req, res) => {
         const user_no = req.query.user_no;
+
+        if (!user_no) {
+            return res.status(400).json({ success: false, message: "user_no가 필요합니다." });
+        }
+
         const followerQuery = `SELECT 
             u.user_id AS following_id,
             up.nickname AS following_nickname
@@ -25,7 +28,6 @@ module.exports = (conn) => {
                 console.log("팔로워 조회 중 에러 발생:", err);
                 res.status(500).json({ success: false, message: "서버 오류" });
             } else {
-                // console.log("팔로워 조회 결과 : ", results);
                 res.json({ success: true, followers: results });
             }
         });
@@ -33,6 +35,10 @@ module.exports = (conn) => {
 
     router.get("/chatFollowers", async (req, res) => {
         const user_no = req.query.user_no;
+
+        if (!user_no) {
+            return res.status(400).json({ success: false, message: "user_no가 필요합니다." });
+        }
 
         // 팔로워 정보 조회
         const followerQuery = `SELECT 
@@ -46,12 +52,13 @@ module.exports = (conn) => {
             UserProfile up ON u.user_no = up.user_no
         WHERE 
             uf.following_no = ?`;
-
+        
         // 팔로잉 정보 조회
         const followingQuery = `SELECT 
             u.user_id AS following_id,
             up.nickname AS following_nickname,
-            up.image_url AS following_image
+            up.image_url AS following_image,
+            u.user_no AS following_no
         FROM 
             UserFollower uf
         JOIN 
@@ -68,9 +75,7 @@ module.exports = (conn) => {
                 (followerErr, followerResults) => {
                     if (followerErr) {
                         console.log("팔로워 조회 중 에러 발생:", followerErr);
-                        return res
-                            .status(500)
-                            .json({ success: false, message: "서버 오류" });
+                        return res.status(500).json({ success: false, message: "서버 오류" });
                     }
 
                     conn.query(
@@ -78,17 +83,10 @@ module.exports = (conn) => {
                         [user_no],
                         (followingErr, followingResults) => {
                             if (followingErr) {
-                                console.log(
-                                    "팔로잉 조회 중 에러 발생:",
-                                    followingErr
-                                );
-                                return res.status(500).json({
-                                    success: false,
-                                    message: "서버 오류",
-                                });
+                                console.log("팔로잉 조회 중 에러 발생:", followingErr);
+                                return res.status(500).json({ success: false, message: "서버 오류" });
                             }
 
-                            // 팔로워와 팔로잉 데이터를 함께 응답
                             res.json({
                                 success: true,
                                 followers: followerResults,
@@ -107,6 +105,10 @@ module.exports = (conn) => {
     router.post("/follow", async (req, res) => {
         const { followerNo, followingNo } = req.body;
 
+        if (!followerNo || !followingNo) {
+            return res.status(400).json({ success: false, message: "followerNo와 followingNo가 필요합니다." });
+        }
+
         const checkDuplicateQuery = `
           SELECT * FROM UserFollower WHERE follower_no = ? AND following_no = ?
         `;
@@ -120,33 +122,23 @@ module.exports = (conn) => {
             [followerNo, followingNo],
             (err, results) => {
                 if (err) {
-                    return res
-                        .status(500)
-                        .json({ success: false, message: "서버 오류" });
+                    return res.status(500).json({ success: false, message: "서버 오류" });
                 }
 
                 // 이미 팔로우 상태인 경우
                 if (results.length > 0) {
-                    return res.status(400).json({
-                        success: false,
-                        message: "이미 팔로우 중입니다.",
-                    });
+                    return res.status(400).json({ success: false, message: "이미 팔로우 중입니다." });
                 }
 
                 // 팔로우 삽입
                 conn.query(
                     insertFollowerQuery,
                     [followerNo, followingNo],
-                    (err, results) => {
+                    (err) => {
                         if (err) {
-                            return res.status(500).json({
-                                success: false,
-                                message: "팔로우 중 오류 발생",
-                            });
+                            return res.status(500).json({ success: false, message: "팔로우 중 오류 발생" });
                         }
-                        return res
-                            .status(200)
-                            .json({ success: true, message: "팔로우 성공" });
+                        return res.status(200).json({ success: true, message: "팔로우 성공" });
                     }
                 );
             }
@@ -155,6 +147,11 @@ module.exports = (conn) => {
 
     router.post("/unfollow", async (req, res) => {
         const { followerNo, followingNo } = req.body;
+
+        if (!followerNo || !followingNo) {
+            return res.status(400).json({ message: "followerNo와 followingNo가 필요합니다." });
+        }
+
         try {
             await conn.query(
                 "DELETE FROM UserFollower WHERE follower_no = ? AND following_no = ?",
@@ -167,7 +164,11 @@ module.exports = (conn) => {
     });
 
     router.get("/isFollowing", (req, res) => {
-        const { followerNo, followingNo } = req.query; // req.query로 수정
+        const { followerNo, followingNo } = req.query;
+
+        if (!followerNo || !followingNo) {
+            return res.status(400).json({ message: "followerNo와 followingNo가 필요합니다." });
+        }
 
         const query = `
             SELECT * FROM UserFollower WHERE follower_no = ? AND following_no = ?

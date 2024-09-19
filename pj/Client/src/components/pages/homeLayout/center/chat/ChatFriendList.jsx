@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom"; // Link로 채팅방으로 이동
+import { useNavigate } from "react-router-dom"; // useNavigate로 채팅방으로 이동
 import api from "../../../../auth/api";
 import { AuthContext } from "../../../../../Context/AuthContext";
 import "./ChatFriendList.css";
@@ -8,50 +8,69 @@ import ProfileImg from "../../../../utills/ProfileImg";
 function ChatFriendList() {
     const { userInfo } = useContext(AuthContext);
     const [followerList, setFollowerList] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const followers = async () => {
+        const fetchFollowers = async () => {
             try {
                 const response = await api.get("/chatFollowers", {
-                    params: {
-                        user_no: userInfo.user_no, // userInfo에서 user_no 가져오기
-                    },
+                    params: { user_no: userInfo.user_no },
                 });
 
-                const data = response.data;
-                console.log("data 진입 ", data.followings);
-                if (data.success) {
-                    setFollowerList(data.followings); // followers 리스트 설정
+                if (response.data.success) {
+                    setFollowerList(response.data.followings);
                 } else {
-                    alert(
-                        "유저 정보를 가져올 수 없습니다. 오류 메시지: " +
-                            data.message
-                    );
+                    console.error("팔로워 정보 가져오기 실패:", response.data.message);
                 }
             } catch (error) {
-                console.error("유저 정보를 가져오는 중 오류 발생:", error);
+                console.error("팔로워 정보를 가져오는 중 오류 발생:", error);
             }
         };
-        followers();
+        fetchFollowers();
     }, [userInfo.user_no]);
+
+    const handleChatClick = async (follower) => {
+        try {
+            const checkResponse = await api.post("/checkChatRoom", {
+                user1_no: userInfo.user_no,
+                user2_no: follower.following_no
+            });
+
+            if (checkResponse.data.success) {
+                navigate(`/room/${checkResponse.data.room_id}`);
+            } else {
+                const createResponse = await api.post("/createChatRoom", {
+                    creator_user_no: userInfo.user_no,
+                    room_name: follower.following_nickname,
+                    user_list: [follower.following_no]
+                });
+
+                if (createResponse.data.room_id) {
+                    navigate(`/room/${createResponse.data.room_id}`);
+                } else {
+                    console.error('방 생성 실패:', createResponse.data);
+                    alert('방 생성에 실패했습니다.');
+                }
+            }
+        } catch (error) {
+            console.error("채팅방 처리 중 오류 발생:", error);
+            alert('채팅방 처리 중 오류가 발생했습니다.');
+        }
+    };
+
 
     return (
         <div className="friendList">
             {followerList.map((follower) => (
-                <Link
-                    to={`/chatRoom/${follower.following_id}`}
+                <div
                     key={follower.following_id}
-                    style={{
-                        textDecoration: "none", // 밑줄 제거
-                        color: "inherit", // 기본 텍스트 색상 유지
-                    }}
+                    className="friendItem"
+                    onClick={() => handleChatClick(follower)}
+                    style={{ cursor: "pointer" }}
                 >
-                    <div className="friendItem">
-                        <ProfileImg image_url={follower.following_image} />
-                        {/* <img src={follower.following_image} /> */}
-                        <span>{follower.following_nickname}</span>
-                    </div>
-                </Link>
+                    <ProfileImg image_url={follower.following_image} />
+                    <span>{follower.following_nickname}</span>
+                </div>
             ))}
         </div>
     );
