@@ -17,8 +17,10 @@ function ChatFriendList() {
                     params: { user_no: userInfo.user_no },
                 });
 
+
                 if (response.data.success) {
                     setFollowerList(response.data.followings);
+
                 } else {
                     console.error("팔로워 정보 가져오기 실패:", response.data.message);
                 }

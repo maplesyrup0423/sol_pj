@@ -16,7 +16,7 @@ function Notice({ user_no }) {
                 const res = await api.get("/notifications", {
                     params: { user_no: currentUser_no },
                 });
-                console.log("클라 알림 목록 : ", res.data.notifications);
+                // console.log("클라 알림 목록 : ", res.data.notifications);
 
                 if (res.data.notifications.length > 0) {
                     setNotifications(res.data.notifications); // 전체 데이터를 설정
