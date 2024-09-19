@@ -60,13 +60,15 @@ function Feeds(props) {
         </NavLink>
 
         {/* 더보기 버튼 */}
-        <FeedMoreBtn
-          postId={postId}
-          loginUser_no={props.loginUser_no}
-          user_no={props.user_no}
-          refreshData={props.refreshData}
-          boardId={boardId}
-        />
+        {props.loginUser_no === props.user_no && (
+          <FeedMoreBtn
+            postId={postId}
+            loginUser_no={props.loginUser_no}
+            user_no={props.user_no}
+            refreshData={props.refreshData}
+            boardId={boardId}
+          />
+        )}
       </div>
       {/* 이미지 모달/캐로셀 컴포넌트 */}
       <FeedImages file_paths={props.file_paths} post_id={props.post_id} />
