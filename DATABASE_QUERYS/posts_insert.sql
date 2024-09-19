@@ -128,3 +128,31 @@ VALUES ('좋아요 테스트3', 3, 1);
 INSERT INTO post_likes(post_id,user_no)
 VALUES (LAST_INSERT_ID(),2);       
 
+select * from posts where user_no = '3';
+
+SELECT * FROM posts WHERE user_no = 3;
+
+SELECT * FROM posts WHERE user_no = '1';
+
+
+
+
+
+
+
+
+
+
+SELECT u.user_no, p.post_id, p.post_text, p.createDate, p.modiDate, p.views, 
+          u.user_id, up.nickname, up.image_url,
+          GROUP_CONCAT(DISTINCT pf.file_path ORDER BY pf.upload_date SEPARATOR ', ') AS file_paths,
+          COUNT(DISTINCT l.p_like_id) AS like_count,
+          COUNT(DISTINCT c.comment_id) AS comment_count
+          FROM posts p
+          LEFT JOIN post_files pf ON p.post_id = pf.post_idpost_id
+          LEFT JOIN User u ON p.user_no = u.user_no
+          LEFT JOIN UserProfile up ON u.user_no = up.user_no
+          LEFT JOIN post_likes l ON p.post_id = l.post_id
+          LEFT JOIN comments c ON p.post_id = c.post_id
+          WHERE u.user_no = 3 AND p.isDeleted = 0
+          GROUP BY u.user_no, p.post_id, p.post_text, p.createDate, p.modiDate, p.views, u.user_id, up.nickname, up.image_url
