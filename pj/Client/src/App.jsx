@@ -13,6 +13,10 @@ import Followers from "./components/pages/homeLayout/right/Followers";
 import EditAccount from "./components/pages/homeLayout/center/UserProfile/EditAccount";
 import Room from "./components/pages/homeLayout/center/chat/Room";
 import ChatFriendList from "./components/pages/homeLayout/center/chat/ChatFriendList";
+import FeedDetail from "./components/pages/homeLayout/center/feed/FeedDetail";
+import FeedProfile from "./components/pages/homeLayout/center/UserProfile/FeedProfile";
+import BookmarkView from "./components/pages/homeLayout/center/feed/BookmarkView";
+import MyNotifications from "./components/pages/homeLayout/center/feed/MyNotifications";
 import PrivateRoute from "./components/auth/privateRoute";
 
 function App() {
@@ -52,7 +56,27 @@ function App() {
                 {
                     path: "/chatFriendList",
                     element: <PrivateRoute><ChatFriendList /></PrivateRoute>,
-                }
+                },
+                 {
+                    path: "/Bookmark",
+                    element: <PrivateRoute><BookmarkView /></PrivateRoute>,
+                },
+                {
+                    path: "/myNotifications",
+                    element: <PrivateRoute><MyNotifications/></PrivateRoute> ,
+                },
+                 {
+                    path: "/post/:boardId/:postId",
+                    element: <PrivateRoute><FeedDetail/></PrivateRoute> ,
+                },
+                   {
+                    path: "/FeedProfile",
+                    element: <PrivateRoute><FeedProfile/></PrivateRoute> ,
+                },
+
+
+
+                
             ],
         },
         {
