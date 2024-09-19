@@ -2,8 +2,18 @@ import { IoIosMore } from "react-icons/io";
 import { Dropdown } from "react-bootstrap";
 import "./FeedMoreBtn.css";
 import api from "../../../../auth/api";
+import { useState, useEffect } from "react";
+import WritingModal from "./WritingModal";
+import { useContext } from "react";
+import { AuthContext } from "../../../../../Context/AuthContext";
 
 function FeedMoreBtn(props) {
+  const { userInfo } = useContext(AuthContext);
+  //console.log("FeedMoreBtn.props:", props);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [postDetail, setPostDetail] = useState(null);
+  const [images, setImages] = useState([]);
+
   const handlePostDelete = async () => {
     try {
       // 서버로 게시물 삭제 요청
@@ -16,6 +26,30 @@ function FeedMoreBtn(props) {
     }
   };
 
+  const openModal = async () => {
+    await fetchPostDetail();
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  //조회수 +1 및 게시글 데이터 가져오기
+  const fetchPostDetail = async () => {
+    try {
+      const response = await api.get(`/api/postDetail/?postId=${props.postId}`);
+      setPostDetail(response.data);
+      setImages(
+        response.data.file_paths ? response.data.file_paths.split(", ") : []
+      );
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  useEffect(() => {
+    fetchPostDetail();
+  }, [props.postId]);
   return (
     <div className="feed-more">
       <Dropdown>
@@ -39,7 +73,7 @@ function FeedMoreBtn(props) {
         >
           {props.user_no === props.loginUser_no ? (
             <>
-              <Dropdown.Item href="#edit">수정</Dropdown.Item>
+              <Dropdown.Item onClick={openModal}>수정</Dropdown.Item>
               <Dropdown.Item onClick={handlePostDelete}>삭제</Dropdown.Item>
             </>
           ) : (
@@ -47,6 +81,20 @@ function FeedMoreBtn(props) {
           )}
         </Dropdown.Menu>
       </Dropdown>
+      {postDetail && isModalOpen && (
+        <WritingModal
+          onClose={closeModal}
+          userInfo={userInfo}
+          boardId={props.boardId}
+          postID={props.postId}
+          isEditMode={true} // 수정 모드
+          refreshData={props.refreshData}
+          existingPostContent={postDetail.post_text}
+          existingImages={images}
+          //parent_comment_id={props.parent_comment_id}
+          //todo 댓글 수정할때 처리할것
+        />
+      )}
     </div>
   );
 }
