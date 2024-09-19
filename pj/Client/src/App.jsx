@@ -12,67 +12,47 @@ import SignUp from "./components/pages/SignUp";
 import Followers from "./components/pages/homeLayout/right/Followers";
 import EditAccount from "./components/pages/homeLayout/center/UserProfile/EditAccount";
 import Room from "./components/pages/homeLayout/center/chat/Room";
-import PrivateRoute from "./components/auth/privateRoute";
-import FeedDetail from "./components/pages/homeLayout/center/feed/FeedDetail";
-import FeedProfile from "./components/pages/homeLayout/center/UserProfile/FeedProfile";
-import BookmarkView from "./components/pages/homeLayout/center/feed/BookmarkView";
-import MyNotifications from "./components/pages/homeLayout/center/feed/MyNotifications";
 import ChatFriendList from "./components/pages/homeLayout/center/chat/ChatFriendList";
+import PrivateRoute from "./components/auth/privateRoute";
 
 function App() {
     const router = createBrowserRouter([
         {
             path: "/",
-            element: <PrivateRoute element={<HomePage />} />, // 수정됨
+            element: <PrivateRoute><HomePage /></PrivateRoute>, 
             children: [
                 {
                     path: "/",
-                    element: <PrivateRoute element={<FeedMain />} />, // 수정됨
+                    element: <PrivateRoute><FeedMain /></PrivateRoute>, 
                 },
                 {
                     path: "/post/:boardId",
-                    element: <PrivateRoute element={<FeedMain />} />, // 수정됨
-                },
-                {
-                    path: "/post/:boardId/:postId",
-                    element: <PrivateRoute element={<FeedDetail />} />, // 추가됨
+                    element: <PrivateRoute><FeedMain /></PrivateRoute>, 
                 },
                 {
                     path: "/myPage",
-                    element: <PrivateRoute element={<UserProfile />} />, // 수정됨
+                    element: <PrivateRoute><UserProfile /></PrivateRoute>, 
                 },
                 {
                     path: "/editProfile",
-                    element: <PrivateRoute element={<MyProfile />} />, // 수정됨
+                    element: <PrivateRoute><MyProfile /></PrivateRoute>, 
                 },
                 {
                     path: "/followers",
-                    element: <PrivateRoute element={<Followers />} />, // 수정됨
+                    element: <PrivateRoute><Followers /></PrivateRoute>, 
                 },
                 {
                     path: "/account",
-                    element: <PrivateRoute element={<EditAccount />} />, // 수정됨
+                    element: <PrivateRoute><EditAccount /></PrivateRoute>, 
                 },
                 {
-                    path: "/chatRoom",
-                    element: <PrivateRoute element={<Room />} />, // 수정됨
+                    path: "/room/:roomId",
+                    element: <PrivateRoute><Room /></PrivateRoute>, 
                 },
                 {
-                    path: "/feedProfile",
-                    element: <PrivateRoute element={<FeedProfile />} />, // 수정됨
-                },
-                {
-                    path: "/Bookmark",
-                    element: <BookmarkView element={<FeedProfile />} />,
-                },
-                {
-                    path: "/myNotifications",
-                    element: <PrivateRoute element={<MyNotifications />} />,
-                },
-                {
-                    path: "/ChatFriendList",
-                    element: <PrivateRoute element={<ChatFriendList />} />,
-                },
+                    path: "/chatFriendList",
+                    element: <PrivateRoute><ChatFriendList /></PrivateRoute>,
+                }
             ],
         },
         {

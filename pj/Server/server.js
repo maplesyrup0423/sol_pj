@@ -96,8 +96,8 @@ app.use(notificationRoutes(conn));
 const followersRoutes = require("./controllers/followers");
 app.use(followersRoutes(conn));
 
-// const chatServiceRoutes = require("./controllers/chatService");
-// app.use(chatServiceRoutes(conn));
+const chatServiceRoutes = require("./controllers/chatService");
+app.use(chatServiceRoutes(conn));
 
 //프로필변경 라우터
 const editProfileRoutes = require("./controllers/editProfile");

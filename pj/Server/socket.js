@@ -2,10 +2,16 @@ const mysql = require('mysql');
 
 function setupChatModule(app, io, conn) {
     // 날짜 포맷팅 
-    const formatToMySQLDate = (isoDateString) => {
-        const date = new Date(isoDateString);
-        return date.toISOString().replace('T', ' ').slice(0, 19); // 'YYYY-MM-DD HH:MM:SS' 형식으로 변환
-    };
+   const formatToMySQLDate = (isoDateString) => {
+    const date = new Date(isoDateString);
+
+    // 로컬 타임존에 맞게 시간 차이를 보정
+    const timezoneOffset = date.getTimezoneOffset() * 60000; // 분 단위의 오프셋을 밀리초로 변환
+    const correctedDate = new Date(date.getTime() - timezoneOffset);
+
+    // 'YYYY-MM-DD HH:MM:SS' 형식으로 변환
+    return correctedDate.toISOString().replace('T', ' ').slice(0, 19);
+};
 
     // 분리된 함수: 페이지네이션을 적용한 메시지 조회
     function fetchPaginatedMessages(room_id, joined_at, page, pageSize) {
