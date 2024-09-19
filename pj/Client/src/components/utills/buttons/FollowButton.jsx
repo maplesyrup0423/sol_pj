@@ -12,11 +12,6 @@ const FollowButton = ({ followerNo, followingNo, initialIsFollowing }) => {
         setIsFollowing(initialIsFollowing);
     }, [initialIsFollowing]);
 
-    // 상태 변경 후 효과를 보기 위한 useEffect
-    useEffect(() => {
-        console.log("팔로우 상태 변경:", isFollowing);
-    }, [isFollowing]);
-
     const handleFollow = async () => {
         try {
             if (isFollowing) {

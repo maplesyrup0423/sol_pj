@@ -19,7 +19,7 @@ function ChatFriendList() {
                 });
 
                 const data = response.data;
-                console.log("data 진입 ", data.followings);
+                // console.log("data 진입 ", data.followings);
                 if (data.success) {
                     setFollowerList(data.followings); // followers 리스트 설정
                 } else {
