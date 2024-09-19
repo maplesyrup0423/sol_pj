@@ -68,7 +68,9 @@ function FeedMain() {
     if (container) {
       container.scrollTop = 0;
     }
-    fetchData();
+    if (boardId.length > 0) {
+      fetchData();
+    }
   }, [boardId, activeTab, defaultBoardId]);
 
   let [btnActive, setBtnActive] = useState(false);
