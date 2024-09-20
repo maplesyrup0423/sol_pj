@@ -25,7 +25,6 @@ ORDER BY p.createDate DESC`;
         console.error("쿼리 오류:", error);
         return res.status(500).json({ error: "서버 오류" });
       }
-      console.log("쿼리 결과:", results);
       res.json(results);
     });
   });

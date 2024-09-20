@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect, useRef } from "react";
+import { useContext, useState, useRef } from "react";
 import { AuthContext } from "../../../../../Context/AuthContext";
 import "./EditProfile.css";
 import Savebtn from "../../../../utills/buttons/Savebtn";
@@ -21,6 +21,12 @@ function MyProfile({ closeModal }) {
   );
 
   const fileInputRef = useRef(null);
+
+  // 닉네임 유효성 검사 함수
+  const isNicknameValid = (nickname) => {
+    const regex = /^[a-zA-Z가-힣0-9]{1,12}$/;
+    return regex.test(nickname);
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -52,6 +58,16 @@ function MyProfile({ closeModal }) {
 
   const handleSaveProfile = async (e) => {
     e.preventDefault();
+
+    // 닉네임 유효성 검사 추가
+    if (!isNicknameValid(userProfile.nickname)) {
+      Swal.fire({
+        icon: "error",
+        title: "오류",
+        text: "닉네임은 한글, 영어 대소문자로 1~12자 이내여야 합니다.",
+      });
+      return; // 닉네임이 유효하지 않으면 서버로 요청하지 않음
+    }
 
     const formData = new FormData();
     formData.append("nickname", userProfile.nickname);

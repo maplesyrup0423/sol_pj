@@ -25,7 +25,6 @@ module.exports = function (conn) {
     decodeToken(),
     upload.single("image"),
     async (req, res) => {
-      console.log("Received request:", req.body);
       const { nickname, introduce } = req.body;
       const user_no = req.user_no; // user_no를 req에서 가져옵니다.
 
@@ -51,7 +50,7 @@ module.exports = function (conn) {
           SET nickname = ?,
               introduce = ?,
               image_url = ?
-          WHERE user_no = ? AND nickname REGEXP '^[a-zA-Z가-힣]{1,12}$';
+          WHERE user_no = ?
         `;
 
         conn.query(
