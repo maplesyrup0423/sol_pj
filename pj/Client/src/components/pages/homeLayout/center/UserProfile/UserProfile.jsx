@@ -8,6 +8,7 @@ import Feeds from "../feed/Feeds";
 import "./UserProfile.css";
 import MyProfile from "./EditProfile";
 import FollowButton from "../../../../utills/buttons/FollowButton";
+import { checkFollowStatus } from "../../../../utills/FollowService";
 
 function UserProfile() {
     // bUserInfo는 피드에서 보내오는 정보, UserInfo는 현재 로그인한 사용자의 정보
@@ -50,27 +51,34 @@ function UserProfile() {
     const openModal = () => setModalOpen(true);
     const closeModal = () => setModalOpen(false);
 
+    const handleFollowStatus = async () => {
+        const isFollowing = await checkFollowStatus(
+            userInfo.user_no,
+            bUserInfo.user_no
+        );
+        setIsFollowing(isFollowing);
+    };
+
     useEffect(() => {
         console.log("bUserInfo.nickname:", bUserInfo?.nickname);
         console.log("userInfo.nickname:", userInfo.nickname);
 
-        // 팔로우 상태 확인 코드
-        const fetchFollowStatus = async () => {
-            try {
-                const response = await api.get(`/isFollowing`, {
-                    params: {
-                        followerNo: userInfo.user_no,
-                        followingNo: bUserInfo.user_no,
-                    },
-                });
-                console.log(response.data, " 팔로우 여부");
-                setIsFollowing(response.data.isFollowing);
-            } catch (error) {
-                console.error("팔로우 상태 가져오기 오류:", error);
-            }
-        };
-
-        fetchFollowStatus(); // 팔로우 상태 확인 함수 호출
+        handleFollowStatus();
+        // const fetchFollowStatus = async () => {
+        //     try {
+        //         const response = await api.get(`/isFollowing`, {
+        //             params: {
+        //                 followerNo: userInfo.user_no,
+        //                 followingNo: bUserInfo.user_no,
+        //             },
+        //         });
+        //         //console.log(response.data, " 팔로우 여부");
+        //         setIsFollowing(response.data.isFollowing);
+        //     } catch (error) {
+        //         console.error("팔로우 상태 가져오기 오류:", error);
+        //     }
+        // };
+        //fetchFollowStatus(); // 팔로우 상태 확인 함수 호출
     }, [bUserInfo, userInfo]);
 
     return (

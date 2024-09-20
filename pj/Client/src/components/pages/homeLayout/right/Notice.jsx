@@ -7,7 +7,6 @@ import api from "../../../auth/api";
 
 function Notice({ user_no }) {
     const currentUser_no = user_no;
-    const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
 
     useEffect(() => {
@@ -19,7 +18,6 @@ function Notice({ user_no }) {
                 // console.log("클라 알림 목록 : ", res.data.notifications);
 
                 if (res.data.notifications.length > 0) {
-                    setNotifications(res.data.notifications); // 전체 데이터를 설정
                     setUnreadCount(
                         res.data.filter((notif) => !notif.is_read).length
                     ); // 읽지 않은 알림 개수 설정
@@ -34,26 +32,23 @@ function Notice({ user_no }) {
     return (
         <div className="notice">
             <div className="notice_alert">
-                <div className="alert_icon">
-                    <NavLink
-                        to={"/myNotifications"}
-                        style={({ isActive }) => ({
-                            fontWeight: isActive ? "bold" : "normal",
-                            color: isActive ? "#ffcd19" : "white",
-                            textDecoration: "none",
-                        })}
-                    >
+                <NavLink
+                    to={"/myNotifications"}
+                    style={({ isActive }) => ({
+                        fontWeight: isActive ? "bold" : "normal",
+                        color: isActive ? "#ffcd19" : "white",
+                        textDecoration: "none",
+                    })}
+                >
+                    <div className="alert_icon">
                         <FaRegBell className="FaRegBell" />
-                    </NavLink>
-                </div>
-                <div className="alert_text">알림</div>
+                    </div>
+                    <div className="alert_text">알림</div>
+                </NavLink>
                 <div className="alert_number">
                     <span>{unreadCount}</span>
                 </div>
             </div>
-            {/* {notifications.map((m) => (
-                <div key={m.id}>받은 메세지 : {m.content}</div>
-            ))} */}
             <NavLink
                 to={`/Bookmark`}
                 style={({ isActive }) => ({
