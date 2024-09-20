@@ -4,11 +4,16 @@
     border-radius: 30px;
     padding: 15px;
     display: flex;
+    flex-direction: column;
+    /* 요소들을 수직으로 배치 */
     align-items: center;
 }
+
 .addMessengerbtn {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 30px;
+    margin-top: auto;
+    /* 버튼을 박스 하단으로 밀어냄 */
 }

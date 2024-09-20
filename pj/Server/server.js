@@ -105,3 +105,6 @@ app.use(editProfileRoutes(conn));
 
 const userPostRoutes = require("./controllers/userPost");
 app.use(userPostRoutes(conn));
+
+const commentRoutes = require("./controllers/comments");
+app.use(commentRoutes(conn));

@@ -3,10 +3,10 @@ const router = express.Router();
 const decodeToken = require("../middleware/decodeToken");
 
 module.exports = function (conn) {
-    router.get("/userPosts/:user_no", decodeToken(), (req, res) => {
-        const user_no = req.params.user_no; // 요청 파라미터에서 user_no 가져오기
-        //console.log("요청된 user_no:", user_no);
-        const query = `SELECT u.user_no, p.post_id, p.post_text, p.createDate, p.modiDate, p.views, 
+
+  router.post("/userPosts/:user_no", decodeToken(), (req, res) => {
+    const user_no = req.params.user_no; // 요청 파라미터에서 user_no 가져오기
+    const query = `SELECT u.user_no, p.post_id, p.post_text, p.createDate, p.modiDate, p.views, 
        u.user_id, up.nickname, up.image_url,
        GROUP_CONCAT(DISTINCT pf.file_path ORDER BY pf.upload_date SEPARATOR ', ') AS file_paths,
        COUNT(DISTINCT l.p_like_id) AS like_count,
@@ -21,14 +21,14 @@ WHERE u.user_no = ? AND p.isDeleted = 0
 GROUP BY u.user_no, p.post_id, p.post_text, p.createDate, p.modiDate, p.views, u.user_id, up.nickname, up.image_url
 ORDER BY p.createDate DESC`;
 
-        conn.query(query, [user_no], (error, results) => {
-            if (error) {
-                console.error("쿼리 오류:", error);
-                return res.status(500).json({ error: "서버 오류" });
-            }
-            //console.log("쿼리 결과:", results);
-            res.json(results);
-        });
+
+    conn.query(query, [user_no], (error, results) => {
+      if (error) {
+        console.error("쿼리 오류:", error);
+        return res.status(500).json({ error: "서버 오류" });
+      }
+      res.json(results);
+
     });
 
     return router;
