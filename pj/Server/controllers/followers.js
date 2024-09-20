@@ -116,6 +116,7 @@ module.exports = (conn) => {
 
     router.post("/follow", async (req, res) => {
         const { followerNo, followingNo } = req.body;
+        console.log("서버 팔로우 함수 진입 : ", followerNo, followingNo);
 
         // 자신을 팔로우하는 경우 예외 처리
         if (followerNo === followingNo) {

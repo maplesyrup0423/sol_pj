@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import "./FollowButton.css";
-import api from "../../auth/api";
 import { RiUserFollowLine, RiUserUnfollowFill } from "react-icons/ri";
 import Swal from "sweetalert2";
-
+import { unfollowUser, followUser, getFollowers } from "../FollowService";
 const FollowButton = ({ followerNo, followingNo, initialIsFollowing }) => {
     const [isFollowing, setIsFollowing] = useState(initialIsFollowing);
 
+    console.log(initialIsFollowing, " 팔로우버튼 진입 , 처음 팔로우 여부");
     // initialIsFollowing이 변경되면 isFollowing도 업데이트
     useEffect(() => {
         setIsFollowing(initialIsFollowing);
@@ -34,16 +34,15 @@ const FollowButton = ({ followerNo, followingNo, initialIsFollowing }) => {
                     cancelButtonText: "아니오",
                 }).then(async (result) => {
                     if (result.isConfirmed) {
-                        await api.post("/unfollow", {
-                            followerNo,
-                            followingNo,
-                        });
+                        unfollowUser(followerNo, followingNo);
                         setIsFollowing(false);
+                        await getFollowers(followerNo);
                     }
                 });
             } else {
-                await api.post("/follow", { followerNo, followingNo });
+                followUser(followerNo, followingNo);
                 setIsFollowing(true);
+                await getFollowers(followerNo);
             }
         } catch (error) {
             console.error("팔로우/언팔로우 에러:", error);
@@ -53,9 +52,9 @@ const FollowButton = ({ followerNo, followingNo, initialIsFollowing }) => {
     return (
         <div key={isFollowing} onClick={handleFollow} className="followBtn">
             {isFollowing ? (
-                <RiUserUnfollowFill size={27} />
+                <RiUserUnfollowFill size={30} />
             ) : (
-                <RiUserFollowLine size={27} />
+                <RiUserFollowLine size={30} />
             )}
         </div>
     );
