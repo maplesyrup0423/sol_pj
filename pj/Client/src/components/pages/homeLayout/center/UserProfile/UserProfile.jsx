@@ -7,11 +7,8 @@ import api from "../../../../auth/api";
 import Feeds from "../feed/Feeds";
 import "./UserProfile.css";
 import MyProfile from "./EditProfile";
-import FollowButton from "../../../../utills/buttons/FollowButton";
-import { checkFollowStatus } from "../../../../utills/FollowService";
 
 function UserProfile() {
-
   const { userInfo } = useContext(AuthContext);
   const location = useLocation();
   const bUserInfo = location.state || null;
@@ -50,23 +47,22 @@ function UserProfile() {
     }
   }, [userInfo, bUserInfo, activeTab]);
 
-        if ((userInfo || bUserInfo) && activeTab === "posts") {
-            fetchPosts();
-        }
-    }, [userInfo, bUserInfo, activeTab]);
+  const showPosts = () => setActiveTab("posts");
+  const showComments = () => setActiveTab("comments");
 
-    const showPosts = () => setActiveTab("posts");
-    const showComments = () => setActiveTab("comments");
+  const displayedUserInfo = bUserInfo || userInfo;
+  const isUserInfoAvailable = displayedUserInfo && displayedUserInfo.nickname;
+  const imageUrl = isUserInfoAvailable
+    ? `${baseUrl}/images/uploads/${displayedUserInfo.image_url}`
+    : `${baseUrl}/images/default-profile.jpg`;
 
-    const displayedUserInfo = bUserInfo || userInfo; // 표시할 사용자 정보 결정
-    const isUserInfoAvailable = displayedUserInfo && displayedUserInfo.nickname;
-    const imageUrl = isUserInfoAvailable
-        ? `${baseUrl}/images/uploads/${displayedUserInfo.image_url}`
-        : `${baseUrl}/images/default-profile.jpg`;
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
 
-    const openModal = () => setModalOpen(true);
-    const closeModal = () => setModalOpen(false);
-
+  useEffect(() => {
+    console.log("bUserInfo.nickname:", bUserInfo?.nickname);
+    console.log("userInfo.nickname:", userInfo.nickname);
+  }, [bUserInfo, userInfo]);
 
   return (
     <>
@@ -139,6 +135,9 @@ function UserProfile() {
                       userInfo={bUserInfo || userInfo}
                       {...p}
                     />
+                  ))
+                ) : (
+                  <h1>게시글이 없습니다.</h1>
                 )}
               </div>
             )}
