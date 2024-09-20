@@ -1,14 +1,12 @@
 .profileCard {
-  width: 750px;
-  height: 400px;
+  width: 100%;
+  height: 100%;
   border: solid 1px black;
   border-radius: 10px;
   background-color: #000;
 }
 header {
-  margin-top: 10px;
   display: flex;
-  padding: 20px;
   font-size: large;
   color: white;
 }
@@ -25,29 +23,36 @@ header .save {
   text-align: center;
 }
 .cardMain {
-  padding: 20px;
+  width: 100%;
+  height: 100%;
 }
 .cardMain .main1 {
   display: flex;
+  flex-direction: row; /* 수평 방향으로 정렬 */
+  align-items: center; /* 수직 정렬 */
 }
 .gallery figure {
-  width: 100px;
+  width: 150px;
   height: auto;
 }
 
 .gallery {
   position: relative;
+  width: 150px;
+  height: 150px;
+  margin-top: 10px; /* Space between gallery and nameContent */
+  margin-bottom: 10px;
 }
 
 .userImage {
   overflow: hidden;
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
 }
 .gallery figcaption {
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
   background-color: rgba(0, 0, 0, 0.7);
   position: absolute;
   top: 0;
@@ -65,8 +70,7 @@ header .save {
 }
 
 .nameContent {
-  margin-left: 50px;
-  width: 70%;
+  flex: 0; /* Makes nameContent take the remaining space */
   border-radius: 20px;
   border: 1px solid gray;
   color: white;
@@ -110,7 +114,7 @@ header .save {
   resize: none;
 }
 
-.savebtn {
+.saveBtn {
   width: 75px;
   margin-top: 20px;
   margin-left: auto;
@@ -119,4 +123,32 @@ header .save {
   color: black;
   border-radius: 32px;
   text-align: center;
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center; /* 수평 중앙 정렬 */
+  align-items: center; /* 수직 중앙 정렬 */
+  z-index: 1000; /* 모달이 다른 요소들보다 위에 표시되도록 설정 */
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modalContent {
+  background-color: black; /* 모달 내용 배경색을 흰색으로 설정 */
+  border-radius: 10px;
+  padding: 20px;
+  max-width: 750px; /* 모달 최대 너비를 설정 */
+  height: auto;
+  width: 100%; /* 모바일 화면에서도 100% 너비를 사용 */
+  border: 1px solid #595959;
+}
+
+.closeBtn {
+  background-color: inherit;
+  border: none;
 }

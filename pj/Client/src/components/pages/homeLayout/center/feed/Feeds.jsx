@@ -68,11 +68,12 @@ function Feeds(props) {
     <div className="feed-container">
       <div className="headerContainer">
         <NavLink
-          to="/feedProfile"
+          to={`/${props.user_id}`}
           className="Nav"
           state={{
             nickname: props.nickname,
             user_id: props.user_id,
+            user_no: props.user_no, // user_no 추가
             image_url: props.image_url,
             introduce: props.introduce,
           }}

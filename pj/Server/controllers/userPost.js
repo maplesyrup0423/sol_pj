@@ -10,14 +10,14 @@ module.exports = function (conn) {
        u.user_id, up.nickname, up.image_url,
        GROUP_CONCAT(DISTINCT pf.file_path ORDER BY pf.upload_date SEPARATOR ', ') AS file_paths,
        COUNT(DISTINCT l.p_like_id) AS like_count,
-       COUNT(DISTINCT c.comment_id) AS comment_count
+       COUNT(DISTINCT c.comment_id) AS comment_count, p.board_info_id
 FROM posts p
 LEFT JOIN post_files pf ON p.post_id = pf.post_id
 LEFT JOIN User u ON p.user_no = u.user_no
 LEFT JOIN UserProfile up ON u.user_no = up.user_no
 LEFT JOIN post_likes l ON p.post_id = l.post_id
 LEFT JOIN comments c ON p.post_id = c.post_id
-WHERE u.user_no = 3 AND p.isDeleted = 0
+WHERE u.user_no = ? AND p.isDeleted = 0
 GROUP BY u.user_no, p.post_id, p.post_text, p.createDate, p.modiDate, p.views, u.user_id, up.nickname, up.image_url
 ORDER BY p.createDate DESC`;
 
