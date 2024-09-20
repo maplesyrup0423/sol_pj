@@ -8,13 +8,17 @@ import { AuthContext } from "../../../../../Context/AuthContext";
 import api from "../../../../auth/api";
 
 function FeedMain() {
-  const { userInfo } = useContext(AuthContext);
+  const { userInfo } = useContext(AuthContext); //로그인한 유저 정보
   const { boardId: paramBoardId } = useParams(); // URL 파라미터로 게시판 ID 가져오기
-  const [data, setData] = useState([]);
-  const [defaultBoardId, setDefaultBoardId] = useState([]);
-  const navigate = useNavigate(); // useNavigate 훅 추가
-  const [activeTab, setActiveTab] = useState("post_date");
+  const [data, setData] = useState([]); // 보여줄 데이터
+  const [defaultBoardId, setDefaultBoardId] = useState([]); // 게시판 선택이 아닌 최초 실행시 보여줄 게시판 ID
+  const navigate = useNavigate(); // useNavigate 훅 추가(최초 리디렉션시 사용)
+  const [activeTab, setActiveTab] = useState("post_date"); // 최신순or인기순 확인 값 (기본적으로 최신순정렬)
 
+  // ↓↓↓↓↓↓↓↓↓↓메인 실행 시 가장 먼저 보여줄 게시판(boardId)을 정하는 코드
+  // 본인이 선택한 게시판 중 ID 값이 가장 작은 게시판을 보여줌
+  // 선택한 게시판이 없는 경우 1번 게시판을 보여줌
+  // 해당 게시판 경로로 리디렉션
   const fetchBoardInfoUser = async () => {
     try {
       const response = await api.get(
@@ -37,8 +41,10 @@ function FeedMain() {
       console.error("Error fetching board info:", err);
     }
   };
-  const boardId = paramBoardId || defaultBoardId; // boardId가 undefined일 때 기본값 설정
+  const boardId = paramBoardId || defaultBoardId; // URL 파라미터로 받아오는 boardId가 undefined일 때 기본값 설정
+  // ↑↑↑↑↑↑↑↑↑↑메인 실행 시 가장 먼저 보여줄 게시판을 정하는 코드
 
+  // ↓↓↓↓↓↓↓↓↓↓보여줄 데이터 요청 코드
   const fetchData = async () => {
     try {
       const response = await api.get(
@@ -51,7 +57,9 @@ function FeedMain() {
       console.error("Error fetching data:", error);
     }
   };
+  // ↑↑↑↑↑↑↑↑↑↑ 보여줄 데이터 요청 코드
 
+  // ↓↓↓↓↓↓↓↓↓↓ 인기순 or 최신순 변경
   const orderBy_pop = () => {
     setActiveTab("post_pop");
   };
@@ -59,19 +67,6 @@ function FeedMain() {
   const orderBy_date = () => {
     setActiveTab("post_date");
   };
-  useEffect(() => {
-    fetchBoardInfoUser();
-  }, [userInfo]);
-
-  useEffect(() => {
-    const container = document.querySelector(".homeContainer"); // 스크롤이 발생하는 컨테이너 선택
-    if (container) {
-      container.scrollTop = 0;
-    }
-    if (boardId.length > 0) {
-      fetchData();
-    }
-  }, [boardId, activeTab, defaultBoardId]);
 
   let [btnActive, setBtnActive] = useState(false);
 
@@ -80,6 +75,18 @@ function FeedMain() {
       return !prev;
     });
   };
+  // ↑↑↑↑↑↑↑↑↑↑인기순 or 최신순 변경 및 css 설정
+
+  useEffect(() => {
+    const container = document.querySelector(".homeContainer"); // 스크롤이 발생하는 컨테이너 선택
+    if (container) {
+      container.scrollTop = 0;
+    }
+    fetchBoardInfoUser();
+    if (boardId.length > 0) {
+      fetchData();
+    }
+  }, [boardId, activeTab, userInfo]);
 
   return (
     <div className="feed_main">
@@ -118,9 +125,6 @@ function FeedMain() {
             userInfo={userInfo}
             boardId={boardId}
             refreshData={fetchData}
-            postID={null}
-            parent_comment_id={null}
-            isEditMode={false} // 등록 모드
           />
         ) : (
           <span className="data-placeholder">로그인후 이용해주세요.</span>
@@ -129,6 +133,7 @@ function FeedMain() {
 
       <div className="feed_orders">
         <div className="feed_contents">
+          {/* 인기순 */}
           {activeTab === "post_pop" && (
             <div className="feed">
               {data.length > 0 && userInfo !== null ? (
@@ -148,6 +153,7 @@ function FeedMain() {
               )}
             </div>
           )}
+          {/* 최신순 */}
           {activeTab === "post_date" && (
             <div className="feed">
               {data.length > 0 && userInfo !== null ? (

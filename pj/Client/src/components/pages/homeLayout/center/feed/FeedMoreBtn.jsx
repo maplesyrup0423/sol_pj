@@ -91,7 +91,7 @@ function FeedMoreBtn(props) {
           refreshData={props.refreshData}
           existingPostContent={postDetail.post_text}
           existingImages={images}
-          //parent_comment_id={props.parent_comment_id}
+          //comment_id={props.comment_id}
           //todo 댓글 수정할때 처리할것
         />
       )}

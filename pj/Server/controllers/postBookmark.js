@@ -94,7 +94,8 @@ module.exports = (conn) => {
       LEFT JOIN post_likes l ON p.post_id = l.post_id
       LEFT JOIN comments c ON p.post_id = c.post_id
       WHERE bk.user_no = ? AND p.isDeleted = 0
-      GROUP BY u.user_no, p.post_id, p.post_text, p.createDate, p.modiDate, p.views, u.user_id, up.nickname, up.image_url, p.board_info_id;`;
+      GROUP BY u.user_no, p.post_id, p.post_text, p.createDate, p.modiDate, p.views, u.user_id, up.nickname, up.image_url, p.board_info_id
+      ORDER BY bk.createDate DESC`;
 
     conn.query(query, [user_no], (err, rows, fields) => {
       if (err) {
