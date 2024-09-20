@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../../../../Context/AuthContext";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import BackArrow from "../../../../utills/buttons/BackArrow";
 import BasicButton from "../../../../utills/buttons/BasicButton";
 import api from "../../../../auth/api";
@@ -9,7 +9,9 @@ import "./UserProfile.css";
 import MyProfile from "./EditProfile";
 
 function UserProfile() {
-  const { userInfo } = useContext(AuthContext); // AuthContext에서 userInfo 받아옴
+  const { userInfo } = useContext(AuthContext);
+  const location = useLocation();
+  const bUserInfo = location.state || null;
   const [activeTab, setActiveTab] = useState("posts");
   const baseUrl = import.meta.env.VITE_BASE_URL;
   const [posts, setPosts] = useState([]);
@@ -18,24 +20,26 @@ function UserProfile() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await api.get(`/userPosts/${userInfo.user_no}`);
+        const userNo = bUserInfo ? bUserInfo.user_no : userInfo.user_no;
+        const response = await api.get(`/userPosts/${userNo}`);
         setPosts(response.data);
       } catch (error) {
         console.error("게시글 가져오기 오류:", error);
       }
     };
 
-    if (userInfo && activeTab === "posts") {
+    if ((userInfo || bUserInfo) && activeTab === "posts") {
       fetchPosts();
     }
-  }, [userInfo, activeTab]);
+  }, [userInfo, bUserInfo, activeTab]);
 
   const showPosts = () => setActiveTab("posts");
   const showComments = () => setActiveTab("comments");
 
-  const isUserInfoAvailable = userInfo && userInfo.nickname;
+  const displayedUserInfo = bUserInfo || userInfo; // 표시할 사용자 정보 결정
+  const isUserInfoAvailable = displayedUserInfo && displayedUserInfo.nickname;
   const imageUrl = isUserInfoAvailable
-    ? `${baseUrl}/images/uploads/${userInfo.image_url}`
+    ? `${baseUrl}/images/uploads/${displayedUserInfo.image_url}`
     : `${baseUrl}/images/default-profile.jpg`;
 
   const openModal = () => setModalOpen(true);
@@ -43,25 +47,13 @@ function UserProfile() {
 
   return (
     <>
-      {/* <header className="profileHeader">
-        <div className="userInfo1">
-          {isUserInfoAvailable ? (
-            <>
-              <div className="name">{userInfo.nickname}</div>
-              <div className="nickName">@{userInfo.user_id}</div>
-            </>
-          ) : (
-            <div>Loading...</div>
-          )}
-        </div>
-      </header> */}
       <main>
-        <div className="backArrow">
-          <NavLink to="/post/1">
-            <BackArrow />
-          </NavLink>
-        </div>
         <div className="userContainer">
+          <div className="backArrow">
+            <NavLink to="/post/1">
+              <BackArrow />
+            </NavLink>
+          </div>
           <div className="userPic">
             <div className="pic">
               <img src={imageUrl} alt="프로필 이미지" className="proImg" />
@@ -71,9 +63,9 @@ function UserProfile() {
             <div className="Info">
               {isUserInfoAvailable ? (
                 <>
-                  <div className="name">{userInfo.nickname}</div>
-                  <div className="nickName">@{userInfo.user_id}</div>
-                  <div className="introduce">{userInfo.introduce}</div>
+                  <div className="name">{displayedUserInfo.nickname}</div>
+                  <div className="nickName">@{displayedUserInfo.user_id}</div>
+                  <div className="introduce">{displayedUserInfo.introduce}</div>
                 </>
               ) : (
                 <div>Loading...</div>
@@ -81,13 +73,17 @@ function UserProfile() {
             </div>
             <div className="edit">
               <div className="editProfile">
-                <button onClick={openModal} className="editBtn">
-                  <BasicButton
-                    btnSize="largeButton"
-                    btnColor="inheritButton"
-                    btnText="프로필수정"
-                  />
-                </button>
+                {/* userInfo.nickname과 bUserInfo.nickname 비교 */}
+                {bUserInfo &&
+                bUserInfo.nickname === userInfo.nickname ? null : (
+                  <button onClick={openModal} className="editBtn">
+                    <BasicButton
+                      btnSize="largeButton"
+                      btnColor="inheritButton"
+                      btnText="프로필수정"
+                    />
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -118,6 +114,7 @@ function UserProfile() {
                       key={p.post_id}
                       postId={p.post_id}
                       boardId={p.board_info_id}
+                      userInfo={bUserInfo || userInfo} // bUserInfo 정보를 전달
                       {...p}
                     />
                   ))
@@ -131,9 +128,8 @@ function UserProfile() {
             )}
           </div>
         </div>
-        {/* MyProfile 모달에 userInfo를 전달 */}
         {isModalOpen && (
-          <MyProfile closeModal={closeModal} userInfo={userInfo} />
+          <MyProfile closeModal={closeModal} userInfo={displayedUserInfo} />
         )}
       </main>
     </>

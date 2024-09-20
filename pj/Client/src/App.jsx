@@ -14,7 +14,6 @@ import EditAccount from "./components/pages/homeLayout/center/UserProfile/EditAc
 import Room from "./components/pages/homeLayout/center/chat/Room";
 import ChatFriendList from "./components/pages/homeLayout/center/chat/ChatFriendList";
 import FeedDetail from "./components/pages/homeLayout/center/feed/FeedDetail";
-import FeedProfile from "./components/pages/homeLayout/center/UserProfile/FeedProfile";
 import BookmarkView from "./components/pages/homeLayout/center/feed/BookmarkView";
 import MyNotifications from "./components/pages/homeLayout/center/feed/MyNotifications";
 import PrivateRoute from "./components/auth/privateRoute";
@@ -46,7 +45,7 @@ function App() {
           ),
         },
         {
-          path: "/myPage",
+          path: "/:username",
           element: (
             <PrivateRoute>
               <UserProfile />
@@ -114,14 +113,6 @@ function App() {
           element: (
             <PrivateRoute>
               <FeedDetail />
-            </PrivateRoute>
-          ),
-        },
-        {
-          path: "/FeedProfile",
-          element: (
-            <PrivateRoute>
-              <FeedProfile />
             </PrivateRoute>
           ),
         },

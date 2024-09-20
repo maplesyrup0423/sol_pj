@@ -10,7 +10,7 @@ module.exports = function (conn) {
        u.user_id, up.nickname, up.image_url,
        GROUP_CONCAT(DISTINCT pf.file_path ORDER BY pf.upload_date SEPARATOR ', ') AS file_paths,
        COUNT(DISTINCT l.p_like_id) AS like_count,
-       COUNT(DISTINCT c.comment_id) AS comment_count
+       COUNT(DISTINCT c.comment_id) AS comment_count, p.board_info_id
 FROM posts p
 LEFT JOIN post_files pf ON p.post_id = pf.post_id
 LEFT JOIN User u ON p.user_no = u.user_no
