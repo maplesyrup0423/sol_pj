@@ -9,6 +9,7 @@ import "./UserProfile.css";
 import MyProfile from "./EditProfile";
 
 function UserProfile() {
+  // bUserInfo는 피드에서 보내오는 정보, UserInfo는 현재 로그인한 사용자의 정보
   const { userInfo } = useContext(AuthContext);
   const location = useLocation();
   const bUserInfo = location.state || null;
@@ -45,6 +46,11 @@ function UserProfile() {
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
 
+  useEffect(() => {
+    console.log("bUserInfo.nickname:", bUserInfo?.nickname);
+    console.log("userInfo.nickname:", userInfo.nickname);
+  }, [bUserInfo, userInfo]);
+
   return (
     <>
       <main>
@@ -73,9 +79,9 @@ function UserProfile() {
             </div>
             <div className="edit">
               <div className="editProfile">
-                {/* userInfo.nickname과 bUserInfo.nickname 비교 */}
-                {bUserInfo &&
-                bUserInfo.nickname === userInfo.nickname ? null : (
+                {/* displayedUserInfo.nickname과 userInfo.nickname 비교 */}
+                {displayedUserInfo &&
+                displayedUserInfo.nickname === userInfo.nickname ? (
                   <button onClick={openModal} className="editBtn">
                     <BasicButton
                       btnSize="largeButton"
@@ -83,7 +89,7 @@ function UserProfile() {
                       btnText="프로필수정"
                     />
                   </button>
-                )}
+                ) : null}
               </div>
             </div>
           </div>
