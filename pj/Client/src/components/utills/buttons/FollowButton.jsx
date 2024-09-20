@@ -13,6 +13,16 @@ const FollowButton = ({ followerNo, followingNo, initialIsFollowing }) => {
     }, [initialIsFollowing]);
 
     const handleFollow = async () => {
+        if (followerNo === followingNo) {
+            Swal.fire({
+                title: "팔로우 취소",
+                text: "자기 자신을 팔로우 할 수 없습니다.",
+                icon: "info",
+                confirmButtonText: "확인",
+            });
+            return;
+        }
+
         try {
             if (isFollowing) {
                 Swal.fire({
