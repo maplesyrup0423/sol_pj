@@ -67,11 +67,13 @@ function UserProfile() {
         console.log("userInfo.nickname:", userInfo.nickname);
 
         //초기 팔로우 값 받아오는 함수
-        const isfollowing = checkFollowStatus(
-            userInfo.user_no,
-            bUserInfo.user_no
-        );
-        setInitialIsFollowing(isfollowing);
+        if (userInfo && bUserInfo) {
+            const isfollowing = checkFollowStatus(
+                userInfo.user_no,
+                bUserInfo.user_no
+            );
+            setInitialIsFollowing(isfollowing);
+        }
     }, [bUserInfo, userInfo]);
 
     return (

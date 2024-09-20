@@ -6,7 +6,7 @@ import { unfollowUser, followUser, getFollowers } from "../FollowService";
 const FollowButton = ({ followerNo, followingNo, initialIsFollowing }) => {
     const [isFollowing, setIsFollowing] = useState(initialIsFollowing);
 
-    console.log(initialIsFollowing, " 팔로우버튼 진입 , 처음 팔로우 여부");
+    //console.log(initialIsFollowing, " 팔로우버튼 진입 , 처음 팔로우 여부");
     // initialIsFollowing이 변경되면 isFollowing도 업데이트
     useEffect(() => {
         setIsFollowing(initialIsFollowing);
