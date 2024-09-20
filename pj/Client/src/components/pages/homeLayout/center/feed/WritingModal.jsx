@@ -10,7 +10,7 @@ function WritingModal({
   existingPostContent,
   existingImages,
   refreshData,
-  parent_comment_id,
+  comment_id,
   isEditMode,
 }) {
   return (
@@ -27,7 +27,7 @@ function WritingModal({
           existingPostContent={existingPostContent}
           existingImages={existingImages}
           refreshData={refreshData}
-          parent_comment_id={parent_comment_id}
+          comment_id={comment_id}
           isEditMode={isEditMode}
           onClose={onClose}
         />

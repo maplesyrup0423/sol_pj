@@ -8,13 +8,45 @@ import { BsImages } from "react-icons/bs";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { v4 as uuidv4 } from "uuid"; // UUID 생성 라이브러리
 
+//게시글 등록/수정, 댓글 등록/수정, 답글 등록/수정 컴포넌트
+/* ***************** 
+ [Writing 컴포넌트 props 값 설명]
+
+  userInfo                로그인한 유저 정보(AuthContext)
+  
+  boardId                 게시판 ID
+  
+  refreshData             목록 데이터 갱신 함수
+  
+  postID                  게시글 ID
+                          [입력모드 : null 게시글 등록, !null 댓글/답글 등록]
+  
+  parent_comment_id       댓글 부모 ID(답글시 사용)
+                          
+  comment_id              댓글ID
+                          [입력모드 : null 댓글 등록, !null 답글 등록]
+                          [수정모드 : null 게시글 수정, !null 댓글/답글 수정]
+                          
+  isEditMode              수정 모드 여부 
+                          [true 수정모드]
+                          [false 입력모드]
+  
+  existingPostContent     기존 글 내용
+  
+  existingImages          기존 이미지 URL
+  
+  onClose                 수정시 모달닫는 함수
+  
+  ------------------------------------------------------
+ 원하는 기능에따라 props를 Writing에 전달하여 사용 가능
+ ***************** */
 function Writing({
   userInfo,
   boardId,
   refreshData,
   postID = null,
-  parent_comment_id = null,
   comment_id = null,
+  parent_comment_id = null,
   isEditMode = false, // 수정 모드 여부
   existingPostContent = "", // 기존 글 내용
   existingImages = [], // 기존 이미지 URL
@@ -221,8 +253,8 @@ function Writing({
     }
   };
   let fileId;
-  if (parent_comment_id !== null) {
-    fileId = "parent_comment_id" + parent_comment_id;
+  if (comment_id !== null) {
+    fileId = "comment_id" + comment_id;
   } else if (postID !== null) {
     fileId = "post_id" + postID;
   } else if (boardId !== null) {

@@ -100,7 +100,6 @@ function FeedDetail() {
             boardId={boardId}
             refreshData={fetchPostDetailComment}
             postID={postId}
-            parent_comment_id={null}
           />
         ) : (
           <span className="data-placeholder">로그인후 이용하세요.</span>

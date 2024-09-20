@@ -23,7 +23,6 @@ function Comments(props) {
           refreshData={props.refreshData}
           postID={props.postId}
           parent_comment_id={props.comment_id}
-          comment_id={props.comment_id}
         />
       ) : (
         <span className="data-placeholder">로그인후 이용하세요.</span>
