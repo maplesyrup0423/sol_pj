@@ -53,9 +53,9 @@ const FollowButton = ({ followerNo, followingNo, initialIsFollowing }) => {
     return (
         <div key={isFollowing} onClick={handleFollow} className="followBtn">
             {isFollowing ? (
-                <RiUserUnfollowFill size={27} />
+                <RiUserUnfollowFill size={30} />
             ) : (
-                <RiUserFollowLine size={27} />
+                <RiUserFollowLine size={30} />
             )}
         </div>
     );
