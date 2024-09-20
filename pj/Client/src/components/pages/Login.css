@@ -47,7 +47,7 @@
 }
 .log-wrapper .input-box .icon {
     position: absolute;
-    right: 1px;
+    right: 20px;
     top: 50%;
     transform: translateY(-40%);
     font-size: 16px;

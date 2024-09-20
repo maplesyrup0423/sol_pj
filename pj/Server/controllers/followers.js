@@ -8,7 +8,9 @@ module.exports = (conn) => {
         const user_no = req.query.user_no;
 
         if (!user_no) {
-            return res.status(400).json({ success: false, message: "user_no가 필요합니다." });
+            return res
+                .status(400)
+                .json({ success: false, message: "user_no가 필요합니다." });
         }
 
         const followerQuery = `SELECT 
@@ -37,7 +39,9 @@ module.exports = (conn) => {
         const user_no = req.query.user_no;
 
         if (!user_no) {
-            return res.status(400).json({ success: false, message: "user_no가 필요합니다." });
+            return res
+                .status(400)
+                .json({ success: false, message: "user_no가 필요합니다." });
         }
 
         // 팔로워 정보 조회
@@ -52,7 +56,7 @@ module.exports = (conn) => {
             UserProfile up ON u.user_no = up.user_no
         WHERE 
             uf.following_no = ?`;
-        
+
         // 팔로잉 정보 조회
         const followingQuery = `SELECT 
             u.user_id AS following_id,
@@ -75,7 +79,9 @@ module.exports = (conn) => {
                 (followerErr, followerResults) => {
                     if (followerErr) {
                         console.log("팔로워 조회 중 에러 발생:", followerErr);
-                        return res.status(500).json({ success: false, message: "서버 오류" });
+                        return res
+                            .status(500)
+                            .json({ success: false, message: "서버 오류" });
                     }
 
                     conn.query(
@@ -83,8 +89,14 @@ module.exports = (conn) => {
                         [user_no],
                         (followingErr, followingResults) => {
                             if (followingErr) {
-                                console.log("팔로잉 조회 중 에러 발생:", followingErr);
-                                return res.status(500).json({ success: false, message: "서버 오류" });
+                                console.log(
+                                    "팔로잉 조회 중 에러 발생:",
+                                    followingErr
+                                );
+                                return res.status(500).json({
+                                    success: false,
+                                    message: "서버 오류",
+                                });
                             }
 
                             res.json({
@@ -105,8 +117,19 @@ module.exports = (conn) => {
     router.post("/follow", async (req, res) => {
         const { followerNo, followingNo } = req.body;
 
+        // 자신을 팔로우하는 경우 예외 처리
+        if (followerNo === followingNo) {
+            return res.status(400).json({
+                success: false,
+                message: "자기 자신을 팔로우할 수 없습니다.",
+            });
+        }
+
         if (!followerNo || !followingNo) {
-            return res.status(400).json({ success: false, message: "followerNo와 followingNo가 필요합니다." });
+            return res.status(400).json({
+                success: false,
+                message: "followerNo와 followingNo가 필요합니다.",
+            });
         }
 
         const checkDuplicateQuery = `
@@ -122,12 +145,17 @@ module.exports = (conn) => {
             [followerNo, followingNo],
             (err, results) => {
                 if (err) {
-                    return res.status(500).json({ success: false, message: "서버 오류" });
+                    return res
+                        .status(500)
+                        .json({ success: false, message: "서버 오류" });
                 }
 
                 // 이미 팔로우 상태인 경우
                 if (results.length > 0) {
-                    return res.status(400).json({ success: false, message: "이미 팔로우 중입니다." });
+                    return res.status(400).json({
+                        success: false,
+                        message: "이미 팔로우 중입니다.",
+                    });
                 }
 
                 // 팔로우 삽입
@@ -136,9 +164,14 @@ module.exports = (conn) => {
                     [followerNo, followingNo],
                     (err) => {
                         if (err) {
-                            return res.status(500).json({ success: false, message: "팔로우 중 오류 발생" });
+                            return res.status(500).json({
+                                success: false,
+                                message: "팔로우 중 오류 발생",
+                            });
                         }
-                        return res.status(200).json({ success: true, message: "팔로우 성공" });
+                        return res
+                            .status(200)
+                            .json({ success: true, message: "팔로우 성공" });
                     }
                 );
             }
@@ -149,7 +182,9 @@ module.exports = (conn) => {
         const { followerNo, followingNo } = req.body;
 
         if (!followerNo || !followingNo) {
-            return res.status(400).json({ message: "followerNo와 followingNo가 필요합니다." });
+            return res
+                .status(400)
+                .json({ message: "followerNo와 followingNo가 필요합니다." });
         }
 
         try {
@@ -167,7 +202,9 @@ module.exports = (conn) => {
         const { followerNo, followingNo } = req.query;
 
         if (!followerNo || !followingNo) {
-            return res.status(400).json({ message: "followerNo와 followingNo가 필요합니다." });
+            return res
+                .status(400)
+                .json({ message: "followerNo와 followingNo가 필요합니다." });
         }
 
         const query = `
