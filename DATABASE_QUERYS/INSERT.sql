@@ -7,7 +7,7 @@ INSERT INTO User (user_id, status) VALUES('gksruf1414', NULL);
 INSERT INTO User (user_id, status) VALUES('Uhan', NULL);
 INSERT INTO User (user_id, status) VALUES('JYP', NULL);
 INSERT INTO User (user_id, status) VALUES('LIMJ2022', NULL);
-
+select * from user;
 
 -- 유저 프로필 여기도 마찬가지
 INSERT INTO UserProfile (user_no, nickname, image_url, introduce) VALUES(1, '체르', 'testImg4.jpg', '무엇을 해야 할까요?');
@@ -16,15 +16,24 @@ INSERT INTO UserProfile (user_no, nickname, image_url, introduce) VALUES(3, '김
 INSERT INTO UserProfile (user_no, nickname, image_url, introduce) VALUES(4, '로크만', 'testImg2.jpg', '자기소개2');
 INSERT INTO UserProfile (user_no, nickname, image_url, introduce) VALUES(5, '기둥', 'testImg5.jpg', '자기소개3');
 INSERT INTO UserProfile (user_no, nickname, image_url, introduce) VALUES(6, '요이커', 'testImg6.jpg', '자기소개4');
+select * from UserProfile;
 
 select * from userprofile;
 update UserProfile set nickname = '체르', introduce ='무엇을 해야 할까요?', image_url='testImg4.jpg'
 where user_no = 1;
 
+update UserProfile set nickname = '맹', introduce ='자기소개', image_url='testImg3.jpg'
+where user_no = 2;
+
 update UserProfile set nickname = '김한결', introduce ='자기소개1', image_url='testImg1.png'
 where user_no = 3;
 
 commit;
+
+select * from board_info_table;
+select * from posts;
+
+select * from comments where user_no = 3;
 
 -- 유저 패스워드 (회원 비밀번호 1234로 통일해놓은 상태)
 INSERT INTO password (user_no, salt, password, update_date) VALUES(1, '10', '1234', NOW());
@@ -61,3 +70,20 @@ CALL RegisterUser(
     '1234',  -- password (해시된 비밀번호)
     'salt01' -- salt (비밀번호에 사용된 솔트)
 );
+
+select * from comments;
+
+SELECT u.user_no, p.post_id, p.post_text, p.createDate, p.modiDate, p.views,
+        u.user_id, up.nickname, up.image_url,
+        GROUP_CONCAT(DISTINCT pf.file_path ORDER BY pf.upload_date SEPARATOR ', ') AS file_paths,
+        COUNT(DISTINCT l.p_like_id) AS like_count,
+        COUNT(DISTINCT c.comment_id) AS comment_count, p.board_info_id
+      FROM posts p
+      LEFT JOIN post_files pf ON p.post_id = pf.post_id
+      LEFT JOIN User u ON p.user_no = u.user_no
+      LEFT JOIN UserProfile up ON u.user_no = up.user_no
+      LEFT JOIN post_likes l ON p.post_id = l.post_id
+      LEFT JOIN comments c ON p.post_id = c.post_id
+      WHERE c.user_no = 3 AND p.isDeleted = 0
+      GROUP BY u.user_no, p.post_id, p.post_text, p.createDate, p.modiDate, p.views, u.user_id, up.nickname, up.image_url, c.createDate
+      ORDER BY c.createDate DESC;

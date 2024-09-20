@@ -9,35 +9,48 @@ import "./UserProfile.css";
 import MyProfile from "./EditProfile";
 
 function UserProfile() {
-  // bUserInfo는 피드에서 보내오는 정보, UserInfo는 현재 로그인한 사용자의 정보
   const { userInfo } = useContext(AuthContext);
   const location = useLocation();
   const bUserInfo = location.state || null;
   const [activeTab, setActiveTab] = useState("posts");
   const baseUrl = import.meta.env.VITE_BASE_URL;
   const [posts, setPosts] = useState([]);
+  const [comments, setComments] = useState([]); // 댓글 상태 추가
   const [isModalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         const userNo = bUserInfo ? bUserInfo.user_no : userInfo.user_no;
-        const response = await api.get(`/userPosts/${userNo}`);
+        const response = await api.post(`/userPosts/${userNo}`);
         setPosts(response.data);
       } catch (error) {
         console.error("게시글 가져오기 오류:", error);
       }
     };
 
+    const fetchComments = async () => {
+      try {
+        const userNo = bUserInfo ? bUserInfo.user_no : userInfo.user_no;
+        const response = await api.post(`/comments/${userNo}`);
+        console.log("댓글 데이터:", response.data); // 추가된 로그
+        setComments(response.data);
+      } catch (error) {
+        console.error("댓글 가져오기 오류:", error);
+      }
+    };
+
     if ((userInfo || bUserInfo) && activeTab === "posts") {
       fetchPosts();
+    } else if ((userInfo || bUserInfo) && activeTab === "comments") {
+      fetchComments(); // comments 탭일 때 댓글 가져오기
     }
   }, [userInfo, bUserInfo, activeTab]);
 
   const showPosts = () => setActiveTab("posts");
   const showComments = () => setActiveTab("comments");
 
-  const displayedUserInfo = bUserInfo || userInfo; // 표시할 사용자 정보 결정
+  const displayedUserInfo = bUserInfo || userInfo;
   const isUserInfoAvailable = displayedUserInfo && displayedUserInfo.nickname;
   const imageUrl = isUserInfoAvailable
     ? `${baseUrl}/images/uploads/${displayedUserInfo.image_url}`
@@ -79,7 +92,6 @@ function UserProfile() {
             </div>
             <div className="edit">
               <div className="editProfile">
-                {/* displayedUserInfo.nickname과 userInfo.nickname 비교 */}
                 {displayedUserInfo &&
                 displayedUserInfo.nickname === userInfo.nickname ? (
                   <button onClick={openModal} className="editBtn">
@@ -120,7 +132,7 @@ function UserProfile() {
                       key={p.post_id}
                       postId={p.post_id}
                       boardId={p.board_info_id}
-                      userInfo={bUserInfo || userInfo} // bUserInfo 정보를 전달
+                      userInfo={bUserInfo || userInfo}
                       {...p}
                     />
                   ))
@@ -130,7 +142,21 @@ function UserProfile() {
               </div>
             )}
             {activeTab === "comments" && (
-              <div className="comments">댓글 누르면 이게 나옴</div>
+              <div className="comments">
+                {comments.length > 0 ? (
+                  comments.map((c) => (
+                    <Feeds
+                      key={c.comment_id}
+                      postId={c.post_id} // 필요에 따라 postId를 설정
+                      boardId={c.board_info_id} // 필요에 따라 boardId를 설정
+                      userInfo={c} // 댓글 사용자 정보를 전달
+                      {...c}
+                    />
+                  ))
+                ) : (
+                  <h1>댓글이 없습니다.</h1>
+                )}
+              </div>
             )}
           </div>
         </div>
