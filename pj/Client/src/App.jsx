@@ -20,84 +20,132 @@ import MyNotifications from "./components/pages/homeLayout/center/feed/MyNotific
 import PrivateRoute from "./components/auth/privateRoute";
 
 function App() {
-    const router = createBrowserRouter([
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: (
+        <PrivateRoute>
+          <HomePage />
+        </PrivateRoute>
+      ),
+      children: [
         {
-            path: "/",
-            element: <PrivateRoute><HomePage /></PrivateRoute>, 
-            children: [
-                {
-                    path: "/",
-                    element: <PrivateRoute><FeedMain /></PrivateRoute>, 
-                },
-                {
-                    path: "/post/:boardId",
-                    element: <PrivateRoute><FeedMain /></PrivateRoute>, 
-                },
-                {
-                    path: "/myPage",
-                    element: <PrivateRoute><UserProfile /></PrivateRoute>, 
-                },
-                {
-                    path: "/editProfile",
-                    element: <PrivateRoute><MyProfile /></PrivateRoute>, 
-                },
-                {
-                    path: "/followers",
-                    element: <PrivateRoute><Followers /></PrivateRoute>, 
-                },
-                {
-                    path: "/account",
-                    element: <PrivateRoute><EditAccount /></PrivateRoute>, 
-                },
-                {
-                    path: "/room/:roomId",
-                    element: <PrivateRoute><Room /></PrivateRoute>, 
-                },
-                {
-                    path: "/chatFriendList",
-                    element: <PrivateRoute><ChatFriendList /></PrivateRoute>,
-                },
-                 {
-                    path: "/Bookmark",
-                    element: <PrivateRoute><BookmarkView /></PrivateRoute>,
-                },
-                {
-                    path: "/myNotifications",
-                    element: <PrivateRoute><MyNotifications/></PrivateRoute> ,
-                },
-                 {
-                    path: "/post/:boardId/:postId",
-                    element: <PrivateRoute><FeedDetail/></PrivateRoute> ,
-                },
-                   {
-                    path: "/FeedProfile",
-                    element: <PrivateRoute><FeedProfile/></PrivateRoute> ,
-                },
-
-
-
-                
-            ],
+          path: "/",
+          element: (
+            <PrivateRoute>
+              <FeedMain />
+            </PrivateRoute>
+          ),
         },
         {
-            path: "/login",
-            element: <LoginPage />,
+          path: "/post/:boardId",
+          element: (
+            <PrivateRoute>
+              <FeedMain />
+            </PrivateRoute>
+          ),
         },
         {
-            path: "/intro",
-            element: <IntroPage />,
+          path: "/myPage",
+          element: (
+            <PrivateRoute>
+              <UserProfile />
+            </PrivateRoute>
+          ),
+        },
+        // {
+        //   path: "/editProfile",
+        //   element: (
+        //     <PrivateRoute>
+        //       <MyProfile />
+        //     </PrivateRoute>
+        //   ),
+        // },
+        {
+          path: "/followers",
+          element: (
+            <PrivateRoute>
+              <Followers />
+            </PrivateRoute>
+          ),
         },
         {
-            path: "/signup",
-            element: <SignUp />,
+          path: "/account",
+          element: (
+            <PrivateRoute>
+              <EditAccount />
+            </PrivateRoute>
+          ),
         },
-    ]);
+        {
+          path: "/room/:roomId",
+          element: (
+            <PrivateRoute>
+              <Room />
+            </PrivateRoute>
+          ),
+        },
+        {
+          path: "/chatFriendList",
+          element: (
+            <PrivateRoute>
+              <ChatFriendList />
+            </PrivateRoute>
+          ),
+        },
+        {
+          path: "/Bookmark",
+          element: (
+            <PrivateRoute>
+              <BookmarkView />
+            </PrivateRoute>
+          ),
+        },
+        {
+          path: "/myNotifications",
+          element: (
+            <PrivateRoute>
+              <MyNotifications />
+            </PrivateRoute>
+          ),
+        },
+        {
+          path: "/post/:boardId/:postId",
+          element: (
+            <PrivateRoute>
+              <FeedDetail />
+            </PrivateRoute>
+          ),
+        },
+        {
+          path: "/FeedProfile",
+          element: (
+            <PrivateRoute>
+              <FeedProfile />
+            </PrivateRoute>
+          ),
+        },
+      ],
+    },
+    {
+      path: "/login",
+      element: <LoginPage />,
+    },
+    {
+      path: "/intro",
+      element: <IntroPage />,
+    },
+    {
+      path: "/signup",
+      element: <SignUp />,
+    },
+  ]);
 
-    return (
-        <AuthProvider>
-            <RouterProvider router={router} />
-        </AuthProvider>
-    );
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  );
 }
 
 export default App;

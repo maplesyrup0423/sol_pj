@@ -94,3 +94,13 @@
   cursor: pointer;
   transition: 0.5s;
 }
+
+.editBtn {
+  background-color: inherit;
+  border: none;
+}
+
+.backArrow {
+  padding-top: 10px;
+  padding-left: 10px;
+}

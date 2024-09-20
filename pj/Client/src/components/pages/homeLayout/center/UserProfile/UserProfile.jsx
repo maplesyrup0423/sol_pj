@@ -6,20 +6,19 @@ import BasicButton from "../../../../utills/buttons/BasicButton";
 import api from "../../../../auth/api";
 import Feeds from "../feed/Feeds";
 import "./UserProfile.css";
+import MyProfile from "./EditProfile";
 
 function UserProfile() {
-  const { userInfo } = useContext(AuthContext);
+  const { userInfo } = useContext(AuthContext); // AuthContext에서 userInfo 받아옴
   const [activeTab, setActiveTab] = useState("posts");
   const baseUrl = import.meta.env.VITE_BASE_URL;
   const [posts, setPosts] = useState([]);
+  const [isModalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        console.log("11111");
         const response = await api.get(`/userPosts/${userInfo.user_no}`);
-        console.log("22222");
-        console.log("서버 응답 데이터:", response.data);
         setPosts(response.data);
       } catch (error) {
         console.error("게시글 가져오기 오류:", error);
@@ -27,14 +26,9 @@ function UserProfile() {
     };
 
     if (userInfo && activeTab === "posts") {
-      console.log("fetchPosts 호출됨");
       fetchPosts();
     }
   }, [userInfo, activeTab]);
-
-  useEffect(() => {
-    console.log("현재 posts 상태:", posts);
-  }, [posts]);
 
   const showPosts = () => setActiveTab("posts");
   const showComments = () => setActiveTab("comments");
@@ -44,14 +38,12 @@ function UserProfile() {
     ? `${baseUrl}/images/uploads/${userInfo.image_url}`
     : `${baseUrl}/images/default-profile.jpg`;
 
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
+
   return (
     <>
-      <header className="profileHeader">
-        <div className="backArrow">
-          <NavLink to="/post/1">
-            <BackArrow />
-          </NavLink>
-        </div>
+      {/* <header className="profileHeader">
         <div className="userInfo1">
           {isUserInfoAvailable ? (
             <>
@@ -62,8 +54,13 @@ function UserProfile() {
             <div>Loading...</div>
           )}
         </div>
-      </header>
+      </header> */}
       <main>
+        <div className="backArrow">
+          <NavLink to="/post/1">
+            <BackArrow />
+          </NavLink>
+        </div>
         <div className="userContainer">
           <div className="userPic">
             <div className="pic">
@@ -84,22 +81,13 @@ function UserProfile() {
             </div>
             <div className="edit">
               <div className="editProfile">
-                <NavLink
-                  to="/editProfile"
-                  state={{
-                    user_no: isUserInfoAvailable ? userInfo.user_no : null,
-                    nickname: isUserInfoAvailable ? userInfo.nickname : "",
-                    image_url: isUserInfoAvailable ? userInfo.image_url : "",
-                    user_id: isUserInfoAvailable ? userInfo.user_id : "",
-                    introduce: isUserInfoAvailable ? userInfo.introduce : "",
-                  }}
-                >
+                <button onClick={openModal} className="editBtn">
                   <BasicButton
                     btnSize="largeButton"
                     btnColor="inheritButton"
                     btnText="프로필수정"
                   />
-                </NavLink>
+                </button>
               </div>
             </div>
           </div>
@@ -143,6 +131,10 @@ function UserProfile() {
             )}
           </div>
         </div>
+        {/* MyProfile 모달에 userInfo를 전달 */}
+        {isModalOpen && (
+          <MyProfile closeModal={closeModal} userInfo={userInfo} />
+        )}
       </main>
     </>
   );
