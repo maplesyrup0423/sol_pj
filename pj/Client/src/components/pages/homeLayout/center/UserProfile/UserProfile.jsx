@@ -91,9 +91,9 @@ function UserProfile() {
               )}
             </div>
             <div className="edit">
-              <div className="editProfile">
-                {displayedUserInfo &&
-                displayedUserInfo.nickname === userInfo.nickname ? (
+              {displayedUserInfo &&
+              displayedUserInfo.nickname === userInfo.nickname ? (
+                <div className="editProfile">
                   <button onClick={openModal} className="editBtn">
                     <BasicButton
                       btnSize="largeButton"
@@ -101,8 +101,8 @@ function UserProfile() {
                       btnText="프로필수정"
                     />
                   </button>
-                ) : null}
-              </div>
+                </div>
+              ) : null}
             </div>
           </div>
         </div>
