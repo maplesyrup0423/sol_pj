@@ -4,9 +4,17 @@ import { useContext } from "react";
 import Writing from "./Writing";
 import FeedImages from "./FeedImages";
 import ProfileImg from "../../../../utills/ProfileImg";
+import React, { useState } from 'react';
+import BasicButton from "../../../../utills/buttons/BasicButton";
 
 function Comments(props) {
   const { userInfo } = useContext(AuthContext);
+
+  const [isVisible, setIsVisible] = useState(false);
+
+  const toggleVisibility = () => {
+    setIsVisible(!isVisible);
+  };
 
   const formatDate = (datetime) => {
     const date = new Date(datetime);
@@ -68,6 +76,16 @@ function Comments(props) {
               <span> {formatModiDate}</span>
             )}
           </div>
+          <div className="FeedComment_button">
+            <BasicButton
+              btnSize="smallButton"
+              btnColor="yellowButton"
+              action={toggleVisibility}
+              btnText={isVisible ? "취소" : "답글"}
+              type="submit"
+            />
+            {/* <button onClick={toggleVisibility}>{isVisible ? '취소' : '답글 쓰기'}</button> */}
+          </div>
         </div>
 
       </div>
@@ -75,16 +93,19 @@ function Comments(props) {
       <FeedImages file_paths={props.file_paths} comment_id={props.comment_id} />
 
       {userInfo ? (
-        <Writing
-          userInfo={userInfo}
-          boardId={props.boardId}
-          refreshData={props.refreshData}
-          postID={props.postId}
-          parent_comment_id={props.comment_id}
-        />
+        isVisible && (
+          <Writing
+            userInfo={userInfo}
+            boardId={props.boardId}
+            refreshData={props.refreshData}
+            postID={props.postId}
+            parent_comment_id={props.comment_id}
+          />
+        )
       ) : (
         <span className="data-placeholder">로그인후 이용하세요.</span>
       )}
+
     </div>
   );
 }

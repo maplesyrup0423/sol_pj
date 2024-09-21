@@ -63,6 +63,9 @@
 
 
 .FeedComment_date {
-  margin-left: auto;
-  margin-right: 15px;
+  margin: 15px;
+}
+
+.FeedComment_button {
+  margin: 15px;
 }
