@@ -1,3 +1,68 @@
 .Comments-Container {
   border-bottom: 1px solid #595959;
 }
+
+
+
+.FeedComment_contents {
+  width: 100%;
+  border-bottom: 1px solid white;
+}
+
+.FeedComment_head {
+  display: flex;
+  width: 100%;
+  height: 100px;
+  align-items: center;
+}
+
+
+.FeedComment_profile {
+  margin-left: 10px;
+}
+
+.FeedComment_body {
+  margin-left: 15px;
+}
+
+.FeedComment_up {
+  display: flex;
+  width: 100%;
+  align-items: center; 
+}
+
+.FeedComment_name {
+  font-weight: bold;
+}
+
+.FeedComment_id {
+  margin-left: 5px;
+  opacity: 50%;
+  font-size: 10pt;
+}
+
+.FeedComment_down {
+  width: 450px;
+}
+
+.FeedComment_comment {
+  word-wrap: break-word;
+}
+
+
+.FeedComment_foot {
+  display: flex;
+  width: 100%;
+}
+
+
+.FeedComment_heart, 
+.FeedComment_reply {
+  margin-left: 15px;
+}
+
+
+.FeedComment_date {
+  margin-left: auto;
+  margin-right: 15px;
+}
