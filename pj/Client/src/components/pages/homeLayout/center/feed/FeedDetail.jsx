@@ -8,7 +8,7 @@ import { AuthContext } from "../../../../../Context/AuthContext";
 import api from "../../../../auth/api";
 import Feeds from "./Feeds";
 import Writing from "./Writing";
-import Comments from "./comments";
+import Comments from "./Comments";
 
 function FeedDetail() {
   const { boardId, postId } = useParams(); // URL에서 postId 가져오기
