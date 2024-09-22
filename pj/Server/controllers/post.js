@@ -19,8 +19,9 @@ module.exports = (conn) => {
   router.get("/api/post", decodeToken(), (req, res) => {
     const board_info_id = req.query.board_info_id; // 쿼리 파라미터로 게시판 ID 받아오기
     const orderBy = req.query.orderBy || "date";
-
-    //console.log("Received orderBy:", orderBy);
+    const page = parseInt(req.query.page) || 1; // 페이지 번호, 기본값 1
+    const limit = parseInt(req.query.limit) || 10; // 페이지당 게시물 수, 기본값 10
+    const offset = (page - 1) * limit; // 페이지에 따른 offset 계산
 
     // 게시판 ID가 제공되지 않은 경우 처리
     if (!board_info_id) {
@@ -52,12 +53,13 @@ module.exports = (conn) => {
           WHERE p.board_info_id = ? AND p.isDeleted = 0
           ${period}
           GROUP BY p.post_id, p.post_text, p.user_no, p.createDate, p.modiDate, p.views, u.user_id, up.nickname, up.image_url
-          ${orderClause}`;
+          ${orderClause}
+          LIMIT ? OFFSET ?`;
 
     // 로그로 쿼리와 정렬 조건을 출력하여 디버깅
     //console.log('Executing query:', query);
 
-    conn.query(query, [board_info_id], (err, rows, fields) => {
+    conn.query(query, [board_info_id, limit, offset], (err, rows, fields) => {
       if (err) {
         console.error("쿼리 실행 오류:", err);
         res.status(500).send("서버 오류");

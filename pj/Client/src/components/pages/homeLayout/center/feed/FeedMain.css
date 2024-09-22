@@ -1,6 +1,14 @@
+.scroll-observer {
+  height: 20px;
+}
+
 .order {
   text-align: center;
-  width: 100%;
+  width: 570px;
+  position: fixed;
+  top: 0; /* 화면의 상단에 고정 */
+  background-color: black;
+  z-index: 1000;
 }
 
 .Latest,
@@ -66,3 +74,7 @@
   border: 5px dotted orange;
   text-align: center;
 }*/
+
+.posting {
+  margin-top: 56px;
+}

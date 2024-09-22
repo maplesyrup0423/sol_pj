@@ -4,7 +4,7 @@ import { useContext } from "react";
 import Writing from "./Writing";
 import FeedImages from "./FeedImages";
 import ProfileImg from "../../../../utills/ProfileImg";
-import React, { useState } from 'react';
+import { useState } from "react";
 import BasicButton from "../../../../utills/buttons/BasicButton";
 
 function Comments(props) {
@@ -40,7 +40,6 @@ function Comments(props) {
     ? formatDate(props.modiDate) + " (수정됨)"
     : "";
 
-
   return (
     <div className="Comments-Container">
       {/* <div>comment_id : {props.comment_id}</div>
@@ -52,10 +51,11 @@ function Comments(props) {
 
       <div className="FeedComment_contents">
         <div className="FeedComment_head">
-          <div className="FeedComment_profile"><ProfileImg image_url={props.image_url} /></div>
+          <div className="FeedComment_profile">
+            <ProfileImg image_url={props.image_url} />
+          </div>
 
           <div className="FeedComment_body">
-
             <div className="FeedComment_up">
               <div className="FeedComment_name">{props.nickname}</div>
               <div className="FeedComment_id"> @{userInfo.user_id}</div>
@@ -64,7 +64,6 @@ function Comments(props) {
             <div className="FeedComment_down">
               <div className="FeedComment_comment">{props.comment_text}</div>
             </div>
-
           </div>
         </div>
 
@@ -87,7 +86,6 @@ function Comments(props) {
             {/* <button onClick={toggleVisibility}>{isVisible ? '취소' : '답글 쓰기'}</button> */}
           </div>
         </div>
-
       </div>
 
       <FeedImages file_paths={props.file_paths} comment_id={props.comment_id} />
@@ -105,7 +103,6 @@ function Comments(props) {
       ) : (
         <span className="data-placeholder">로그인후 이용하세요.</span>
       )}
-
     </div>
   );
 }
