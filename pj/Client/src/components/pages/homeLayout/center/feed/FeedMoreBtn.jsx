@@ -2,7 +2,7 @@ import { IoIosMore } from "react-icons/io";
 import { Dropdown } from "react-bootstrap";
 import "./FeedMoreBtn.css";
 import api from "../../../../auth/api";
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 import WritingModal from "./WritingModal";
 import { useContext } from "react";
 import { AuthContext } from "../../../../../Context/AuthContext";
@@ -13,6 +13,7 @@ function FeedMoreBtn(props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [postDetail, setPostDetail] = useState(null);
   const [images, setImages] = useState([]);
+  const hasIncremented = useRef(false);
 
   const handlePostDelete = async () => {
     try {
@@ -29,6 +30,10 @@ function FeedMoreBtn(props) {
   const openModal = async () => {
     await fetchPostDetail();
     setIsModalOpen(true);
+    if (!hasIncremented.current) {
+      fetchPostDetail();
+      hasIncremented.current = true;
+    }
   };
 
   const closeModal = () => {
@@ -47,9 +52,7 @@ function FeedMoreBtn(props) {
       console.error("Error fetching data:", error);
     }
   };
-  useEffect(() => {
-    fetchPostDetail();
-  }, [props.postId]);
+
   return (
     <div className="feed-more">
       <Dropdown>
