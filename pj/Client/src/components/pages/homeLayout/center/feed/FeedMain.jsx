@@ -90,6 +90,10 @@ function FeedMain() {
   }, [userInfo]);
 
   useEffect(() => {
+    const container = document.querySelector(".homeContainer"); // 스크롤이 발생하는 컨테이너 선택
+    if (container) {
+      container.scrollTop = 0;
+    }
     if (boardId) {
       setPage(1);
       setHasMore(true);

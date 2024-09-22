@@ -38,21 +38,22 @@ function BookmarkView() {
 
         <span>북마크</span>
       </div>
-
-      {data.length > 0 && userInfo !== null ? (
-        data.map((p) => (
-          <Feeds
-            key={p.post_id}
-            loginUser_no={userInfo.user_no}
-            postId={p.post_id} // 게시글 ID 전달
-            boardId={p.board_info_id} // 게시판 ID 전달
-            fetchBookmarkView={fetchBookmarkView}
-            {...p}
-          />
-        ))
-      ) : (
-        <span className="data-placeholder">북마크한 게시글이 없습니다.</span>
-      )}
+      <div className="Bookmark-Feeds">
+        {data.length > 0 && userInfo !== null ? (
+          data.map((p) => (
+            <Feeds
+              key={p.post_id}
+              loginUser_no={userInfo.user_no}
+              postId={p.post_id} // 게시글 ID 전달
+              boardId={p.board_info_id} // 게시판 ID 전달
+              fetchBookmarkView={fetchBookmarkView}
+              {...p}
+            />
+          ))
+        ) : (
+          <span className="data-placeholder">북마크한 게시글이 없습니다.</span>
+        )}
+      </div>
     </>
   );
 }

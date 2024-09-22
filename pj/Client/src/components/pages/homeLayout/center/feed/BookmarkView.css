@@ -5,6 +5,10 @@
   align-items: center; /* 수직 가운데 정렬 */
   padding: 10px;
   width: 570px;
+  position: fixed;
+  top: 0;
+  background-color: black;
+  z-index: 1000;
 }
 
 .BookmarkView-header span {
@@ -23,4 +27,7 @@
 }
 .BackIcon:hover {
   background-color: rgba(255, 205, 25, 0.5);
+}
+.Bookmark-Feeds {
+  margin-top: 50px;
 }
