@@ -2,16 +2,16 @@ import "./ChatMessage.css";
 
 function ChatMessage({ isMyChat, text, nickname, createdAt, image_url }) {
     // 한국 시간으로 변환 함수
-    const toKoreanTime = (date) => {
-        const koreanOffset = 9 * 60; // 한국 시간대 오프셋(분 단위)
-        return new Date(date.getTime() + koreanOffset * 60 * 1000);
-    };
+const toKoreanTime = (date) => {
+    return new Date(date.getTime() + (9 * 60 * 60 * 1000)); // UTC+9로 조정
+};
+
 
     // 날짜 포맷팅 함수
     const formatDate = (dateString) => {
-        const messageDate = toKoreanTime(new Date(dateString));
-        const today = new Date();
-        
+       const messageDate = new Date(dateString); // 먼저 Date 객체로 변환
+    const koreanDate = toKoreanTime(messageDate); // 한국 시간으로 변환
+    const today = new Date();
         const isToday =
             today.getFullYear() === messageDate.getFullYear() &&
             today.getMonth() === messageDate.getMonth() &&
