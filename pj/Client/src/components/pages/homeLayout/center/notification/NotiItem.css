@@ -1,0 +1,16 @@
+.noti-card {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    /* justify-content: space-between; */
+    background-color: black;
+    border: 1px solid white;
+    transition: all 0.3s ease;
+    gap: 10px;
+}
+.noti-card:hover {
+    background-color: rgb(79, 78, 78);
+}
+.isRead {
+    margin-left: auto;
+}

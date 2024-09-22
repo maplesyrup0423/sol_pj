@@ -1,25 +1,27 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import "./Notice.css";
 import { FaRegBell } from "react-icons/fa";
 import { FaRegBookmark, FaBookmark } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import api from "../../../auth/api";
+import { NotificationContext } from "../../../../Context/NotificationContext";
 
 function Notice({ user_no }) {
     const currentUser_no = user_no;
-    const [unreadCount, setUnreadCount] = useState(0);
+    const { unreadCount, setUnreadCount } = useContext(NotificationContext);
 
     useEffect(() => {
         const fetchNotifications = async () => {
             try {
-                const res = await api.get("/notifications", {
+                const res = await api.get("/getNotification", {
                     params: { user_no: currentUser_no },
                 });
-                // console.log("클라 알림 목록 : ", res.data.notifications);
+                const notiList = res.data.notifications;
+                //console.log("클라 알림 목록 : ", notiList);
 
-                if (res.data.notifications.length > 0) {
+                if (notiList.length > 0) {
                     setUnreadCount(
-                        res.data.filter((notif) => !notif.is_read).length
+                        notiList.filter((notif) => !notif.is_read).length
                     ); // 읽지 않은 알림 개수 설정
                 }
             } catch (error) {
@@ -27,7 +29,7 @@ function Notice({ user_no }) {
             }
         };
         fetchNotifications();
-    }, [currentUser_no]); // 의존성 배열에 currentUser_no만 포함
+    }, [currentUser_no, setUnreadCount]); // 의존성 배열에 currentUser_no만 포함
 
     return (
         <div className="notice">
