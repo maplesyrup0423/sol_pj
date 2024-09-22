@@ -87,7 +87,7 @@ select c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
     join UserProfile u
     on u.user_no = c.user_no
     LEFT JOIN comments_files cf ON c.comment_id = cf.comment_id
-    WHERE c.post_id=?
+    WHERE c.post_id=? AND c.parent_comment_id IS NULL
     group by c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
 	  c.user_no, c.createDate, c.modiDate, c.isDeleted, u.nickname, u.image_url;
     `;
