@@ -130,7 +130,7 @@ function UserProfile() {
                             ) : (
                                 //팔로우 버튼 추가
                                 <FollowButton
-                                    followerNo={userInfo.user_no}
+                                    userInfo={userInfo}
                                     followingNo={displayedUserInfo.user_no}
                                     initialIsFollowing={initialIsFollowing}
                                 />

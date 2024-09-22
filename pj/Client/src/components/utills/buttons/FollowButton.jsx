@@ -3,7 +3,10 @@ import "./FollowButton.css";
 import { RiUserFollowLine, RiUserUnfollowFill } from "react-icons/ri";
 import Swal from "sweetalert2";
 import { unfollowUser, followUser, getFollowers } from "../FollowService";
-const FollowButton = ({ followerNo, followingNo, initialIsFollowing }) => {
+import { createNotification } from "../NotificationService";
+const FollowButton = ({ userInfo, followingNo, initialIsFollowing }) => {
+    const followerNo = userInfo.user_no;
+
     const [isFollowing, setIsFollowing] = useState(initialIsFollowing);
 
     //console.log(initialIsFollowing, " 팔로우버튼 진입 , 처음 팔로우 여부");
@@ -43,6 +46,11 @@ const FollowButton = ({ followerNo, followingNo, initialIsFollowing }) => {
                 followUser(followerNo, followingNo);
                 setIsFollowing(true);
                 await getFollowers(followerNo);
+                await createNotification(
+                    followingNo,
+                    `${userInfo.nickname}님이 당신을 팔로우 했습니다.`,
+                    "follow"
+                );
             }
         } catch (error) {
             console.error("팔로우/언팔로우 에러:", error);
