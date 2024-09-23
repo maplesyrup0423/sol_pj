@@ -46,7 +46,7 @@ function BookmarkView() {
               loginUser_no={userInfo.user_no}
               postId={p.post_id} // 게시글 ID 전달
               boardId={p.board_info_id} // 게시판 ID 전달
-              fetchBookmarkView={fetchBookmarkView}
+              refreshData={fetchBookmarkView}
               {...p}
             />
           ))
