@@ -163,7 +163,6 @@ select c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
     decodeToken(),
     (req, res) => {
       const { comment_id, postContent, user_no, existingImages } = req.body;
-      console.log(comment_id, postContent, user_no, existingImages);
       const updatePostQuery =
         "UPDATE comments SET comment_text = ? WHERE comment_id = ? AND user_no = ?";
 
@@ -180,7 +179,6 @@ select c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
           const existingImageArray = Array.isArray(existingImages)
             ? existingImages
             : [existingImages]; // 기존 이미지가 배열인지 확인
-          console.log("existingImageArray", existingImageArray);
           // 기존 이미지 중 삭제된 이미지를 DB에서 제거
           const deleteImagesQuery =
             "DELETE FROM comments_files WHERE comment_id = ? AND comments_file_path NOT IN (?)";
@@ -199,7 +197,7 @@ select c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
                   comment_id,
                   file.filename,
                 ]);
-                console.log("newImageInserts", newImageInserts);
+
                 const insertImagesQuery =
                   "INSERT INTO comments_files (comment_id, comments_file_path) VALUES ?";
                 conn.query(insertImagesQuery, [newImageInserts], (err) => {

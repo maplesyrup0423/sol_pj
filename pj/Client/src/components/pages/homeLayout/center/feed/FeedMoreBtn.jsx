@@ -9,11 +9,8 @@ import { AuthContext } from "../../../../../Context/AuthContext";
 import Swal from "sweetalert2";
 
 function FeedMoreBtn(props) {
-  // console.log("FeedMoreBtn:", props);
   const { userInfo } = useContext(AuthContext);
-  //console.log("FeedMoreBtn.props:", props);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [postDetail, setPostDetail] = useState(null);
   const [images, setImages] = useState([]);
   const [text, setText] = useState([]);
 
