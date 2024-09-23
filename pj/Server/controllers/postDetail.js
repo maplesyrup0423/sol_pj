@@ -87,7 +87,7 @@ select c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
     join UserProfile u
     on u.user_no = c.user_no
     LEFT JOIN comments_files cf ON c.comment_id = cf.comment_id
-    WHERE c.post_id=? AND c.parent_comment_id IS NULL
+    WHERE c.post_id=? AND c.parent_comment_id IS NULL and c.isDeleted = 0
     group by c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
 	  c.user_no, c.createDate, c.modiDate, c.isDeleted, u.nickname, u.image_url;
     `;
@@ -101,6 +101,7 @@ select c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
     });
   });
   //------------------------------------------------------------------
+  //댓글 입력
   router.post(
     "/api/commentInsert",
     upload.array("images"),
@@ -140,6 +141,20 @@ select c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
       );
     }
   );
+  //------------------------------------------------------------------
+  //댓글 삭제
+  router.post("/api/comment/:comment_id/delete", decodeToken(), (req, res) => {
+    // 게시글 소프트 삭제 (isDeleted 값을 1로 업데이트)
+    const comment_id = req.params.comment_id;
+    const query = "UPDATE comments SET isDeleted = 1 WHERE comment_id = ?";
+    conn.query(query, [comment_id], (err, rows) => {
+      if (err) {
+        console.error("쿼리 실행 오류:", err);
+        return res.status(500).send("서버 오류");
+      }
+      res.status(204).send();
+    });
+  });
 
   return router;
 };

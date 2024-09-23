@@ -6,6 +6,7 @@ import FeedImages from "./FeedImages";
 import ProfileImg from "../../../../utills/ProfileImg";
 import { useState } from "react";
 import BasicButton from "../../../../utills/buttons/BasicButton";
+import FeedMoreBtn from "./FeedMoreBtn";
 
 function Comments(props) {
   const { userInfo } = useContext(AuthContext);
@@ -50,6 +51,17 @@ function Comments(props) {
       <div>postId : {props.postId}</div> */}
 
       <div className="FeedComment_contents">
+        {/* 더보기 버튼 */}
+        {userInfo.user_no === props.user_no && (
+          <FeedMoreBtn
+            comment_id={props.comment_id}
+            postId={props.postId}
+            loginUser_no={userInfo.user_no}
+            user_no={props.user_no}
+            refreshData={props.refreshData}
+            boardId={props.boardId}
+          />
+        )}
         <div className="FeedComment_head">
           <div className="FeedComment_profile">
             <ProfileImg image_url={props.image_url} />

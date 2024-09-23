@@ -6,8 +6,10 @@ import { useState, useRef } from "react";
 import WritingModal from "./WritingModal";
 import { useContext } from "react";
 import { AuthContext } from "../../../../../Context/AuthContext";
+import Swal from "sweetalert2";
 
 function FeedMoreBtn(props) {
+  // console.log("FeedMoreBtn:", props);
   const { userInfo } = useContext(AuthContext);
   //console.log("FeedMoreBtn.props:", props);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,9 +18,32 @@ function FeedMoreBtn(props) {
   const hasIncremented = useRef(false);
 
   const handlePostDelete = async () => {
+    const result = await Swal.fire({
+      title: "삭제하시겠습니까?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "확인",
+      cancelButtonText: "취소",
+      width: "300px",
+      customClass: {
+        title: "custom-swal-title",
+      },
+    });
+
+    if (!result.isConfirmed) {
+      // "취소"를 누르면 아무 작업도 하지 않음
+      return;
+    }
+
     try {
       // 서버로 게시물 삭제 요청
-      await api.post(`/api/posts/${props.postId}/delete`);
+      if (props.comment_id === undefined) {
+        await api.post(`/api/posts/${props.postId}/delete`);
+      } else {
+        await api.post(`/api/comment/${props.comment_id}/delete`);
+      }
       if (props.refreshData !== undefined) {
         props.refreshData();
       }
