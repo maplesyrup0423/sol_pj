@@ -67,7 +67,7 @@ module.exports = (conn) => {
 
   //------------------------------------------------------------------
 
-  //댓글 조회
+  //댓글 조회 (답글X)
   router.get("/api/postDetailComment", decodeToken(), (req, res) => {
     //const { postId } = req.params.postId;
     const postId = req.query.postId;
@@ -155,6 +155,72 @@ select c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
       res.status(204).send();
     });
   });
+  //------------------------------------------------------------------
+  //댓글 수정
+  router.post(
+    "/api/commentUpdate",
+    upload.array("images"), // 새로운 이미지 파일들을 업로드 처리
+    decodeToken(),
+    (req, res) => {
+      const { comment_id, postContent, user_no, existingImages } = req.body;
+      console.log(comment_id, postContent, user_no, existingImages);
+      const updatePostQuery =
+        "UPDATE comments SET comment_text = ? WHERE comment_id = ? AND user_no = ?";
 
+      conn.query(
+        updatePostQuery,
+        [postContent, comment_id, user_no],
+        (err, result) => {
+          if (err) {
+            console.error("Post update query error:", err);
+            return res.status(500).send("게시글 수정에 실패했습니다.");
+          }
+
+          // 기존 이미지 처리: 삭제되지 않은 기존 이미지만 유지
+          const existingImageArray = Array.isArray(existingImages)
+            ? existingImages
+            : [existingImages]; // 기존 이미지가 배열인지 확인
+          console.log("existingImageArray", existingImageArray);
+          // 기존 이미지 중 삭제된 이미지를 DB에서 제거
+          const deleteImagesQuery =
+            "DELETE FROM comments_files WHERE comment_id = ? AND comments_file_path NOT IN (?)";
+          conn.query(
+            deleteImagesQuery,
+            [comment_id, existingImageArray],
+            (err) => {
+              if (err) {
+                console.error("Existing image deletion error:", err);
+                return res.status(500).send("기존 이미지 삭제에 실패했습니다.");
+              }
+
+              // 새롭게 추가된 이미지 파일 처리
+              if (req.files && req.files.length > 0) {
+                const newImageInserts = req.files.map((file) => [
+                  comment_id,
+                  file.filename,
+                ]);
+                console.log("newImageInserts", newImageInserts);
+                const insertImagesQuery =
+                  "INSERT INTO comments_files (comment_id, comments_file_path) VALUES ?";
+                conn.query(insertImagesQuery, [newImageInserts], (err) => {
+                  if (err) {
+                    console.error("Image insertion error:", err);
+                    return res
+                      .status(500)
+                      .send("새 이미지 추가에 실패했습니다.");
+                  }
+
+                  res.send("댓글과 이미지가 성공적으로 수정되었습니다.");
+                });
+              } else {
+                // 이미지가 없는 경우
+                res.send("댓글이 성공적으로 수정되었습니다.");
+              }
+            }
+          );
+        }
+      );
+    }
+  );
   return router;
 };

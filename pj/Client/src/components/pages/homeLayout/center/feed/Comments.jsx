@@ -51,32 +51,39 @@ function Comments(props) {
       <div>postId : {props.postId}</div> */}
 
       <div className="FeedComment_contents">
-        {/* 더보기 버튼 */}
-        {userInfo.user_no === props.user_no && (
-          <FeedMoreBtn
-            comment_id={props.comment_id}
-            postId={props.postId}
-            loginUser_no={userInfo.user_no}
-            user_no={props.user_no}
-            refreshData={props.refreshData}
-            boardId={props.boardId}
-          />
-        )}
         <div className="FeedComment_head">
-          <div className="FeedComment_profile">
-            <ProfileImg image_url={props.image_url} />
-          </div>
-
-          <div className="FeedComment_body">
-            <div className="FeedComment_up">
-              <div className="FeedComment_name">{props.nickname}</div>
-              <div className="FeedComment_id"> @{userInfo.user_id}</div>
+          <div className="FeedComment_head-left">
+            <div className="FeedComment_profile">
+              <ProfileImg image_url={props.image_url} />
             </div>
 
-            <div className="FeedComment_down">
-              <div className="FeedComment_comment">{props.comment_text}</div>
+            <div className="FeedComment_body">
+              <div className="FeedComment_up">
+                <div className="FeedComment_name">{props.nickname}</div>
+                <div className="FeedComment_id"> @{userInfo.user_id}</div>
+              </div>
             </div>
           </div>
+          {/* 더보기 버튼 */}
+          {userInfo.user_no === props.user_no && (
+            <FeedMoreBtn
+              comment_id={props.comment_id}
+              comment_text={props.comment_text}
+              comment_file_paths={props.file_paths}
+              postId={props.postId}
+              loginUser_no={userInfo.user_no}
+              user_no={props.user_no}
+              refreshData={props.refreshData}
+              boardId={props.boardId}
+            />
+          )}
+        </div>
+        <FeedImages
+          file_paths={props.file_paths}
+          comment_id={props.comment_id}
+        />
+        <div className="FeedComment_down">
+          <div className="FeedComment_comment">{props.comment_text}</div>
         </div>
 
         <div className="FeedComment_foot">
@@ -99,8 +106,6 @@ function Comments(props) {
           </div>
         </div>
       </div>
-
-      <FeedImages file_paths={props.file_paths} comment_id={props.comment_id} />
 
       {userInfo ? (
         isVisible && (

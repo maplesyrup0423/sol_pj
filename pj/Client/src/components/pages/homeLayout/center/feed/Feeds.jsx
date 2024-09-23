@@ -81,6 +81,8 @@ function Feeds(props) {
         {props.loginUser_no === props.user_no && (
           <FeedMoreBtn
             postId={postId}
+            post_text={props.post_text}
+            post_file_paths={props.file_paths}
             loginUser_no={props.loginUser_no}
             user_no={props.user_no}
             refreshData={props.refreshData}
