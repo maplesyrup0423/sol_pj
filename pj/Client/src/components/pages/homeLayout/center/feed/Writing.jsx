@@ -172,6 +172,9 @@ function Writing({
     if (parent_comment_id !== null) {
       postData.append("parent_comment_id", parent_comment_id); // 부모댓글 ID 추가
     }
+    if (comment_id !== null) {
+      postData.append("comment_id", comment_id); // 댓글 ID 추가
+    }
 
     // 선택한 파일들을 formData에 추가
     selectedFiles.forEach(({ file }) => {

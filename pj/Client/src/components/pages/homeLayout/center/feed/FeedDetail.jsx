@@ -43,7 +43,11 @@ function FeedDetail() {
       setPostDetail(response.data); // 게시물 데이터 설정
       setLoading(false);
     } catch (err) {
-      setError(err);
+      if (err.response && err.response.status === 404) {
+        setError("삭제되었거나 없는 게시물입니다.");
+      } else {
+        setError("알 수 없는 오류가 발생했습니다.");
+      }
       setLoading(false);
     }
   };
@@ -57,7 +61,7 @@ function FeedDetail() {
   }, [postId]);
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>오류가 발생했습니다: {error.message}</p>;
+  if (error) return <div className="FeedDetail-error">{error}</div>;
 
   return (
     <div className="feed_detail">
@@ -85,6 +89,7 @@ function FeedDetail() {
           like_count={postDetail.like_count}
           comment_count={postDetail.comment_count}
           Expanded={"Expanded"}
+          refreshData={fetchPostDetail}
         />
       ) : (
         <span className="data-placeholder">로그인후 이용하세요.</span>

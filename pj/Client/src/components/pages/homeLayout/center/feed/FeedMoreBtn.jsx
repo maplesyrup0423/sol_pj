@@ -2,23 +2,48 @@ import { IoIosMore } from "react-icons/io";
 import { Dropdown } from "react-bootstrap";
 import "./FeedMoreBtn.css";
 import api from "../../../../auth/api";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import WritingModal from "./WritingModal";
 import { useContext } from "react";
 import { AuthContext } from "../../../../../Context/AuthContext";
+import Swal from "sweetalert2";
 
 function FeedMoreBtn(props) {
+  // console.log("FeedMoreBtn:", props);
   const { userInfo } = useContext(AuthContext);
   //console.log("FeedMoreBtn.props:", props);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [postDetail, setPostDetail] = useState(null);
+  // const [postDetail, setPostDetail] = useState(null);
   const [images, setImages] = useState([]);
-  const hasIncremented = useRef(false);
+  const [text, setText] = useState([]);
 
   const handlePostDelete = async () => {
+    const result = await Swal.fire({
+      title: "삭제하시겠습니까?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "확인",
+      cancelButtonText: "취소",
+      width: "300px",
+      customClass: {
+        title: "custom-swal-title",
+      },
+    });
+
+    if (!result.isConfirmed) {
+      // "취소"를 누르면 아무 작업도 하지 않음
+      return;
+    }
+
     try {
       // 서버로 게시물 삭제 요청
-      await api.post(`/api/posts/${props.postId}/delete`);
+      if (props.comment_id === undefined) {
+        await api.post(`/api/posts/${props.postId}/delete`);
+      } else {
+        await api.post(`/api/comment/${props.comment_id}/delete`);
+      }
       if (props.refreshData !== undefined) {
         props.refreshData();
       }
@@ -28,29 +53,20 @@ function FeedMoreBtn(props) {
   };
 
   const openModal = async () => {
-    await fetchPostDetail();
-    setIsModalOpen(true);
-    if (!hasIncremented.current) {
-      fetchPostDetail();
-      hasIncremented.current = true;
+    if (props.comment_id === undefined) {
+      setImages(props.post_file_paths ? props.post_file_paths.split(", ") : []);
+      setText(props.post_text);
+    } else {
+      setImages(
+        props.comment_file_paths ? props.comment_file_paths.split(", ") : []
+      );
+      setText(props.comment_text);
     }
+    setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
-  };
-
-  //조회수 +1 및 게시글 데이터 가져오기
-  const fetchPostDetail = async () => {
-    try {
-      const response = await api.get(`/api/postDetail/?postId=${props.postId}`);
-      setPostDetail(response.data);
-      setImages(
-        response.data.file_paths ? response.data.file_paths.split(", ") : []
-      );
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
   };
 
   return (
@@ -84,7 +100,7 @@ function FeedMoreBtn(props) {
           )}
         </Dropdown.Menu>
       </Dropdown>
-      {postDetail && isModalOpen && (
+      {isModalOpen && (
         <WritingModal
           onClose={closeModal}
           userInfo={userInfo}
@@ -92,10 +108,9 @@ function FeedMoreBtn(props) {
           postID={props.postId}
           isEditMode={true} // 수정 모드
           refreshData={props.refreshData}
-          existingPostContent={postDetail.post_text}
+          existingPostContent={text}
           existingImages={images}
-          //comment_id={props.comment_id}
-          //todo 댓글 수정할때 처리할것
+          comment_id={props.comment_id}
         />
       )}
     </div>

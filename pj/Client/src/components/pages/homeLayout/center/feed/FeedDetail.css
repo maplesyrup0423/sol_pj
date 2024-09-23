@@ -33,3 +33,6 @@
 .back_to_FeedMain:hover {
   font-weight: bolder;
 }
+.FeedDetail-error {
+  width: 570px;
+}
