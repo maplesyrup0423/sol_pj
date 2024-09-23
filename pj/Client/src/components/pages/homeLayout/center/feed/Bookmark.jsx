@@ -22,8 +22,8 @@ function Bookmark(props) {
         .post(`/api/posts/${props.postId}/unBookmark/${props.loginUser_no}`)
         .then(() => setBookmark(false))
         .catch((err) => console.error(err));
-      if (props.fetchBookmarkView !== undefined) {
-        props.fetchBookmarkView();
+      if (props.refreshData !== undefined) {
+        props.refreshData();
       }
     } else {
       // 북마크 등록

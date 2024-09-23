@@ -17,8 +17,10 @@
 
 /* .smallButton {
   border: none;
-  width: 100px;
+  width: 50px;
   height: 30px;
+  border-radius: 30px;
+  font-size: 18px;
 } */
 
 /* 버튼 색 */
@@ -44,6 +46,12 @@
 }
 .blackButton:hover {
   background-color: gray;
+}
+/*------------------------------------*/
+.textColorYellow {
+  font-size: 15px;
+  background-color: black;
+  color: #ffcd19;
 }
 /*------------------------------------*/
 .whiteButton {
