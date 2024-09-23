@@ -145,6 +145,7 @@ function Comments(props) {
               postId={props.postId}
               comment_id={reply.comment_id}
               user_no={reply.user_no}
+              parentCommentId={reply.comment_id}
               {...reply}
             />
           ))}
