@@ -80,6 +80,9 @@ module.exports = (conn) => {
   // 북마크 불러오기
   router.get("/api/bookmark", decodeToken(), (req, res) => {
     const user_no = req.query.user_no;
+    const page = parseInt(req.query.page) || 1; // 요청받은 페이지, 기본값 1
+    const limit = parseInt(req.query.limit) || 10; // 한 페이지당 출력할 데이터 수, 기본값 10
+    const offset = (page - 1) * limit;
 
     const query = `SELECT u.user_no, p.post_id, p.post_text, p.createDate, p.modiDate, p.views, 
       u.user_id, up.nickname, up.image_url,p.board_info_id,
@@ -95,9 +98,10 @@ module.exports = (conn) => {
       LEFT JOIN comments c ON p.post_id = c.post_id
       WHERE bk.user_no = ? AND p.isDeleted = 0
       GROUP BY u.user_no, p.post_id, p.post_text, p.createDate, p.modiDate, p.views, u.user_id, up.nickname, up.image_url, p.board_info_id
-      ORDER BY bk.createDate DESC`;
+      ORDER BY bk.createDate DESC
+      LIMIT ? OFFSET ?`;
 
-    conn.query(query, [user_no], (err, rows, fields) => {
+    conn.query(query, [user_no, limit, offset], (err, rows, fields) => {
       if (err) {
         console.error("쿼리 실행 오류:", err);
         res.status(500).send("서버 오류");
