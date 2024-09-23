@@ -4,17 +4,39 @@ import { useContext } from "react";
 import Writing from "./Writing";
 import FeedImages from "./FeedImages";
 import ProfileImg from "../../../../utills/ProfileImg";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import BasicButton from "../../../../utills/buttons/BasicButton";
 import FeedMoreBtn from "./FeedMoreBtn";
 
 function Comments(props) {
   const { userInfo } = useContext(AuthContext);
+  const [replies, setReplies] = useState([]);
+
+  useEffect(() => {
+    const fetchReplies = async () => {
+      try {
+        const response = await api.get(
+          `/api/postDetailComment/?postId=${props.postId}&parentCommentId=${props.comment_id}`
+        );
+        setReplies(response.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchReplies();
+  }, [props.comment_id, props.postId]);
 
   const [isVisible, setIsVisible] = useState(false);
 
+  const [isCommentVisible, setIsCommentVisible] = useState(false);
+
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
+  };
+
+  const toggleCommentVisibility = () => {
+    setIsCommentVisible(!isCommentVisible);
   };
 
   const formatDate = (datetime) => {
@@ -100,9 +122,17 @@ function Comments(props) {
               btnColor="textColorYellow"
               action={toggleVisibility}
               btnText={isVisible ? "취소" : "답글쓰기"}
-              type="submit"
+
             />
             {/* <button onClick={toggleVisibility}>{isVisible ? '취소' : '답글 쓰기'}</button> */}
+          </div>
+          <div className="FeedComments_button">
+            <BasicButton
+              btnSize="mediumButton"
+              btnColor="yellowButton"
+              action={toggleCommentVisibility}
+              btnText={isCommentVisible ? "숨기기" : "답글보기"}
+            />
           </div>
         </div>
       </div>
@@ -120,6 +150,26 @@ function Comments(props) {
       ) : (
         <span className="data-placeholder">로그인후 이용하세요.</span>
       )}
+
+
+      {/* 대댓글 렌더링 */}
+      {isCommentVisible && (
+        <div className="replies">
+          {replies.map((reply) => (
+            <Comments
+              key={reply.comment_id}
+              refreshData={props.refreshData}
+              boardId={props.boardId}
+              postId={props.postId}
+              comment_id={reply.comment_id}
+              user_no={reply.user_no}
+              parentCommentId={reply.comment_id}
+              {...reply}
+            />
+          ))}
+        </div>
+      )}
+
     </div>
   );
 }
