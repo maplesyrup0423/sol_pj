@@ -147,4 +147,90 @@ GROUP BY u.user_no, p.post_id, p.post_text, p.createDate, p.modiDate, p.views, u
 
 UPDATE posts SET isDeleted = 0 WHERE post_id = 22;
 
-select * from posts;
+select * from comments;
+
+select * from userfollower;
+
+UPDATE comments SET isDeleted = 1 WHERE comment_id = 23;
+
+select c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
+	  c.user_no, c.createDate, c.modiDate, c.isDeleted, count(cl.user_no) as like_count,
+    u.nickname, u.image_url,
+    GROUP_CONCAT(DISTINCT cf.comments_file_path ORDER BY cf.upload_date SEPARATOR ', ') AS file_paths
+    from comments c
+    left join comment_likes cl
+    on c.comment_id = cl.comment_id
+    join UserProfile u
+    on u.user_no = c.user_no
+    LEFT JOIN comments_files cf ON c.comment_id = cf.comment_id
+    WHERE c.comment_id=22 AND c.isDeleted = 0
+    group by c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
+	  c.user_no, c.createDate, c.modiDate, c.isDeleted, u.nickname, u.image_url;
+      
+      
+      select * from comments;
+      
+      
+       select c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
+   c.user_no, c.createDate, c.modiDate, c.isDeleted, count(cl.user_no) as like_count,
+   u.nickname, u.image_url,
+   GROUP_CONCAT(DISTINCT cf.comments_file_path ORDER BY cf.upload_date SEPARATOR ', ') AS file_paths
+   from comments c
+   left join comment_likes cl
+   on c.comment_id = cl.comment_id
+   join UserProfile u
+   on u.user_no = c.user_no
+  LEFT JOIN comments_files cf ON c.comment_id = cf.comment_id
+   WHERE c.post_id=112 and c.isDeleted = 0
+    AND c.parent_comment_id =34 GROUP BY c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
+   c.user_no, c.createDate, c.modiDate, c.isDeleted, u.nickname, u.image_url;
+   
+   INSERT INTO comments(post_id,parent_comment_id,comment_text,user_no)
+VALUES(114,41,'댓글의 답글의 답글의 답글',1);
+   INSERT INTO comments(post_id,parent_comment_id,comment_text,user_no)
+VALUES(114,41,'댓글의 답글의 답글의 답글',1);
+   SELECT * FROM comments WHERE post_id = 114 AND (parent_comment_id = 39 OR parent_comment_id IN (SELECT comment_id FROM comments WHERE parent_comment_id = 39));
+   
+   WITH RECURSIVE CommentCTE AS (
+    SELECT * FROM comments WHERE post_id = 114 AND parent_comment_id = 39
+    UNION ALL
+    SELECT c.* FROM comments c
+    INNER JOIN CommentCTE cc ON c.parent_comment_id = cc.comment_id
+)
+SELECT * FROM CommentCTE;
+
+
+-- 댓글과 해당 대댓글을 가져오는 쿼리
+WITH RECURSIVE CommentCTE AS (
+
+    SELECT c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
+           c.user_no, c.createDate, c.modiDate, c.isDeleted,
+           u.nickname, u.image_url
+    FROM comments c
+    JOIN UserProfile u ON u.user_no = c.user_no
+    WHERE c.post_id = 114 AND c.isDeleted = 0 AND c.parent_comment_id = 39
+
+    UNION ALL
+
+
+    SELECT c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
+           c.user_no, c.createDate, c.modiDate, c.isDeleted,
+           u.nickname, u.image_url
+    FROM comments c
+    INNER JOIN CommentCTE cc ON c.parent_comment_id = cc.comment_id
+    JOIN UserProfile u ON u.user_no = c.user_no
+    WHERE c.isDeleted = 0
+)
+
+SELECT cc.comment_id, cc.post_id, cc.parent_comment_id, cc.comment_text,
+       cc.user_no, cc.createDate, cc.modiDate, cc.isDeleted,
+       cc.nickname, cc.image_url,
+       COUNT(cl.user_no) AS like_count,
+       GROUP_CONCAT(DISTINCT cf.comments_file_path ORDER BY cf.upload_date SEPARATOR ', ') AS file_paths
+FROM CommentCTE cc
+LEFT JOIN comment_likes cl ON cc.comment_id = cl.comment_id
+LEFT JOIN comments_files cf ON cc.comment_id = cf.comment_id
+GROUP BY cc.comment_id, cc.post_id, cc.parent_comment_id, cc.comment_text,
+         cc.user_no, cc.createDate, cc.modiDate, cc.isDeleted, cc.nickname, cc.image_url
+         ORDER BY cc.createDate DESC;
+

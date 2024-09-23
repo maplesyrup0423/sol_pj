@@ -7,6 +7,7 @@ import ProfileImg from "../../../../utills/ProfileImg";
 import { useState, useEffect } from "react";
 import BasicButton from "../../../../utills/buttons/BasicButton";
 import FeedMoreBtn from "./FeedMoreBtn";
+import api from "../../../../auth/api";
 
 function Comments(props) {
   const { userInfo } = useContext(AuthContext);
@@ -16,7 +17,7 @@ function Comments(props) {
     const fetchReplies = async () => {
       try {
         const response = await api.get(
-          `/api/postDetailComment/?postId=${props.postId}&parentCommentId=${props.comment_id}`
+          `/api/postDetailCommentReply/?postId=${props.postId}&parentCommentId=${props.comment_id}`
         );
         setReplies(response.data);
       } catch (err) {
@@ -65,13 +66,6 @@ function Comments(props) {
 
   return (
     <div className="Comments-Container">
-      {/* <div>comment_id : {props.comment_id}</div>
-      <div>user_no : {props.user_no}</div>
-      <div>parent_comment_id : {props.parent_comment_id}</div>
-      <div>comment_text : {props.comment_text}</div>
-      <div>createDate : {props.createDate}</div>
-      <div>postId : {props.postId}</div> */}
-
       <div className="FeedComment_contents">
         <div className="FeedComment_head">
           <div className="FeedComment_head-left">
@@ -122,7 +116,6 @@ function Comments(props) {
               btnColor="textColorYellow"
               action={toggleVisibility}
               btnText={isVisible ? "취소" : "답글쓰기"}
-
             />
             {/* <button onClick={toggleVisibility}>{isVisible ? '취소' : '답글 쓰기'}</button> */}
           </div>
@@ -151,7 +144,6 @@ function Comments(props) {
         <span className="data-placeholder">로그인후 이용하세요.</span>
       )}
 
-
       {/* 대댓글 렌더링 */}
       {isCommentVisible && (
         <div className="replies">
@@ -169,7 +161,6 @@ function Comments(props) {
           ))}
         </div>
       )}
-
     </div>
   );
 }

@@ -69,15 +69,10 @@ module.exports = (conn) => {
 
   //댓글 조회 (답글X)
   router.get("/api/postDetailComment", decodeToken(), (req, res) => {
-    //const { postId } = req.params.postId;
     let postId = req.query.postId;
-
-    const parentCommentId = req.query.parentCommentId; // 답글
-
     if (!postId) {
       return res.status(400).send("게시물 ID가 필요합니다.");
     }
-
     let query = `
 select c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
 	  c.user_no, c.createDate, c.modiDate, c.isDeleted, count(cl.user_no) as like_count,
@@ -89,22 +84,62 @@ select c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
     join UserProfile u
     on u.user_no = c.user_no
     LEFT JOIN comments_files cf ON c.comment_id = cf.comment_id
-    WHERE c.post_id=?
+    WHERE c.post_id=? and c.isDeleted = 0 AND c.parent_comment_id IS NULL
+     GROUP BY c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
+      c.user_no, c.createDate, c.modiDate, c.isDeleted, u.nickname, u.image_url
+      ORDER BY c.createDate ASC
     `;
-
-    const params = [postId];
-
-    if (parentCommentId) {
-      query += ` AND c.parent_comment_id = ?`;
-      params.push(parentCommentId);
-    } else {
-      query += ` AND c.parent_comment_id IS NULL`;
-    }
-
-    query += ` GROUP BY c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
-      c.user_no, c.createDate, c.modiDate, c.isDeleted, u.nickname, u.image_url`;
-
     conn.query(query, [postId], (err, rows, fields) => {
+      if (err) {
+        console.error("쿼리 실행 오류:", err);
+        res.status(500).send("서버 오류");
+      } else {
+        res.send(rows);
+      }
+    });
+  }); //------------------------------------------------------------------
+
+  //답글 조회
+  router.get("/api/postDetailCommentReply", decodeToken(), (req, res) => {
+    let postId = req.query.postId;
+    let parentCommentId = req.query.parentCommentId;
+    if (!postId) {
+      return res.status(400).send("게시물 ID가 필요합니다.");
+    }
+    let query = `WITH RECURSIVE CommentCTE AS (
+
+    SELECT c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
+           c.user_no, c.createDate, c.modiDate, c.isDeleted,
+           u.nickname, u.image_url
+    FROM comments c
+    JOIN UserProfile u ON u.user_no = c.user_no
+    WHERE c.post_id = ? AND c.isDeleted = 0 AND c.parent_comment_id = ?
+
+    UNION ALL
+
+
+    SELECT c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
+           c.user_no, c.createDate, c.modiDate, c.isDeleted,
+           u.nickname, u.image_url
+    FROM comments c
+    INNER JOIN CommentCTE cc ON c.parent_comment_id = cc.comment_id
+    JOIN UserProfile u ON u.user_no = c.user_no
+    WHERE c.isDeleted = 0
+)
+
+SELECT cc.comment_id, cc.post_id, cc.parent_comment_id, cc.comment_text,
+       cc.user_no, cc.createDate, cc.modiDate, cc.isDeleted,
+       cc.nickname, cc.image_url,
+       COUNT(cl.user_no) AS like_count,
+       GROUP_CONCAT(DISTINCT cf.comments_file_path ORDER BY cf.upload_date SEPARATOR ', ') AS file_paths
+FROM CommentCTE cc
+LEFT JOIN comment_likes cl ON cc.comment_id = cl.comment_id
+LEFT JOIN comments_files cf ON cc.comment_id = cf.comment_id
+GROUP BY cc.comment_id, cc.post_id, cc.parent_comment_id, cc.comment_text,
+         cc.user_no, cc.createDate, cc.modiDate, cc.isDeleted, cc.nickname, cc.image_url
+         ORDER BY cc.createDate ASC
+    `;
+    conn.query(query, [postId, parentCommentId], (err, rows, fields) => {
       if (err) {
         console.error("쿼리 실행 오류:", err);
         res.status(500).send("서버 오류");
