@@ -96,10 +96,10 @@ function Comments(props) {
           </div>
           <div className="FeedComment_button">
             <BasicButton
-              btnSize="smallButton"
-              btnColor="yellowButton"
+              btnSize="mediumButton"
+              btnColor="textColorYellow"
               action={toggleVisibility}
-              btnText={isVisible ? "취소" : "답글"}
+              btnText={isVisible ? "취소" : "답글쓰기"}
               type="submit"
             />
             {/* <button onClick={toggleVisibility}>{isVisible ? '취소' : '답글 쓰기'}</button> */}
