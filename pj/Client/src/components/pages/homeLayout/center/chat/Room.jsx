@@ -54,12 +54,12 @@ function Room() {
         socket.emit('join_room', roomId, userInfo.user_no);
 
         socket.on('initial_messages', (initialMessages) => {
-            setMessages(initialMessages.reverse());
-            setHasMore(initialMessages.length === 20);
-            setIsInitialLoad(false);
-            scrollToBottom();
-        });
-
+            console.log('초기 메시지:', initialMessages);
+    setMessages(initialMessages.reverse()); // 내림차순으로 저장
+    setHasMore(initialMessages.length === 20);
+    setIsInitialLoad(false);
+    scrollToBottom();
+});
         socket.on('chat_message', (data) => {
             setMessages((prevMessages) => {
                 const updatedMessages = [...prevMessages, data];
@@ -73,23 +73,28 @@ function Room() {
         });
 
         socket.on('additional_messages', (additionalMessages) => {
-            // 현재 스크롤 위치와 스크롤 높이를 기록
-            const prevScrollHeight = messageListRef.current.scrollHeight;
-            const prevScrollTop = messageListRef.current.scrollTop;
+    // 현재 스크롤 위치와 스크롤 높이를 기록
+    const prevScrollHeight = messageListRef.current.scrollHeight;
+    const prevScrollTop = messageListRef.current.scrollTop;
+            console.log('추가 메시지:', additionalMessages);
+            console.log('추가 메시지.reverse:', additionalMessages.reverse());
+    setMessages((prevMessages) => {
+        // 추가된 메시지를 위에 쌓이도록 변경
+        
+        
+         const newMessages = [...additionalMessages, ...prevMessages]; // 추가 메시지를 앞에 추가
+        return newMessages;
+    });
 
-            setMessages((prevMessages) => {
-                const newMessages = [...additionalMessages.reverse(), ...prevMessages];
-                return newMessages;
-            });
+    setTimeout(() => {
+        // 메시지 추가 후 스크롤 위치 복원
+        const newScrollHeight = messageListRef.current.scrollHeight;
+        messageListRef.current.scrollTop = newScrollHeight - prevScrollHeight + prevScrollTop;
+    }, 0);  // 바로 적용되도록 짧은 딜레이 사용
 
-            setTimeout(() => {
-                // 메시지 추가 후 스크롤 위치 복원
-                const newScrollHeight = messageListRef.current.scrollHeight;
-                messageListRef.current.scrollTop = newScrollHeight - prevScrollHeight + prevScrollTop;
-            }, 0);  // 바로 적용되도록 짧은 딜레이 사용
+    setHasMore(additionalMessages.length === 20);
+});
 
-            setHasMore(additionalMessages.length === 20);
-        });
 
         return () => {
             socket.off('initial_messages');
@@ -125,19 +130,19 @@ function Room() {
     };
 
     const loadMoreMessages = () => {
-        if (socket && userInfo && userInfo.user_no && hasMore) {
-            const oldestMessage = messages[0];
-            const oldestMessageDate = oldestMessage ? new Date(oldestMessage.created_at) : new Date();
+    if (socket && userInfo && userInfo.user_no && hasMore) {
+        const oldestMessage = messages[messages.length - 1]; // 가장 오래된 메시지를 가져오도록 수정
+        const oldestMessageDate = oldestMessage ? new Date(oldestMessage.created_at) : new Date();
 
-            socket.emit('fetch_more_messages', {
-                room_id: roomId,
-                joined_at: oldestMessageDate.toISOString(),
-                page: page + 1,
-                pageSize: 20
-            });
-            setPage(prevPage => prevPage + 1);
-        }
-    };
+        socket.emit('fetch_more_messages', {
+            room_id: roomId,
+            joined_at: oldestMessageDate.toISOString(),
+            page: page + 1,
+            pageSize: 20
+        });
+        setPage(prevPage => prevPage + 1); // 페이지 증가
+    }
+};
 
     const handleScroll = () => {
         const { scrollTop } = messageListRef.current;

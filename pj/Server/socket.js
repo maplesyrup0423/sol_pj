@@ -19,7 +19,7 @@ function setupChatModule(app, io, conn) {
                 JOIN User u ON m.user_no = u.user_no 
                 LEFT JOIN UserProfile up ON m.user_no = up.user_no
                 WHERE m.room_id = ? AND m.created_at > ?
-                ORDER BY m.created_at DESC
+                ORDER BY m.message_id DESC
                 LIMIT ? OFFSET ?
             `;
 
@@ -118,6 +118,18 @@ function setupChatModule(app, io, conn) {
             });
         });
     }
+      function getRoomName(room_id) {
+        return new Promise((resolve, reject) => {
+            const query = 'SELECT room_name FROM ChatRoom WHERE room_id = ?';
+            conn.query(query, [room_id], (error, results) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(results[0] ? results[0].room_name : 'Unknown Room');
+                }
+            });
+        });
+    }
 
     // Socket.IO 이벤트 설정
     io.on('connection', (socket) => {
@@ -189,7 +201,7 @@ function setupChatModule(app, io, conn) {
         });
 
         // 메시지 전송
-      socket.on('chat_message', async (data) => {
+     socket.on('chat_message', async (data) => {
             try {
                 const { room_id, user_no, message_content } = data;
                 console.log(`메시지 전송: room_id=${room_id}, user_no=${user_no}, 내용=${message_content}`);
@@ -214,6 +226,9 @@ function setupChatModule(app, io, conn) {
 
                     io.to(room_id).emit('chat_message', messageData);
 
+                    // 방 이름 가져오기
+                    const roomName = await getRoomName(room_id);
+
                     // Notify all users in the room about the new message
                     const roomUsers = await new Promise((resolve, reject) => {
                         conn.query('SELECT user_no, last_active_at FROM ChatRoomUser WHERE room_id = ?', [room_id], (error, results) => {
@@ -227,6 +242,7 @@ function setupChatModule(app, io, conn) {
                             const unreadCount = await getUnreadMessageCount(room_id, roomUser.user_no, roomUser.last_active_at);
                             chatNotificationSpace.to(`user_${roomUser.user_no}`).emit('new_message', {
                                 room_id,
+                                room_name: roomName,
                                 last_message: messageData,
                                 unread_count: unreadCount
                             });
