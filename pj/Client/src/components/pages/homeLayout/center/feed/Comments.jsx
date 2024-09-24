@@ -65,7 +65,13 @@ function Comments(props) {
     : "";
 
   return (
-    <div className="Comments-Container">
+    <div className="Comments-Container"
+      style={{ 
+        marginLeft: props.parent_comment_id !== null ? '50px' : '0px', // 자식 댓글은 오른쪽으로 밀림
+        borderBottom: props.parent_comment_id !== null ? 'none' : '1px solid #595959', //자식 댓글은 밑줄 없음
+        width: props.parent_comment_id !== null ? '90%' : '100%', // 자식 댓글의 가로 길이 줄이기
+      }}
+    >
       <div className="FeedComment_contents">
         <div className="FeedComment_head">
           <div className="FeedComment_head-left">
