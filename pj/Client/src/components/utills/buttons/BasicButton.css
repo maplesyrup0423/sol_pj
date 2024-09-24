@@ -49,9 +49,12 @@
 }
 /*------------------------------------*/
 .textColorYellow {
-  font-size: 15px;
-  background-color: black;
+  font-size: 13px;
+  background-color: transparent; /*투명*/
   color: #ffcd19;
+}
+.textColorYellow:hover {
+  background-color: rgba(255, 205, 25, 0.5);
 }
 /*------------------------------------*/
 .whiteButton {

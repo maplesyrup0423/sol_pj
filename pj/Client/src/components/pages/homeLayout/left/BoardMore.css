@@ -1,4 +1,4 @@
-.modalOverlay {
+.BoardMore-modalOverlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -11,7 +11,7 @@
   z-index: 1000;
 }
 
-.modalContainer {
+.BoardMore-modalContainer {
   background-color: #000;
   padding: 30px;
   border-radius: 10px;

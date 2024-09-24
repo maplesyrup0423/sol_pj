@@ -2,12 +2,11 @@
   width: 100%;
   border-bottom: 1px solid gray;
 }
-
 .FeedComment_head {
   display: flex;
   height: 70px;
   align-items: center;
-  width: 570px;
+  width: 100%;
   justify-content: space-between;
   padding: 5px;
 }
@@ -56,7 +55,6 @@
   display: flex;
   width: 100%;
   align-items: center; /* 세로 중앙 정렬 */
-  margin-bottom: 15px;
   font-size: 20px;
 }
 
@@ -66,15 +64,14 @@
 }
 
 .FeedComment_date {
-  margin: 15px;
+  margin: 0px 15px;
   color: gray;
 }
 
 .FeedComment_button {
-  margin: 15px;
+  margin: 5px;
 }
 
 .FeedComments_button {
-  margin-left: auto;
-  margin-right: 15px;
+  margin: 5px;
 }
