@@ -233,4 +233,13 @@ LEFT JOIN comments_files cf ON cc.comment_id = cf.comment_id
 GROUP BY cc.comment_id, cc.post_id, cc.parent_comment_id, cc.comment_text,
          cc.user_no, cc.createDate, cc.modiDate, cc.isDeleted, cc.nickname, cc.image_url
          ORDER BY cc.createDate DESC;
+         
+         
+         select up.nickname, u.user_id
+      from comments c
+      join UserProfile up
+      on up.user_no = c.user_no
+      join User u
+      on up.user_no = u.user_no
+      where c.post_id = 114 and c.comment_id = 41;
 

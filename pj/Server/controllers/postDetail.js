@@ -74,20 +74,20 @@ module.exports = (conn) => {
       return res.status(400).send("게시물 ID가 필요합니다.");
     }
     let query = `
-select c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
-	  c.user_no, c.createDate, c.modiDate, c.isDeleted, count(cl.user_no) as like_count,
-    u.nickname, u.image_url,
-    GROUP_CONCAT(DISTINCT cf.comments_file_path ORDER BY cf.upload_date SEPARATOR ', ') AS file_paths
-    from comments c
-    left join comment_likes cl
-    on c.comment_id = cl.comment_id
-    join UserProfile u
-    on u.user_no = c.user_no
-    LEFT JOIN comments_files cf ON c.comment_id = cf.comment_id
-    WHERE c.post_id=? and c.isDeleted = 0 AND c.parent_comment_id IS NULL
-     GROUP BY c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
-      c.user_no, c.createDate, c.modiDate, c.isDeleted, u.nickname, u.image_url
-      ORDER BY c.createDate ASC
+SELECT c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
+       c.user_no, c.createDate, c.modiDate, c.isDeleted, 
+       COUNT(cl.user_no) AS like_count, u.nickname, u.image_url,
+       u_main.user_id AS user_id, -- 본인 user_id 가져오기
+       GROUP_CONCAT(DISTINCT cf.comments_file_path ORDER BY cf.upload_date SEPARATOR ', ') AS file_paths
+FROM comments c
+LEFT JOIN comment_likes cl ON c.comment_id = cl.comment_id
+JOIN UserProfile u ON u.user_no = c.user_no
+JOIN User u_main ON u_main.user_no = c.user_no -- 본인 user_id 조인
+LEFT JOIN comments_files cf ON c.comment_id = cf.comment_id
+WHERE c.post_id = ? AND c.isDeleted = 0 AND c.parent_comment_id IS NULL
+GROUP BY c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
+         c.user_no, c.createDate, c.modiDate, c.isDeleted, u.nickname, u.image_url, u_main.user_id
+ORDER BY c.createDate ASC
     `;
     conn.query(query, [postId], (err, rows, fields) => {
       if (err) {
@@ -107,37 +107,42 @@ select c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
       return res.status(400).send("게시물 ID가 필요합니다.");
     }
     let query = `WITH RECURSIVE CommentCTE AS (
-
     SELECT c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
            c.user_no, c.createDate, c.modiDate, c.isDeleted,
-           u.nickname, u.image_url
+           u.nickname, u.image_url, u_main.user_id AS user_id, u2.user_id AS parent_user_id
     FROM comments c
     JOIN UserProfile u ON u.user_no = c.user_no
+    JOIN User u_main ON c.user_no = u_main.user_no -- 댓글 작성자의 user_id 가져오기
+    LEFT JOIN comments c2 ON c.parent_comment_id = c2.comment_id
+    LEFT JOIN User u2 ON c2.user_no = u2.user_no -- 부모 댓글 작성자의 user_id 가져오기
     WHERE c.post_id = ? AND c.isDeleted = 0 AND c.parent_comment_id = ?
 
     UNION ALL
 
-
     SELECT c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
            c.user_no, c.createDate, c.modiDate, c.isDeleted,
-           u.nickname, u.image_url
+           u.nickname, u.image_url, u_main.user_id AS user_id, u2.user_id AS parent_user_id
     FROM comments c
     INNER JOIN CommentCTE cc ON c.parent_comment_id = cc.comment_id
     JOIN UserProfile u ON u.user_no = c.user_no
+    JOIN User u_main ON c.user_no = u_main.user_no -- 댓글 작성자의 user_id 가져오기
+    LEFT JOIN comments c2 ON c.parent_comment_id = c2.comment_id
+    LEFT JOIN User u2 ON c2.user_no = u2.user_no -- 부모 댓글 작성자의 user_id 가져오기
     WHERE c.isDeleted = 0
 )
 
 SELECT cc.comment_id, cc.post_id, cc.parent_comment_id, cc.comment_text,
        cc.user_no, cc.createDate, cc.modiDate, cc.isDeleted,
-       cc.nickname, cc.image_url,
+       cc.nickname, cc.image_url, cc.user_id, cc.parent_user_id,
        COUNT(cl.user_no) AS like_count,
        GROUP_CONCAT(DISTINCT cf.comments_file_path ORDER BY cf.upload_date SEPARATOR ', ') AS file_paths
 FROM CommentCTE cc
 LEFT JOIN comment_likes cl ON cc.comment_id = cl.comment_id
 LEFT JOIN comments_files cf ON cc.comment_id = cf.comment_id
 GROUP BY cc.comment_id, cc.post_id, cc.parent_comment_id, cc.comment_text,
-         cc.user_no, cc.createDate, cc.modiDate, cc.isDeleted, cc.nickname, cc.image_url
-         ORDER BY cc.createDate ASC
+         cc.user_no, cc.createDate, cc.modiDate, cc.isDeleted, cc.nickname, cc.image_url, cc.user_id, cc.parent_user_id
+ORDER BY cc.createDate ASC
+
     `;
     conn.query(query, [postId, parentCommentId], (err, rows, fields) => {
       if (err) {
@@ -149,33 +154,7 @@ GROUP BY cc.comment_id, cc.post_id, cc.parent_comment_id, cc.comment_text,
     });
   });
   //------------------------------------------------------------------
-  //부모 댓글 아이디 찾아오기
-  router.get('/api/getParentUser', async (req, res) => {
-    const parentCommentId = req.query.parentCommentId; // parentCommentId로 수정
-    const postId = req.query.postId;
 
-    const query = `
-      select up.nickname, u.user_id
-      from comments c
-      join UserProfile up
-      on up.user_no = c.user_no
-      join User u
-      on up.user_no = u.user_no
-      where c.post_id = ? and c.comment_id = ?;`;
-
-      try {
-        const results = await db.query(query, [postId, parentCommentId]);
-        
-        if (results.length === 0) {
-            return res.status(404).send("부모 댓글을 찾을 수 없습니다.");
-        }
-
-        res.json(results[0]); // 결과를 JSON 형태로 응답
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("서버 에러");
-    }
-  });
   //------------------------------------------------------------------------------
   //댓글 입력
   router.post(
