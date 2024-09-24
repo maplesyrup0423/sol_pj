@@ -55,7 +55,9 @@ function ChatMessage({ isMyChat, text, nickname, createdAt, image_url }) {
         </div>
       )}
       <div className="chat-bubble-container">
-        <div className="chat-nickname">{nickname || "Unknown"}</div>
+        {!isMyChat && (
+          <div className="chat-nickname">{nickname || "Unknown"}</div>
+        )}
         <div className="chat-bubble">
           <p>{text}</p>
         </div>
