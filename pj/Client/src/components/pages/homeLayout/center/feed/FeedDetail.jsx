@@ -115,6 +115,8 @@ function FeedDetail() {
           postDetailComment.map((c) => (
             <Comments
               key={c.comment_id}
+              parent_user_id={null}
+              user_id={c.user_id}
               refreshData={fetchPostDetailComment}
               boardId={boardId}
               postId={postId}

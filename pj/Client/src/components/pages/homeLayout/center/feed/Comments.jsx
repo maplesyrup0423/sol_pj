@@ -12,34 +12,23 @@ import api from "../../../../auth/api";
 function Comments(props) {
   const { userInfo } = useContext(AuthContext);
   const [replies, setReplies] = useState([]);
-  const [parentUser, setParentUser] = useState([]);
 
+  const reload = () => {
+    window.location.reload();
+  };
+
+  const fetchReplies = async () => {
+    try {
+      const response = await api.get(
+        `/api/postDetailCommentReply/?postId=${props.postId}&parentCommentId=${props.comment_id}`
+      );
+      setReplies(response.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
   useEffect(() => {
-    const fetchReplies = async () => {
-      try {
-        const response = await api.get(
-          `/api/postDetailCommentReply/?postId=${props.postId}&parentCommentId=${props.comment_id}`
-        );
-        setReplies(response.data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
     fetchReplies();
-  }, [props.comment_id, props.postId]);
-
-  useEffect(() => {
-    const getParentUser = async () => {
-      try{
-        const res = await api.get(`/api/getParentUser/?postId=${props.postId}&parentCommentId=${props.comment_id}`);
-        setParentUser(res.data);
-      }catch (err) {
-        console.error(err);
-      }
-    };
-
-    getParentUser();
   }, [props.comment_id, props.postId]);
 
   const [isVisible, setIsVisible] = useState(false);
@@ -79,11 +68,13 @@ function Comments(props) {
     : "";
 
   return (
-    <div className="Comments-Container"
-      style={{ 
-        marginLeft: props.parent_comment_id !== null ? '50px' : '0px', // 자식 댓글은 오른쪽으로 밀림
-        borderBottom: props.parent_comment_id !== null ? 'none' : '1px solid #595959', //자식 댓글은 밑줄 없음
-        width: props.parent_comment_id !== null ? '90%' : '100%', // 자식 댓글의 가로 길이 줄이기
+    <div
+      className="Comments-Container"
+      style={{
+        marginLeft: props.parent_comment_id !== null ? "50px" : "0px", // 자식 댓글은 오른쪽으로 밀림
+        borderBottom:
+          props.parent_comment_id !== null ? "none" : "1px solid #595959", //자식 댓글은 밑줄 없음
+        width: props.parent_comment_id !== null ? "90%" : "100%", // 자식 댓글의 가로 길이 줄이기
       }}
     >
       <div className="FeedComment_contents">
@@ -96,7 +87,7 @@ function Comments(props) {
             <div className="FeedComment_body">
               <div className="FeedComment_up">
                 <div className="FeedComment_name">{props.nickname}</div>
-                <div className="FeedComment_id"> @{userInfo.user_id}</div>
+                <div className="FeedComment_id"> @{props.user_id}</div>
               </div>
             </div>
           </div>
@@ -109,7 +100,9 @@ function Comments(props) {
               postId={props.postId}
               loginUser_no={userInfo.user_no}
               user_no={props.user_no}
-              refreshData={props.refreshData}
+              refreshData={
+                props.parent_user_id === null ? props.refreshData : reload
+              }
               boardId={props.boardId}
             />
           )}
@@ -119,7 +112,12 @@ function Comments(props) {
           comment_id={props.comment_id}
         />
         <div className="FeedComment_down">
-          <div className="FeedComment_comment">{parentUser && <span>@{parentUser.user_id} </span>}{props.comment_text}</div>
+          <div className="FeedComment_comment">
+            {props.parent_user_id !== null && (
+              <span>@{props.parent_user_id} </span>
+            )}
+            {props.comment_text}
+          </div>
         </div>
 
         <div className="FeedComment_foot">
@@ -155,7 +153,7 @@ function Comments(props) {
           <Writing
             userInfo={userInfo}
             boardId={props.boardId}
-            refreshData={props.refreshData}
+            refreshData={reload}
             postID={props.postId}
             parent_comment_id={props.comment_id}
           />
@@ -170,12 +168,14 @@ function Comments(props) {
           {replies.map((reply) => (
             <Comments
               key={reply.comment_id}
+              user_id={reply.user_id}
               refreshData={props.refreshData}
               boardId={props.boardId}
               postId={props.postId}
               comment_id={reply.comment_id}
               user_no={reply.user_no}
               parentCommentId={reply.comment_id}
+              parent_user_id={reply.parent_user_id}
               {...reply}
             />
           ))}
