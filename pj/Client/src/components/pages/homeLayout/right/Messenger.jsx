@@ -8,7 +8,7 @@ import { AuthContext } from '../../../../Context/AuthContext';
 
 
 function Messenger() {
-    const { userInfo, activeRoomId, activeRoom, setActiveRoom } = useContext(AuthContext);
+    const { userInfo, activeRoom, setActiveRoom } = useContext(AuthContext);
     const [chatList, setChatList] = useState([]);
     const [socket, setSocket] = useState(null);
     const [isLoading, setIsLoading] = useState(true);

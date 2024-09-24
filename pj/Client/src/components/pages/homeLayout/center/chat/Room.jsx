@@ -64,7 +64,9 @@ function Room() {
                 setMessages(initialMessages.reverse());
                 setHasMore(initialMessages.length === 20);
                 setIsInitialLoad(false);
+                setTimeout(() => {
                 scrollToBottom();
+            }, 100);
             });
 
             socket.on('chat_message', (data) => {
@@ -83,7 +85,7 @@ function Room() {
                 const prevScrollHeight = messageListRef.current.scrollHeight;
                 const prevScrollTop = messageListRef.current.scrollTop;
                 console.log('추가 메시지:', additionalMessages);
-                setMessages((prevMessages) => [...additionalMessages, ...prevMessages]);
+                setMessages((prevMessages) => [...additionalMessages,...prevMessages ]);
                 
                 setTimeout(() => {
                     const newScrollHeight = messageListRef.current.scrollHeight;
@@ -104,6 +106,7 @@ function Room() {
     const scrollToBottom = () => {
         if (messageListRef.current) {
             messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
+            console.log("스크롤을 최하단으로 이동:", messageListRef.current.scrollTop);
         }
     };
 
@@ -129,6 +132,9 @@ function Room() {
         if (socket && userInfo && userInfo.user_no && hasMore) {
             const oldestMessage = messages[messages.length - 1];
             const oldestMessageDate = oldestMessage ? new Date(oldestMessage.created_at) : new Date();
+            console.log('가장 오래된 메시지:', oldestMessage);
+            console.log('가장 오래된 메시지의 created_at:', oldestMessage ? oldestMessage.created_at : '없음');
+
 
             socket.emit('fetch_more_messages', {
                 room_id: roomId,
