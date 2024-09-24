@@ -181,7 +181,8 @@ function Room() {
         <div className="BackIcon" onClick={handleBack}>
           <IoMdArrowRoundBack />
         </div>
-        <span>채딩방이름</span>
+        <span></span>
+        {/*채팅방 이름 넣어줄거면 여기에 넣어주시면됩니다. 일단 비워두겠습니당 */}
       </div>
 
       <div className="chat-Card" ref={messageListRef} onScroll={handleScroll}>
@@ -197,19 +198,23 @@ function Room() {
         ))}
         <div ref={chatEndRef} />
       </div>
-      <form onSubmit={handleSendMessage}>
-        <input
-          type="text"
-          value={inputMessage}
-          onChange={(e) => setInputMessage(e.target.value)}
-        />
-        <BasicButton
-          type="submit"
-          btnSize="mediumButton"
-          btnColor="yellowButton"
-          btnText="전송"
-        />
-      </form>
+      <div className="chatRoom-formDiv">
+        <form onSubmit={handleSendMessage}>
+          <input
+            type="text"
+            value={inputMessage}
+            onChange={(e) => setInputMessage(e.target.value)}
+            className="chat-input"
+            placeholder="글을 입력해주세요."
+          />
+          <BasicButton
+            type="submit"
+            btnSize="mediumButton"
+            btnColor="yellowButton"
+            btnText="전송"
+          />
+        </form>
+      </div>
     </div>
   );
 }
