@@ -1,11 +1,12 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import { AuthContext } from "../../../../../Context/AuthContext";
 import api from "../../../../auth/api";
 import BasicButton from "../../../../utills/buttons/BasicButton";
 import ChatMessage from "./ChatMessage";
 import "./Room.css";
+import { IoMdArrowRoundBack } from "react-icons/io";
 
 function Room() {
   const { userInfo, accessToken, setUserInfo, activeRoom, setActiveRoom } =
@@ -20,6 +21,7 @@ function Room() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const baseUrl = import.meta.env.VITE_BASE_URL;
 
   useEffect(() => {
     const checkUserInfo = async () => {
@@ -163,13 +165,25 @@ function Room() {
       loadMoreMessages();
     }
   };
-
+  //↓↓↓↓↓↓↓↓↓↓뒤로가기 버튼 코드
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate(-1); //뒤로가기
+  };
+  //↑↑↑↑↑↑↑↑↑↑뒤로가기 버튼 코드
   if (loading) {
     return <div>로딩중입니다</div>;
   }
 
   return (
     <div className="chatContainer">
+      <div className="caht-header">
+        <div className="BackIcon" onClick={handleBack}>
+          <IoMdArrowRoundBack />
+        </div>
+        <span>채딩방이름</span>
+      </div>
+
       <div className="chat-Card" ref={messageListRef} onScroll={handleScroll}>
         {messages.map((msg, index) => (
           <ChatMessage
@@ -178,7 +192,7 @@ function Room() {
             text={msg.message_content}
             nickname={msg.nickname}
             createdAt={msg.created_at}
-            image_url={msg.image_url}
+            image_url={`${baseUrl}/images/uploads/${msg.image_url}`}
           />
         ))}
         <div ref={chatEndRef} />
@@ -189,7 +203,12 @@ function Room() {
           value={inputMessage}
           onChange={(e) => setInputMessage(e.target.value)}
         />
-        <BasicButton type="submit">전송</BasicButton>
+        <BasicButton
+          type="submit"
+          btnSize="mediumButton"
+          btnColor="yellowButton"
+          btnText="전송"
+        />
       </form>
     </div>
   );
