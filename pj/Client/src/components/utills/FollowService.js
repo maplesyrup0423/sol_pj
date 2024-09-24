@@ -86,3 +86,16 @@ export const unfollowUser = async (followerNo, followingNo) => {
         return false;
     }
 };
+
+export const followerIds = async (followerNo) => {
+    try {
+        const response = await api.get("/followerIds", {
+            params: {
+                followerNo,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error("언팔로우 중 오류 발생:", error);
+    }
+};

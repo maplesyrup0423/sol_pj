@@ -226,5 +226,26 @@ module.exports = (conn) => {
         });
     });
 
+    router.get("/followerIds", (req, res) => {
+        const { followerNo } = req.query;
+
+        const query = `SELECT follower_no FROM UserFollower WHERE following_no = ?`;
+        conn.query(query, [followerNo], (err) => {
+            if ((err, results)) {
+                return res.status(500).json({
+                    success: false,
+                    message: "팔로워 목록 불러오는 중 오류 발생",
+                });
+            }
+            return res
+                .status(200)
+                .json({
+                    success: true,
+                    message: "팔로워 목록 불러오기 성공",
+                    followerIds: results,
+                });
+        });
+    });
+
     return router; // router를 반환
 };

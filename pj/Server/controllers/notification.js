@@ -91,6 +91,51 @@ module.exports = (conn) => {
                     }
                 }
             );
+        }
+        // 타입이 새 글일 경우
+        else if (type === "new_post") {
+            //console.log("서버 new_post 진입 : ", req.query);
+
+            const query = `SELECT follower_no FROM UserFollower WHERE following_no = ?`;
+            conn.query(query, [followingNo], (err, followerIds) => {
+                if (err) {
+                    return res.status(500).json({
+                        success: false,
+                        message: "팔로워 목록 불러오는 중 오류 발생",
+                    });
+                }
+                // 각 팔로워에게 알림 생성
+                followerIds.forEach((follower) => {
+                    //console.log("포이치 진입 : ", follower);
+                    conn.query(
+                        "INSERT INTO notifications (user_no, message, type) VALUES (?, ?, ?)",
+                        [follower.follower_no, message, type]
+                    );
+                });
+                return res.status(200).json({
+                    success: true,
+                    message: "팔로워들에게 알림 보내기 성공",
+                });
+            });
+        } else if (type === "new_heart") {
+            conn.query(
+                "INSERT INTO notifications (user_no, message, type) VALUES (?, ?, ?)",
+                [followingNo, message, type],
+                (err) => {
+                    if (err) {
+                        console.log("알림 추가 중 오류 발생");
+                        res.status(500).json({
+                            success: false,
+                            message: "알림 추가 서버 오류",
+                        });
+                    } else {
+                        res.status(200).json({
+                            success: true,
+                            message: "알림이 성공적으로 추가되었습니다.",
+                        });
+                    }
+                }
+            );
         } else {
             // 다른 타입의 알림 처리 로직
             conn.query(
