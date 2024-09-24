@@ -9,13 +9,14 @@ export const AuthProvider = ({ children }) => {
     const [accessToken, setAccessToken] = useState(localStorage.getItem('accessToken'));
     const [userInfo, setUserInfo] = useState(null);
     const [loading, setLoading] = useState(true); // 로딩 상태 추가
+    const [activeRoom, setActiveRoom] = useState(null); // activeRoom 상태 추가
 
     useEffect(() => {
         const initializeAuth = async () => {
             const storedToken = localStorage.getItem('accessToken');
             if (storedToken) {
                 try {
-                    // 서버에 토큰을 보내서 사용자 정보를 가져옴
+                    // 서버에 토큰을 보내서 사용자 정보를 가져옴    
                     const response = await api.post('/user-info', {}, {
                         headers: { Authorization: `Bearer ${storedToken}` }
                     });
@@ -67,14 +68,18 @@ export const AuthProvider = ({ children }) => {
             setUserInfo(null);
         }
     };
+    useEffect(() => {
+    console.log("activeRoom 값 변경:", activeRoom);
+}, [activeRoom]);
 
     // 로딩이 끝날 때까지 자식 컴포넌트를 렌더링하지 않음
     if (loading) {
         return null; // 로딩 중엔 아무것도 렌더링하지 않음
     }
+    
 
     return (
-        <AuthContext.Provider value={{ accessToken, userInfo, setUserInfo, login, logout }}>
+        <AuthContext.Provider value={{ accessToken, userInfo, setUserInfo,activeRoom, setActiveRoom, login, logout }}>
             {children} {/* 로딩 후에만 자식 컴포넌트를 렌더링 */}
         </AuthContext.Provider>
     );

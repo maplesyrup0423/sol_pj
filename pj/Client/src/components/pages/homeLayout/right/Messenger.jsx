@@ -8,7 +8,7 @@ import { AuthContext } from '../../../../Context/AuthContext';
 
 
 function Messenger() {
-    const { userInfo } = useContext(AuthContext);
+    const { userInfo, activeRoom, setActiveRoom } = useContext(AuthContext);
     const [chatList, setChatList] = useState([]);
     const [socket, setSocket] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -79,17 +79,27 @@ const formatLastDate = (dateString) => {
    newSocket.on('new_message', (data) => {
     console.log("새 메시지 받음:", data);
     console.log("메시지 생성 시간:", data.last_message.created_at);
+    
     setChatList(prevList => {
         const roomId = Number(data.room_id); // room_id 형변환
         const chat = prevList.find(chat => chat.room_id === roomId); // room_id로 체크
-         const formattedDate = formatLastDate(data.last_message.created_at);
+        const formattedDate = formatLastDate(data.last_message.created_at);
+
+        // 발신자인지 확인
+        const isSender = data.last_message.nickname === userInfo.nickname;
+
+        // 수신자가 현재 해당 방에 접속해 있는지 확인
+        const isActiveRoom = Number(roomId) === Number(activeRoom);
+        console.log("그냥 roomid"+roomId);
+        console.log("active roomid"+activeRoom);
+
         if (chat) {
             console.log(`채팅방 업데이트: room_id=${roomId}`);
             return prevList.map(chat =>
                 chat.room_id === roomId
                     ? {
                         ...chat,
-                        unread_count: chat.unread_count + 1,
+                        unread_count: (isActiveRoom || isSender) ? 0 : chat.unread_count + 1, // 발신자거나 접속중이면 unread_count 0, 아니면 증가
                         last_date: formattedDate,
                         last_chat: data.last_message.message_content,
                         last_sender: data.last_message.nickname,
@@ -106,7 +116,7 @@ const formatLastDate = (dateString) => {
                     room_name: userInfo.nickname === data.last_message.nickname 
                     ? data.room_name 
                     : data.last_message.nickname,
-                    unread_count: 1,
+                    unread_count: isSender || isActiveRoom ? 0 : 1, // 발신자거나 접속중이면 unread_count 0
                     last_date: formattedDate,
                     last_chat: data.last_message.message_content,
                     last_sender: data.last_message.nickname

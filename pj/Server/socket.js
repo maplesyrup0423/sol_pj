@@ -87,7 +87,7 @@ function setupChatModule(app, io, conn) {
             JOIN User u ON m.user_no = u.user_no
             LEFT JOIN UserProfile up ON m.user_no = up.user_no
             WHERE m.room_id = ?
-            ORDER BY m.created_at DESC
+            ORDER BY m.message_id DESC
             LIMIT 1
         `;
         conn.query(query, [room_id], (error, results) => {
@@ -95,6 +95,7 @@ function setupChatModule(app, io, conn) {
                 reject(error);
             } else {
                 resolve(results[0]);
+                
             }
         });
     });
@@ -190,10 +191,9 @@ function setupChatModule(app, io, conn) {
         socket.on('fetch_more_messages', async (data) => {
             try {
                 const { room_id, joined_at, page, pageSize } = data;
-                console.log(`추가 메시지 요청: room_id=${room_id}, joined_at=${joined_at}, page=${page}, pageSize=${pageSize}`);
                 
                 const messages = await fetchPaginatedMessages(room_id, joined_at, page, pageSize);
-                socket.emit('additional_messages', messages);
+                socket.emit('additional_messages', messages.reverse());
             } catch (error) {
                 console.error('페이지네이션 메시지 조회 오류:', error);
                 socket.emit('error', 'Failed to fetch messages');
@@ -220,7 +220,6 @@ function setupChatModule(app, io, conn) {
 
                     const formatTime = formatToMySQLDate(messageData.created_at);
                     
-                    console.log('메시지 데이터:', messageData);
                     await saveMessage(room_id, user_no, message_content, formatTime);
                     console.log('메시지 저장 완료');
 
@@ -303,7 +302,6 @@ function setupChatModule(app, io, conn) {
                     last_sender: latestMessage ? latestMessage.nickname : null
                 };
             }));
-            console.log(`채팅 목록 전송: ${JSON.stringify(chatList)}`);
             socket.emit('chat_list_update', chatList);
         } catch (error) {
             console.error('채팅 목록 조회 오류:', error);
