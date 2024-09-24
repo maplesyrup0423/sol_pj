@@ -78,8 +78,8 @@ function BoardMore({ onClose }) {
   }, [userInfo]);
 
   return ReactDOM.createPortal(
-    <div className="modalOverlay">
-      <div className="modalContainer">
+    <div className="BoardMore-modalOverlay">
+      <div className="BoardMore-modalContainer">
         {/* 모달 상단 닫기 버튼 */}
         <button className="closeButton" onClick={onClose}>
           <Closebtn />

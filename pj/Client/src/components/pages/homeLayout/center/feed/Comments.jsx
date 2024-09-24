@@ -8,6 +8,8 @@ import { useState, useEffect } from "react";
 import BasicButton from "../../../../utills/buttons/BasicButton";
 import FeedMoreBtn from "./FeedMoreBtn";
 import api from "../../../../auth/api";
+import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import { MdOutlineKeyboardArrowUp } from "react-icons/md";
 
 function Comments(props) {
   const { userInfo } = useContext(AuthContext);
@@ -66,18 +68,31 @@ function Comments(props) {
   const formatModiDate = props.modiDate
     ? formatDate(props.modiDate) + " (수정됨)"
     : "";
-
+  let btnText;
+  if (isCommentVisible) {
+    btnText = (
+      <>
+        <MdOutlineKeyboardArrowUp /> 숨기기
+      </>
+    );
+  } else {
+    btnText = (
+      <>
+        <MdOutlineKeyboardArrowDown /> 답글보기
+      </>
+    );
+  }
   return (
-    <div
-      className="Comments-Container"
-      style={{
-        marginLeft: props.parent_comment_id !== null ? "50px" : "0px", // 자식 댓글은 오른쪽으로 밀림
-        borderBottom:
-          props.parent_comment_id !== null ? "none" : "1px solid #595959", //자식 댓글은 밑줄 없음
-        width: props.parent_comment_id !== null ? "90%" : "100%", // 자식 댓글의 가로 길이 줄이기
-      }}
-    >
-      <div className="FeedComment_contents">
+    <div className="Comments-Container">
+      <div
+        className="FeedComment_contents"
+        style={{
+          marginLeft: props.parent_comment_id !== null ? "10%" : "0px", // 자식 댓글은 오른쪽으로 밀림
+          backgroundColor:
+            props.parent_comment_id !== null ? "#131313" : "black",
+          width: props.parent_comment_id !== null ? "90%" : "100%", // 자식 댓글의 가로 길이 줄이기
+        }}
+      >
         <div className="FeedComment_head">
           <div className="FeedComment_head-left">
             <div className="FeedComment_profile">
@@ -137,14 +152,14 @@ function Comments(props) {
             />
             {/* <button onClick={toggleVisibility}>{isVisible ? '취소' : '답글 쓰기'}</button> */}
           </div>
-          <div className="FeedComments_button">
-            <BasicButton
-              btnSize="mediumButton"
-              btnColor="yellowButton"
-              action={toggleCommentVisibility}
-              btnText={isCommentVisible ? "숨기기" : "답글보기"}
-            />
-          </div>
+        </div>
+        <div className="FeedComments_button">
+          <BasicButton
+            btnSize="mediumButton"
+            btnColor="textColorYellow"
+            action={toggleCommentVisibility}
+            btnText={btnText}
+          ></BasicButton>
         </div>
       </div>
 

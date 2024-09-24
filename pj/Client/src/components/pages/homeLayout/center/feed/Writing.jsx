@@ -187,7 +187,6 @@ function Writing({
     try {
       let response;
       if (isEditMode) {
-        //todo update 호출문
         if (comment_id === null) {
           response = await api.post("/api/postUpdate", postData, {
             headers: {
@@ -283,9 +282,12 @@ function Writing({
   if (isEditMode === true) {
     placeholderText = "수정할 글을 작성해주세요.";
   }
-
+  let reply;
+  if (parent_comment_id !== null) {
+    reply = "replyWrite";
+  }
   return (
-    <div className="write-container">
+    <div className="write-container" id={reply}>
       <form onSubmit={handleSubmit}>
         <div className="write-row">
           <div className="profile-image">
