@@ -149,6 +149,34 @@ GROUP BY cc.comment_id, cc.post_id, cc.parent_comment_id, cc.comment_text,
     });
   });
   //------------------------------------------------------------------
+  //부모 댓글 아이디 찾아오기
+  router.get('/api/getParentUser', async (req, res) => {
+    const parentCommentId = req.query.parentCommentId; // parentCommentId로 수정
+    const postId = req.query.postId;
+
+    const query = `
+      select up.nickname, u.user_id
+      from comments c
+      join UserProfile up
+      on up.user_no = c.user_no
+      join User u
+      on up.user_no = u.user_no
+      where c.post_id = ? and c.comment_id = ?;`;
+
+      try {
+        const results = await db.query(query, [postId, parentCommentId]);
+        
+        if (results.length === 0) {
+            return res.status(404).send("부모 댓글을 찾을 수 없습니다.");
+        }
+
+        res.json(results[0]); // 결과를 JSON 형태로 응답
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("서버 에러");
+    }
+  });
+  //------------------------------------------------------------------------------
   //댓글 입력
   router.post(
     "/api/commentInsert",

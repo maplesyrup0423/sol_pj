@@ -12,6 +12,7 @@ import api from "../../../../auth/api";
 function Comments(props) {
   const { userInfo } = useContext(AuthContext);
   const [replies, setReplies] = useState([]);
+  const [parentUser, setParentUser] = useState([]);
 
   useEffect(() => {
     const fetchReplies = async () => {
@@ -26,6 +27,19 @@ function Comments(props) {
     };
 
     fetchReplies();
+  }, [props.comment_id, props.postId]);
+
+  useEffect(() => {
+    const getParentUser = async () => {
+      try{
+        const res = await api.get(`/api/getParentUser/?postId=${props.postId}&parentCommentId=${props.comment_id}`);
+        setParentUser(res.data);
+      }catch (err) {
+        console.error(err);
+      }
+    };
+
+    getParentUser();
   }, [props.comment_id, props.postId]);
 
   const [isVisible, setIsVisible] = useState(false);
@@ -105,7 +119,7 @@ function Comments(props) {
           comment_id={props.comment_id}
         />
         <div className="FeedComment_down">
-          <div className="FeedComment_comment">{props.comment_text}</div>
+          <div className="FeedComment_comment">{parentUser && <span>@{parentUser.user_id} </span>}{props.comment_text}</div>
         </div>
 
         <div className="FeedComment_foot">
