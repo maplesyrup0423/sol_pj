@@ -1,11 +1,12 @@
 .feed-image {
-  width: 550px;
+  width: 95%;
   text-align: center;
   margin: 10px auto;
 }
 .feedImg1 {
-  width: 530px;
-  height: 380px;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
   border-radius: 30px;
   object-fit: cover;
 }

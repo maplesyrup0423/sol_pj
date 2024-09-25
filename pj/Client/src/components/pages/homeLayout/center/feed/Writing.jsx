@@ -265,8 +265,12 @@ function Writing({
   };
   let fileId;
   let placeholderText;
+  let reply;
 
-  if (comment_id !== null) {
+  if (parent_comment_id !== null) {
+    reply = "replyWrite";
+    fileId = "parent_comment_id" + parent_comment_id;
+  } else if (comment_id !== null) {
     fileId = "comment_id" + comment_id;
     placeholderText = "댓글을 작성해주세요.";
   } else if (postID !== null) {
@@ -282,10 +286,7 @@ function Writing({
   if (isEditMode === true) {
     placeholderText = "수정할 글을 작성해주세요.";
   }
-  let reply;
-  if (parent_comment_id !== null) {
-    reply = "replyWrite";
-  }
+
   return (
     <div className="write-container" id={reply}>
       <form onSubmit={handleSubmit}>
