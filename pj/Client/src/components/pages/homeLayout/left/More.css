@@ -1,6 +1,11 @@
 .moreContainer {
   vertical-align: middle;
   display: flex;
+  padding: 5px;
+}
+.moreContainer:hover {
+  background-color: #313131;
+  border-radius: 10px;
 }
 
 .more_image {

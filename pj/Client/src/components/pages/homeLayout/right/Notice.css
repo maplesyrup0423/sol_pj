@@ -1,76 +1,80 @@
 .notice {
-    width: 250px;
-    height: 120px;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid whitesmoke;
-    border-radius: 30px;
-    /* padding: 15px; */
-    align-items: center;
-    justify-content: center;
+  width: 250px;
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid whitesmoke;
+  border-radius: 30px;
+  /* padding: 15px; */
+  align-items: center;
+  justify-content: center;
 }
 
 .notice_alert {
-    width: 240px;
-    height: 50px;
-    /* margin-bottom: 10px; */
-    line-height: 50px;
-    display: flex;
+  width: 240px;
+  height: 50px;
+  /* margin-bottom: 10px; */
+  line-height: 50px;
+  display: flex;
 }
 .notice_alert a {
-    display: flex;
+  display: flex;
 }
 .alert_icon {
-    /* line-height: 50px; */
+  /* line-height: 50px; */
 
-    margin-left: 10px;
-    margin-right: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .FaRegBell {
-    width: 30px;
-    height: 30px;
-    /* margin-top: 10px; */
-    /* color: #a7d41e; */
+  width: 30px;
+  height: 30px;
+  /* margin-top: 10px; */
+  /* color: #a7d41e; */
 }
 
 .alert_text {
-    width: 50px;
-    /* display: flex; */
+  width: 50px;
+  /* display: flex; */
 }
 
 .alert_number {
-    color: black;
-    font-weight: 600;
-    margin: 10px 10px 10px auto;
-    width: 30px;
-    height: 30px;
-    text-align: center;
-    border-radius: 50%;
-    background-color: #fae100;
-    line-height: 30px;
+  color: black;
+  font-weight: 600;
+  margin: 10px 10px 10px auto;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  border-radius: 50%;
+  background-color: #fae100;
+  line-height: 30px;
 }
 
 .notice_bookMark {
-    width: 240px;
-    height: 50px;
-    line-height: 50px;
-    display: flex;
+  width: 240px;
+  height: 50px;
+  line-height: 50px;
+  display: flex;
 }
 
 .bookMark_icon {
-    line-height: 50px;
-    margin-left: 10px;
-    margin-right: 10px;
+  line-height: 50px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .FaRegBookmark {
-    width: 25px;
-    height: 25px;
-    /* margin-top: 10px; */
+  width: 25px;
+  height: 25px;
+  /* margin-top: 10px; */
 }
 .FaBookmark {
-    width: 25px;
-    height: 25px;
-    /* margin-top: 10px; */
+  width: 25px;
+  height: 25px;
+  /* margin-top: 10px; */
+}
+.notice-NavLink-hover:hover {
+  background-color: #313131;
+  border-radius: 30px;
 }
