@@ -153,7 +153,7 @@ function Comments(props) {
             {/* <button onClick={toggleVisibility}>{isVisible ? '취소' : '답글 쓰기'}</button> */}
           </div>
         </div>
-        {props.reply_count > 0 || props.parent_comment_id === null && (
+        {replies.length > 0 && props.parent_comment_id === null && (
           <div className="FeedComments_button">
             <BasicButton
               btnSize="mediumButton"
