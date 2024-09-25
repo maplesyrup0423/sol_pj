@@ -1,6 +1,7 @@
 import "./MessengerUser.css";
 
 function MessengerUser({ ...chat }) {
+  console.log("chat", chat);
   return (
     <div className="messengerUser">
       {/* messengerTable 부분 테이블 태그로 만들어져 있는데
@@ -14,7 +15,7 @@ function MessengerUser({ ...chat }) {
         <tr>
           <td rowSpan={2}>
             <div className="messengerImageBox">
-              <img className="messengerImage" src="" alt={chat.img} />
+              <img className="messengerImage" src="" alt="" />
             </div>
           </td>
           <td>
@@ -22,7 +23,7 @@ function MessengerUser({ ...chat }) {
           </td>
           <td rowSpan={2} className="messengerNumberBox">
             <div className="messengerNumber">{chat.unread_count}</div>
-          </td>{" "}
+          </td>
           {/*알림갯수 */}
         </tr>
         <tr>

@@ -33,9 +33,17 @@
   padding: 10px 15px;
   gap: 70px;
 }
+.activeChat:hover {
+  background-color: rgba(255, 205, 25, 0.5);
+  border-radius: 10px;
+  color: #ffcd19;
+}
 
 .activeChat {
-  color: #ffcd19;
+  color: white;
   background-color: inherit;
   border: none;
+}
+.RightNav-Footer {
+  margin-left: 25px;
 }

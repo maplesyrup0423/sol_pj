@@ -11,6 +11,7 @@ function BoardName(props) {
     <li key={props.board_info_id}>
       <NavLink
         to={`/post/${props.board_info_id}`}
+        className="BoardName-hover"
         style={({ isActive }) => ({
           fontWeight: isActive ? "bold" : "normal", // 활성화된 링크에 스타일 적용
           color: isActive ? "#ffcd19" : "white", // 선택된 링크의 색상

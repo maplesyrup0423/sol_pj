@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useCallback } from "react";
+import { useState, useEffect, useContext, useCallback } from "react";
 import { Link, NavLink, useParams } from "react-router-dom";
 import "./Messenger.css";
 import MessengerUser from "./MessengerUser";
@@ -170,7 +170,11 @@ function Messenger() {
               ? chat.last_sender
               : chat.room_name;
           return (
-            <Link to={`Room/${chat.room_id}`} key={chat.room_id}>
+            <Link
+              to={`Room/${chat.room_id}`}
+              key={chat.room_id}
+              className="Link-hover"
+            >
               <MessengerUser room_name={displayName} {...chat} />
             </Link>
           );
@@ -179,10 +183,17 @@ function Messenger() {
       <div className="addMessengerbtn">
         <NavLink
           to={"chatFriendList"}
-          style={{ textDecoration: "none", color: "inherit" }}
+          className="Link-hover"
+          style={{
+            textDecoration: "none",
+            color: "inherit",
+            marginTop: "10px",
+          }}
         >
-          <FaPlus size={40} />
-          <span>새로운 채팅방</span>
+          <div className="newChatRoom">
+            <FaPlus size={30} />
+            <span>새로운 채팅방</span>
+          </div>
         </NavLink>
       </div>
     </div>
