@@ -40,22 +40,28 @@ function Room() {
   }, [userInfo, setUserInfo, accessToken]);
 
   useEffect(() => {
-    console.log("Room ID:", roomId); // roomId 확인
-
     if (userInfo && userInfo.user_no && accessToken) {
       const newSocket = io("http://localhost:5000", {
         auth: { token: accessToken },
       });
       setSocket(newSocket);
-      setActiveRoom(roomId); // roomId를 activeRoom으로 설정
-      console.log(activeRoom);
-      console.log("활성 방 설정:", roomId); // 방 ID 확인
+
+      setActiveRoom(roomId);
+      // roomId를 activeRoom으로 설정
+      console.log("활성 방 설정 전:", activeRoom);
+
       return () => {
         newSocket.close();
+
         setActiveRoom(null);
       };
     }
   }, [userInfo, accessToken, roomId]);
+
+  // activeRoom 상태가 변경될 때마다 확인
+  useEffect(() => {
+    console.log("activeRoom 값 변경 감지:", activeRoom);
+  }, [activeRoom]);
 
   useEffect(() => {
     if (socket && userInfo && userInfo.user_no) {
