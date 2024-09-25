@@ -135,7 +135,8 @@ SELECT cc.comment_id, cc.post_id, cc.parent_comment_id, cc.comment_text,
        cc.user_no, cc.createDate, cc.modiDate, cc.isDeleted,
        cc.nickname, cc.image_url, cc.user_id, cc.parent_user_id,
        COUNT(cl.user_no) AS like_count,
-       GROUP_CONCAT(DISTINCT cf.comments_file_path ORDER BY cf.upload_date SEPARATOR ', ') AS file_paths
+       GROUP_CONCAT(DISTINCT cf.comments_file_path ORDER BY cf.upload_date SEPARATOR ', ') AS file_paths,
+       (SELECT COUNT(*) FROM CommentCTE ccte WHERE ccte.parent_comment_id = cc.comment_id) AS reply_count
 FROM CommentCTE cc
 LEFT JOIN comment_likes cl ON cc.comment_id = cl.comment_id
 LEFT JOIN comments_files cf ON cc.comment_id = cf.comment_id
