@@ -1,7 +1,6 @@
 import "./MessengerUser.css";
 
 function MessengerUser({ ...chat }) {
-  console.log("chat", chat);
   return (
     <div className="messengerUser">
       {/* messengerTable 부분 테이블 태그로 만들어져 있는데
