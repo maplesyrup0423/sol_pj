@@ -10,7 +10,7 @@ import UserProfile from "./components/pages/homeLayout/center/UserProfile/UserPr
 //import MyProfile from "./components/pages/homeLayout/center/UserProfile/EditProfile";
 import SignUp from "./components/pages/SignUp";
 import Followers from "./components/pages/homeLayout/right/Followers";
-import EditAccount from "./components/pages/homeLayout/center/UserProfile/EditAccount";
+//import EditAccount from "./components/pages/homeLayout/center/UserProfile/EditAccount";
 import Room from "./components/pages/homeLayout/center/chat/Room";
 import ChatFriendList from "./components/pages/homeLayout/center/chat/ChatFriendList";
 import FeedDetail from "./components/pages/homeLayout/center/feed/FeedDetail";
@@ -21,6 +21,7 @@ import { NotificationProvider } from "./Context/NotificationContext";
 import SearchPage from "./components/pages/homeLayout/center/feed/SearchPage";
 import Account from "./components/pages/homeLayout/center/UserProfile/Account/Account";
 import ChangePassword from "./components/pages/homeLayout/center/UserProfile/Account/ChangePassword";
+import LoginHistory from "./components/pages/homeLayout/center/UserProfile/Account/LoginHistory";
 
 function App() {
   const router = createBrowserRouter([
@@ -85,6 +86,14 @@ function App() {
           element: (
             <PrivateRoute>
               <ChangePassword />
+            </PrivateRoute>
+          ),
+        },
+        {
+          path: "/LoginHistory",
+          element: (
+            <PrivateRoute>
+              <LoginHistory />
             </PrivateRoute>
           ),
         },

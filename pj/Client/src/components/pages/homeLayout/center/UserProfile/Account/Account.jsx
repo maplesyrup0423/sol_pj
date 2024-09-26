@@ -52,7 +52,7 @@ function Account() {
             </NavLink>
           </li>
           <li>
-            <NavLink to={``} className="Account-NavLink">
+            <NavLink to={"/LoginHistory"} className="Account-NavLink">
               <div className="Account-btn">
                 <div className="Account-left">
                   <MdOutlineSwitchAccount color="gray" size={25} />
