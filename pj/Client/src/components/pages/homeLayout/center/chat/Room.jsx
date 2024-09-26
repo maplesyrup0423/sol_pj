@@ -1,6 +1,7 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
+import { useInView } from "react-intersection-observer";
 import { AuthContext } from "../../../../../Context/AuthContext";
 import api from "../../../../auth/api";
 import BasicButton from "../../../../utills/buttons/BasicButton";
@@ -9,20 +10,19 @@ import "./Room.css";
 import { IoMdArrowRoundBack } from "react-icons/io";
 
 function Room() {
-  const { userInfo, accessToken, setUserInfo, activeRoom, setActiveRoom } =
-    useContext(AuthContext);
+  const { userInfo, accessToken, setUserInfo } = useContext(AuthContext);
   const { roomId } = useParams();
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
-  const chatEndRef = useRef(null);
-  const messageListRef = useRef(null);
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
   const baseUrl = import.meta.env.VITE_BASE_URL;
+  const navigate = useNavigate();
+  const chatContainerRef = useRef(null);
+  const { ref, inView } = useInView({ threshold: 0 });
 
+  // 유저 정보 체크 및 소켓 설정
   useEffect(() => {
     const checkUserInfo = async () => {
       if (!userInfo || !userInfo.user_no) {
@@ -33,12 +33,12 @@ function Room() {
           console.error("유저정보를 가져올 수 없습니다:", error);
         }
       }
-      setLoading(false);
+      setLoading(false); // 유저 정보 로드가 완료된 후 로딩 상태 해제
     };
-
     checkUserInfo();
   }, [userInfo, setUserInfo, accessToken]);
 
+  // 소켓 초기화
   useEffect(() => {
     if (userInfo && userInfo.user_no && accessToken) {
       const newSocket = io("http://localhost:5000", {
@@ -46,84 +46,63 @@ function Room() {
       });
       setSocket(newSocket);
 
-      setActiveRoom(roomId);
-      // roomId를 activeRoom으로 설정
-      console.log("활성 방 설정 전:", activeRoom);
-
       return () => {
-        newSocket.close();
-
-        setActiveRoom(null);
+        newSocket.close(); // 컴포넌트 언마운트 시 소켓 종료
       };
     }
-  }, [userInfo, accessToken, roomId]);
+  }, [userInfo, accessToken]);
 
-  // activeRoom 상태가 변경될 때마다 확인
-  useEffect(() => {
-    console.log("activeRoom 값 변경 감지:", activeRoom);
-  }, [activeRoom]);
-
+  // 방 변경 시 메시지 초기화 및 소켓 이벤트 설정
   useEffect(() => {
     if (socket && userInfo && userInfo.user_no) {
+      setLoading(true); // 로딩 시작
+      setMessages([]); // 메시지 상태 초기화
+      setHasMore(true); // 이전 메시지 로드 상태 초기화
       socket.emit("join_room", roomId, userInfo.user_no);
 
-      socket.on("initial_messages", (initialMessages) => {
-        console.log("초기 메시지:", initialMessages);
-        setMessages(initialMessages.reverse());
+      // 소켓 이벤트 리스너 등록
+      const handleInitialMessages = (initialMessages) => {
+        setMessages(initialMessages);
         setHasMore(initialMessages.length === 20);
-        setIsInitialLoad(false);
         setTimeout(() => {
           scrollToBottom();
-        }, 100);
-      });
+        }, 100); // 초기 메시지 로딩 후 스크롤을 아래로
+        setLoading(false); // 로딩 완료
+      };
 
-      socket.on("chat_message", (data) => {
-        setMessages((prevMessages) => {
-          const updatedMessages = [...prevMessages, data];
-          const isAtBottom =
-            messageListRef.current.scrollHeight -
-              messageListRef.current.clientHeight <=
-            messageListRef.current.scrollTop + 1;
-
-          if (isAtBottom) {
-            scrollToBottom();
-          }
-          return updatedMessages;
-        });
-      });
-
-      socket.on("additional_messages", (additionalMessages) => {
-        const prevScrollHeight = messageListRef.current.scrollHeight;
-        const prevScrollTop = messageListRef.current.scrollTop;
-        console.log("추가 메시지:", additionalMessages);
-        setMessages((prevMessages) => [...additionalMessages, ...prevMessages]);
-
+      const handleChatMessage = (data) => {
+        setMessages((prevMessages) => [...prevMessages, data]);
         setTimeout(() => {
-          const newScrollHeight = messageListRef.current.scrollHeight;
-          messageListRef.current.scrollTop =
-            newScrollHeight - prevScrollHeight + prevScrollTop;
-        }, 0);
+          scrollToBottom();
+        }, 100); // 새 메시지가 오면 스크롤을 아래로
+      };
 
-        setHasMore(additionalMessages.length === 20);
-      });
+      const handlePreviousMessages = (previousMessages) => {
+        if (previousMessages.length > 0) {
+          setMessages((prevMessages) => [...previousMessages, ...prevMessages]); // 이전 메시지를 추가
+          setHasMore(previousMessages.length === 20); // 이전 메시지가 더 있는지 확인
+        } else {
+          setHasMore(false); // 이전 메시지가 더 이상 없으면 상태 업데이트
+        }
+      };
+
+      socket.on("initial_messages", handleInitialMessages);
+      socket.on("chat_message", handleChatMessage);
+      socket.on("previous_messages", handlePreviousMessages);
 
       return () => {
-        socket.off("initial_messages");
-        socket.off("chat_message");
-        socket.off("additional_messages");
+        socket.off("initial_messages", handleInitialMessages);
+        socket.off("chat_message", handleChatMessage);
+        socket.off("previous_messages", handlePreviousMessages);
       };
     }
   }, [socket, userInfo, roomId]);
 
-  const scrollToBottom = () => {
-    if (messageListRef.current) {
-      messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
-      console.log(
-        "스크롤을 최하단으로 이동:",
-        messageListRef.current.scrollTop
-      );
+  useEffect(() => {
+    if (inView && hasMore) {
+      loadPreviousMessages();
     }
-  };
+  }, [inView, hasMore]);
 
   const handleSendMessage = (e) => {
     e.preventDefault();
@@ -136,65 +115,53 @@ function Room() {
 
       socket.emit("chat_message", messageData);
       setInputMessage("");
-
-      setTimeout(() => {
-        scrollToBottom();
-      }, 100);
     }
   };
 
-  const loadMoreMessages = () => {
+  const loadPreviousMessages = () => {
     if (socket && userInfo && userInfo.user_no && hasMore) {
-      const oldestMessage = messages[messages.length - 1];
-      const oldestMessageDate = oldestMessage
-        ? new Date(oldestMessage.created_at)
-        : new Date();
-      console.log("가장 오래된 메시지:", oldestMessage);
-      console.log(
-        "가장 오래된 메시지의 created_at:",
-        oldestMessage ? oldestMessage.created_at : "없음"
-      );
+      const oldestMessage = messages[0]; // 가장 오래된 메시지를 가져옵니다.
+      const oldestMessageId = oldestMessage ? oldestMessage.message_id : null;
 
-      socket.emit("fetch_more_messages", {
-        room_id: roomId,
-        joined_at: oldestMessageDate.toISOString(),
-        page: page + 1,
-        pageSize: 20,
-      });
-      setPage((prevPage) => prevPage + 1);
+      if (oldestMessageId) {
+        // 가장 오래된 메시지가 있을 때만 요청합니다.
+        socket.emit("fetch_previous_messages", {
+          room_id: roomId,
+          oldest_message_id: oldestMessageId,
+        });
+      }
     }
   };
 
-  const handleScroll = () => {
-    const { scrollTop } = messageListRef.current;
-    if (scrollTop === 0 && hasMore && !isInitialLoad) {
-      loadMoreMessages();
+  const scrollToBottom = () => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
     }
   };
-  //↓↓↓↓↓↓↓↓↓↓뒤로가기 버튼 코드
-  const navigate = useNavigate();
+
   const handleBack = () => {
-    navigate(-1); //뒤로가기
+    navigate(-1);
   };
-  //↑↑↑↑↑↑↑↑↑↑뒤로가기 버튼 코드
+
   if (loading) {
     return <div>로딩중입니다</div>;
   }
 
   return (
     <div className="chatContainer">
-      <div className="caht-header">
+      <div className="chat-header">
         <div className="BackIcon" onClick={handleBack}>
           <IoMdArrowRoundBack />
         </div>
         <span></span>
-        {/*채팅방 이름 넣어줄거면 여기에 넣어주시면됩니다. 일단 비워두겠습니당 */}
       </div>
 
-      <div className="chat-Card" ref={messageListRef} onScroll={handleScroll}>
-        {messages.map((msg, index) => (
+      <div className="chat-Card" ref={chatContainerRef}>
+        {hasMore && <div ref={ref} style={{ height: "20px" }}></div>}
+        {messages.map((msg) => (
           <ChatMessage
-            key={index}
+            key={msg.message_id}
             isMyChat={msg.user_no === userInfo.user_no}
             text={msg.message_content}
             nickname={msg.nickname}
@@ -202,7 +169,6 @@ function Room() {
             image_url={`${baseUrl}/images/uploads/${msg.image_url}`}
           />
         ))}
-        <div ref={chatEndRef} />
       </div>
       <div className="chatRoom-formDiv">
         <form onSubmit={handleSendMessage}>

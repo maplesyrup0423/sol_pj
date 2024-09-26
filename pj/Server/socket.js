@@ -10,30 +10,42 @@ function setupChatModule(app, io, conn) {
   };
 
   // 메시지 조회
-  function fetchPaginatedMessages(room_id, joined_at, page, pageSize) {
+  function fetchMessages(room_id, oldest_message_id = null, limit = 20) {
     return new Promise((resolve, reject) => {
-      const offset = (page - 1) * pageSize;
-      const query = `
-                SELECT m.*, up.nickname, up.image_url 
-                FROM ChatMessage m 
-                JOIN User u ON m.user_no = u.user_no 
-                LEFT JOIN UserProfile up ON m.user_no = up.user_no
-                WHERE m.room_id = ? AND m.created_at > ?
-                ORDER BY m.message_id DESC
-                LIMIT ? OFFSET ?
-            `;
+      let query;
+      let params;
 
-      conn.query(
-        query,
-        [room_id, joined_at, pageSize, offset],
-        (error, messages) => {
-          if (error) {
-            reject(error);
-          } else {
-            resolve(messages);
-          }
+      if (oldest_message_id) {
+        query = `
+          SELECT m.*, up.nickname, up.image_url 
+          FROM ChatMessage m 
+          JOIN User u ON m.user_no = u.user_no 
+          LEFT JOIN UserProfile up ON m.user_no = up.user_no
+          WHERE m.room_id = ? AND m.message_id < ?
+          ORDER BY m.message_id DESC
+          LIMIT ?
+        `;
+        params = [room_id, oldest_message_id, limit];
+      } else {
+        query = `
+          SELECT m.*, up.nickname, up.image_url 
+          FROM ChatMessage m 
+          JOIN User u ON m.user_no = u.user_no 
+          LEFT JOIN UserProfile up ON m.user_no = up.user_no
+          WHERE m.room_id = ?
+          ORDER BY m.message_id DESC
+          LIMIT ?
+        `;
+        params = [room_id, limit];
+      }
+
+      conn.query(query, params, (error, messages) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(messages.reverse()); // 시간 순으로 정렬
         }
-      );
+      });
     });
   }
 
@@ -200,13 +212,7 @@ function setupChatModule(app, io, conn) {
         console.log(`소켓 룸 조인: ${room_id}`);
         socket.join(room_id);
 
-        const initialMessages = await fetchPaginatedMessages(
-          room_id,
-          joined_at,
-          1,
-          20
-        );
-
+        const initialMessages = await fetchMessages(room_id);
         socket.emit("initial_messages", initialMessages);
       } catch (error) {
         console.error("채팅방 참가 오류:", error);
@@ -215,24 +221,23 @@ function setupChatModule(app, io, conn) {
     });
 
     // 추가 메시지 요청 (페이지네이션)
-    socket.on("fetch_more_messages", async (data) => {
+    // 추가 메시지 요청 (페이지네이션)
+    socket.on("fetch_previous_messages", async (data) => {
       try {
-        const { room_id, joined_at, page, pageSize } = data;
+        const { room_id, oldest_message_id } = data;
+        const messages = await fetchMessages(room_id, oldest_message_id);
 
-        const messages = await fetchPaginatedMessages(
-          room_id,
-          joined_at,
-          page,
-          pageSize
-        );
-        socket.emit("additional_messages", messages.reverse());
+        if (messages.length > 0) {
+          socket.emit("previous_messages", messages);
+        } else {
+          console.log("더 이상 이전 메시지가 없습니다.");
+        }
       } catch (error) {
-        console.error("페이지네이션 메시지 조회 오류:", error);
-        socket.emit("error", "Failed to fetch messages");
+        console.error("이전 메시지 조회 오류:", error);
+        socket.emit("error", "Failed to fetch previous messages");
       }
     });
 
-    // 메시지 전송
     // 메시지 전송
     socket.on("chat_message", async (data) => {
       try {

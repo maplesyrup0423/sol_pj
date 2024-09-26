@@ -304,6 +304,14 @@ CREATE TABLE Announcements (
   content TEXT,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+-- 로그인 로그 테이블
+CREATE TABLE LoginLog (
+   log_id        int      AUTO_INCREMENT PRIMARY KEY,  -- 로그 ID
+   user_id       varchar(256)    NOT NULL,                    -- 유저 id 
+   login_time    DATETIME        NOT NULL,                    -- 로그인 시간
+   login_status  ENUM('SUCCESS', 'FAIL') NOT NULL,            -- 로그인 성공 여부
+   FOREIGN KEY (user_id) REFERENCES User(user_id)             -- User 테이블과 연결
+);
 
 
-
+select * from Loginlog;
