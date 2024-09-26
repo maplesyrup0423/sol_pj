@@ -18,8 +18,11 @@ import BookmarkView from "./components/pages/homeLayout/center/feed/BookmarkView
 import MyNotifications from "./components/pages/homeLayout/center/notification/MyNotifications";
 import PrivateRoute from "./components/auth/privateRoute";
 import { NotificationProvider } from "./Context/NotificationContext";
+
 import Account from "./components/pages/homeLayout/center/UserProfile/Account/Account";
 import ChangePassword from "./components/pages/homeLayout/center/UserProfile/Account/ChangePassword";
+import SearchPage from "./components/pages/homeLayout/center/feed/SearchPage";
+
 
 function App() {
   const router = createBrowserRouter([
@@ -38,6 +41,112 @@ function App() {
               <FeedMain />
             </PrivateRoute>
           ),
+
+            path: "/",
+            element: (
+                <PrivateRoute>
+                    <HomePage />
+                </PrivateRoute>
+            ),
+            children: [
+                {
+                    path: "/",
+                    element: (
+                        <PrivateRoute>
+                            <FeedMain />
+                        </PrivateRoute>
+                    ),
+                },
+                {
+                    path: "/post/:boardId",
+                    element: (
+                        <PrivateRoute>
+                            <FeedMain />
+                        </PrivateRoute>
+                    ),
+                },
+                {
+                    path: "/:username",
+                    element: (
+                        <PrivateRoute>
+                            <UserProfile />
+                        </PrivateRoute>
+                    ),
+                },
+                // {
+                //   path: "/editProfile",
+                //   element: (
+                //     <PrivateRoute>
+                //       <MyProfile />
+                //     </PrivateRoute>
+                //   ),
+                // },
+                {
+                    path: "/followers",
+                    element: (
+                        <PrivateRoute>
+                            <Followers />
+                        </PrivateRoute>
+                    ),
+                },
+                {
+                    path: "/account",
+                    element: (
+                        <PrivateRoute>
+                            <EditAccount />
+                        </PrivateRoute>
+                    ),
+                },
+                {
+                    path: "/room/:roomId",
+                    element: (
+                        <PrivateRoute>
+                            <Room />
+                        </PrivateRoute>
+                    ),
+                },
+                {
+                    path: "/chatFriendList",
+                    element: (
+                        <PrivateRoute>
+                            <ChatFriendList />
+                        </PrivateRoute>
+                    ),
+                },
+                {
+                    path: "/Bookmark",
+                    element: (
+                        <PrivateRoute>
+                            <BookmarkView />
+                        </PrivateRoute>
+                    ),
+                },
+                {
+                    path: "/myNotifications",
+                    element: (
+                        <PrivateRoute>
+                            <MyNotifications />
+                        </PrivateRoute>
+                    ),
+                },
+                {
+                    path: "/post/:boardId/:postId",
+                    element: (
+                        <PrivateRoute>
+                            <FeedDetail />
+                        </PrivateRoute>
+                    ),
+                },
+                {
+                    path: "/search/:searchKeyword",
+                    element: (
+                        <PrivateRoute>
+                            <SearchPage />
+                        </PrivateRoute>
+                    ),
+                },
+            ],
+
         },
         {
           path: "/post/:boardId",
