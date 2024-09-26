@@ -18,6 +18,7 @@ import BookmarkView from "./components/pages/homeLayout/center/feed/BookmarkView
 import MyNotifications from "./components/pages/homeLayout/center/notification/MyNotifications";
 import PrivateRoute from "./components/auth/privateRoute";
 import { NotificationProvider } from "./Context/NotificationContext";
+import SearchPage from "./components/pages/homeLayout/center/feed/SearchPage";
 
 function App() {
     const router = createBrowserRouter([
@@ -114,6 +115,14 @@ function App() {
                     element: (
                         <PrivateRoute>
                             <FeedDetail />
+                        </PrivateRoute>
+                    ),
+                },
+                {
+                    path: "/search/:searchKeyword",
+                    element: (
+                        <PrivateRoute>
+                            <SearchPage />
                         </PrivateRoute>
                     ),
                 },

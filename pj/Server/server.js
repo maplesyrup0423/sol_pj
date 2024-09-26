@@ -108,3 +108,6 @@ app.use(userPostRoutes(conn));
 
 const commentRoutes = require("./controllers/comments");
 app.use(commentRoutes(conn));
+
+const searchRoutes = require("./controllers/search");
+app.use(searchRoutes(conn));
