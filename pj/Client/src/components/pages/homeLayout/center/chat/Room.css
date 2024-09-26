@@ -4,7 +4,7 @@
   background-color: black;
 }
 
-.caht-header {
+.chat-header {
   border-bottom: 1px solid white;
   display: flex;
   height: 5vh;
@@ -12,6 +12,7 @@
   padding: 10px;
   width: 100%;
   background-color: black;
+  box-sizing: border-box;
 }
 .chat-Card {
   background-color: black;
