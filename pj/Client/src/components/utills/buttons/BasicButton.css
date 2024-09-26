@@ -22,7 +22,13 @@
   border-radius: 30px;
   font-size: 18px;
 } */
-
+.bigButton {
+  border: none;
+  width: 100%;
+  height: 30px;
+  border-radius: 30px;
+  font-size: 18px;
+}
 /* 버튼 색 */
 .yellowButton {
   background-color: #ffcd19;

@@ -1,0 +1,34 @@
+.Account-header {
+  border-bottom: 1px solid white;
+  display: flex;
+  height: 50px;
+  align-items: center; /* 수직 가운데 정렬 */
+  padding: 10px;
+}
+.Account-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* 요소 간 간격을 벌리기 위해 사용 가능 */
+  padding: 20px;
+}
+.Account-left {
+  display: flex;
+  align-items: center; /* 아이콘과 텍스트를 수직으로 가운데 정렬 */
+  gap: 10px;
+}
+.Account-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 10px; /* 아이콘과 텍스트 간의 간격을 조정 */
+}
+.Account-gray-text {
+  color: gray;
+}
+.Account-NavLink {
+  color: white; /* 기본 색상 설정 */
+  text-decoration: none; /* 밑줄 제거 */
+}
+.Account-btn:hover {
+  background-color: #313131;
+}

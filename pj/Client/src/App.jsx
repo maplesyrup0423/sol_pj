@@ -18,128 +18,138 @@ import BookmarkView from "./components/pages/homeLayout/center/feed/BookmarkView
 import MyNotifications from "./components/pages/homeLayout/center/notification/MyNotifications";
 import PrivateRoute from "./components/auth/privateRoute";
 import { NotificationProvider } from "./Context/NotificationContext";
+import Account from "./components/pages/homeLayout/center/UserProfile/Account/Account";
+import ChangePassword from "./components/pages/homeLayout/center/UserProfile/Account/ChangePassword";
 
 function App() {
-    const router = createBrowserRouter([
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: (
+        <PrivateRoute>
+          <HomePage />
+        </PrivateRoute>
+      ),
+      children: [
         {
-            path: "/",
-            element: (
-                <PrivateRoute>
-                    <HomePage />
-                </PrivateRoute>
-            ),
-            children: [
-                {
-                    path: "/",
-                    element: (
-                        <PrivateRoute>
-                            <FeedMain />
-                        </PrivateRoute>
-                    ),
-                },
-                {
-                    path: "/post/:boardId",
-                    element: (
-                        <PrivateRoute>
-                            <FeedMain />
-                        </PrivateRoute>
-                    ),
-                },
-                {
-                    path: "/:username",
-                    element: (
-                        <PrivateRoute>
-                            <UserProfile />
-                        </PrivateRoute>
-                    ),
-                },
-                // {
-                //   path: "/editProfile",
-                //   element: (
-                //     <PrivateRoute>
-                //       <MyProfile />
-                //     </PrivateRoute>
-                //   ),
-                // },
-                {
-                    path: "/followers",
-                    element: (
-                        <PrivateRoute>
-                            <Followers />
-                        </PrivateRoute>
-                    ),
-                },
-                {
-                    path: "/account",
-                    element: (
-                        <PrivateRoute>
-                            <EditAccount />
-                        </PrivateRoute>
-                    ),
-                },
-                {
-                    path: "/room/:roomId",
-                    element: (
-                        <PrivateRoute>
-                            <Room />
-                        </PrivateRoute>
-                    ),
-                },
-                {
-                    path: "/chatFriendList",
-                    element: (
-                        <PrivateRoute>
-                            <ChatFriendList />
-                        </PrivateRoute>
-                    ),
-                },
-                {
-                    path: "/Bookmark",
-                    element: (
-                        <PrivateRoute>
-                            <BookmarkView />
-                        </PrivateRoute>
-                    ),
-                },
-                {
-                    path: "/myNotifications",
-                    element: (
-                        <PrivateRoute>
-                            <MyNotifications />
-                        </PrivateRoute>
-                    ),
-                },
-                {
-                    path: "/post/:boardId/:postId",
-                    element: (
-                        <PrivateRoute>
-                            <FeedDetail />
-                        </PrivateRoute>
-                    ),
-                },
-            ],
+          path: "/",
+          element: (
+            <PrivateRoute>
+              <FeedMain />
+            </PrivateRoute>
+          ),
         },
         {
-            path: "/login",
-            element: <LoginPage />,
+          path: "/post/:boardId",
+          element: (
+            <PrivateRoute>
+              <FeedMain />
+            </PrivateRoute>
+          ),
+        },
+        {
+          path: "/:username",
+          element: (
+            <PrivateRoute>
+              <UserProfile />
+            </PrivateRoute>
+          ),
         },
         // {
-        //     path: "/intro",
-        //     element: <IntroPage />,
+        //   path: "/editProfile",
+        //   element: (
+        //     <PrivateRoute>
+        //       <MyProfile />
+        //     </PrivateRoute>
+        //   ),
         // },
         {
-            path: "/signup",
-            element: <SignUp />,
+          path: "/followers",
+          element: (
+            <PrivateRoute>
+              <Followers />
+            </PrivateRoute>
+          ),
         },
-    ]);
+        {
+          path: "/room/:roomId",
+          element: (
+            <PrivateRoute>
+              <Room />
+            </PrivateRoute>
+          ),
+        },
+        {
+          path: "/chatFriendList",
+          element: (
+            <PrivateRoute>
+              <ChatFriendList />
+            </PrivateRoute>
+          ),
+        },
+        {
+          path: "/Bookmark",
+          element: (
+            <PrivateRoute>
+              <BookmarkView />
+            </PrivateRoute>
+          ),
+        },
+        {
+          path: "/myNotifications",
+          element: (
+            <PrivateRoute>
+              <MyNotifications />
+            </PrivateRoute>
+          ),
+        },
+        {
+          path: "/post/:boardId/:postId",
+          element: (
+            <PrivateRoute>
+              <FeedDetail />
+            </PrivateRoute>
+          ),
+        },
+        {
+          path: "/account",
+          element: (
+            <PrivateRoute>
+              <Account />
+            </PrivateRoute>
+          ),
+        },
+        {
+          path: "/ChangePassword",
+          element: (
+            <PrivateRoute>
+              <ChangePassword />
+            </PrivateRoute>
+          ),
+        },
+      ],
+    },
+    {
+      path: "/login",
+      element: <LoginPage />,
+    },
+    // {
+    //     path: "/intro",
+    //     element: <IntroPage />,
+    // },
+    {
+      path: "/signup",
+      element: <SignUp />,
+    },
+  ]);
 
-    return (
-        <AuthProvider>
-            <NotificationProvider>
-                <RouterProvider router={router} />
-            </NotificationProvider>
-        </AuthProvider>
-    );
+  return (
+    <AuthProvider>
+      <NotificationProvider>
+        <RouterProvider router={router} />
+      </NotificationProvider>
+    </AuthProvider>
+  );
 }
 
 export default App;
