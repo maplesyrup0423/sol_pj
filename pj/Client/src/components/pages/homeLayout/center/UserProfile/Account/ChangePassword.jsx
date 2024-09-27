@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useState } from "react";
 import BasicButton from "../../../../../utills/buttons/BasicButton";
+import api from "../../../../../auth/api";
 
 function ChangePassword() {
   const navigate = useNavigate();
@@ -10,13 +11,37 @@ function ChangePassword() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordMismatch, setPasswordMismatch] = useState(false); // 비밀번호 불일치 상태 추가
+  const [errorMessage, setErrorMessage] = useState(null); // 서버 오류 메시지 상태 추가
+  const [successMessage, setSuccessMessage] = useState(null); // 성공 메시지 상태 추가
 
   const handleBack = () => {
     navigate(-1); //뒤로가기
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // 비밀번호 변경 로직 처리
+
+    try {
+      const response = await api.post("/api/changePassword", {
+        currentPassword,
+        newPassword,
+        confirmPassword,
+      });
+
+      if (response.status === 200) {
+        setSuccessMessage(response.data.message);
+        setErrorMessage(null);
+        //todo 비밀번호 변경 성공 시 처리 로직- 로그아웃 시키고 로그인창으로 보내기
+      } else {
+        setErrorMessage(response.data.message); // 서버에서 받은 오류 메시지 표시
+      }
+    } catch (error) {
+      if (error.response && error.response.data) {
+        setErrorMessage(error.response.data.message);
+      } else {
+        setErrorMessage("비밀번호 변경 중 오류가 발생했습니다.");
+      }
+    }
   };
 
   return (
@@ -42,6 +67,7 @@ function ChangePassword() {
               onChange={(e) => setCurrentPassword(e.target.value)}
               required
             />
+            {errorMessage && <p className="error-message">{errorMessage}</p>}
           </div>
 
           <div className={`input-group ${newPassword ? "active" : ""}`}>
@@ -95,6 +121,9 @@ function ChangePassword() {
             btnText="저장"
             type="submit"
           />
+          {successMessage && (
+            <p className="success-message">{successMessage}</p>
+          )}
         </form>
       </div>
     </>
