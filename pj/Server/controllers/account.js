@@ -3,23 +3,35 @@ const router = express.Router();
 const decodeToken = require("../middleware/decodeToken");
 
 module.exports = function (conn) {
-  router.post("/changePassword", decodeToken(), async (req, res) => {
+  router.post("/api/changePassword", decodeToken(), async (req, res) => {
     const { currentPassword, newPassword, confirmPassword } = req.body;
     const userNo = req.user_no; // decodeToken 미들웨어에서 가져온 user_no
 
     try {
       // 1. 현재 비밀번호 확인을 위한 쿼리
-      const [userPassword] = await conn.query(
-        "SELECT password FROM Password WHERE user_no = ?",
-        [userNo]
-      );
+      const userPassword = await new Promise((resolve, reject) => {
+        conn.query(
+          "SELECT password FROM Password WHERE user_no = ?",
+          [userNo],
+          (err, rows) => {
+            if (err) {
+              console.error("쿼리 실행 오류:", err);
+              return reject(err); // 에러를 reject
+            }
+            if (rows.length === 0) {
+              return resolve(null); // 결과가 없을 경우 null 반환
+            }
+            resolve(rows[0].password); // 비밀번호만 반환
+          }
+        );
+      });
 
-      if (!userPassword) {
+      if (userPassword === null) {
         return res.status(404).json({ message: "사용자를 찾을 수 없습니다." });
       }
 
       // 2. 현재 비밀번호가 일치하는지 확인
-      if (userPassword.password !== currentPassword) {
+      if (userPassword !== currentPassword) {
         return res
           .status(400)
           .json({ message: "입력한 현재 비밀번호가 일치하지 않습니다." });
@@ -47,7 +59,7 @@ module.exports = function (conn) {
     }
   });
 
-  router.post("/loginLog", decodeToken(), async (req, res) => {
+  router.post("/api/loginLog", decodeToken(), async (req, res) => {
     const userNo = req.user_no; // decodeToken에서 얻은 user_no
 
     try {

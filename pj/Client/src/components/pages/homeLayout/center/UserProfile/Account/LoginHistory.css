@@ -2,3 +2,6 @@
   border-bottom: 1px solid gray;
   padding: 10px;
 }
+.LoginHistory-detail span {
+  margin: 5px;
+}

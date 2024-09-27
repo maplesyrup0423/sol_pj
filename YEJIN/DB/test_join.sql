@@ -241,5 +241,80 @@ GROUP BY cc.comment_id, cc.post_id, cc.parent_comment_id, cc.comment_text,
       on up.user_no = c.user_no
       join User u
       on up.user_no = u.user_no
-      where c.post_id = 114 and c.comment_id = 41;
+      where c.post_id = 117 and c.comment_id = 56;
+WITH RECURSIVE CommentCTE AS (
+    SELECT c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
+           c.user_no, c.createDate, c.modiDate, c.isDeleted,
+           u.nickname, u.image_url, u2.user_id AS parent_user_id
+    FROM comments c
+    JOIN UserProfile u ON u.user_no = c.user_no
+    LEFT JOIN comments c2 ON c.parent_comment_id = c2.comment_id
+    LEFT JOIN User u2 ON c2.user_no = u2.user_no
+    WHERE c.post_id = 117 AND c.isDeleted = 0 AND c.parent_comment_id = 56
 
+    UNION ALL
+
+    SELECT c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
+           c.user_no, c.createDate, c.modiDate, c.isDeleted,
+           u.nickname, u.image_url, u2.user_id AS parent_user_id
+    FROM comments c
+    INNER JOIN CommentCTE cc ON c.parent_comment_id = cc.comment_id
+    JOIN UserProfile u ON u.user_no = c.user_no
+    LEFT JOIN comments c2 ON c.parent_comment_id = c2.comment_id
+    LEFT JOIN User u2 ON c2.user_no = u2.user_no
+    WHERE c.isDeleted = 0
+)
+
+SELECT cc.comment_id, cc.post_id, cc.parent_comment_id, cc.comment_text,
+       cc.user_no, cc.createDate, cc.modiDate, cc.isDeleted,
+       cc.nickname, cc.image_url, cc.parent_user_id,
+       COUNT(cl.user_no) AS like_count,
+       GROUP_CONCAT(DISTINCT cf.comments_file_path ORDER BY cf.upload_date SEPARATOR ', ') AS file_paths
+FROM CommentCTE cc
+LEFT JOIN comment_likes cl ON cc.comment_id = cl.comment_id
+LEFT JOIN comments_files cf ON cc.comment_id = cf.comment_id
+GROUP BY cc.comment_id, cc.post_id, cc.parent_comment_id, cc.comment_text,
+         cc.user_no, cc.createDate, cc.modiDate, cc.isDeleted, cc.nickname, cc.image_url, cc.parent_user_id
+ORDER BY cc.createDate ASC;
+
+
+WITH RECURSIVE CommentCTE AS (
+    SELECT c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
+           c.user_no, c.createDate, c.modiDate, c.isDeleted,
+           u.nickname, u.image_url, u_main.user_id AS user_id, u2.user_id AS parent_user_id
+    FROM comments c
+    JOIN UserProfile u ON u.user_no = c.user_no
+    JOIN User u_main ON c.user_no = u_main.user_no -- 댓글 작성자의 user_id 가져오기
+    LEFT JOIN comments c2 ON c.parent_comment_id = c2.comment_id
+    LEFT JOIN User u2 ON c2.user_no = u2.user_no -- 부모 댓글 작성자의 user_id 가져오기
+    WHERE c.post_id = 117 AND c.isDeleted = 0 AND c.parent_comment_id = ?
+
+    UNION ALL
+
+    SELECT c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
+           c.user_no, c.createDate, c.modiDate, c.isDeleted,
+           u.nickname, u.image_url, u_main.user_id AS user_id, u2.user_id AS parent_user_id
+    FROM comments c
+    INNER JOIN CommentCTE cc ON c.parent_comment_id = cc.comment_id
+    JOIN UserProfile u ON u.user_no = c.user_no
+    JOIN User u_main ON c.user_no = u_main.user_no -- 댓글 작성자의 user_id 가져오기
+    LEFT JOIN comments c2 ON c.parent_comment_id = c2.comment_id
+    LEFT JOIN User u2 ON c2.user_no = u2.user_no -- 부모 댓글 작성자의 user_id 가져오기
+    WHERE c.isDeleted = 0
+)
+
+SELECT cc.comment_id, cc.post_id, cc.parent_comment_id, cc.comment_text,
+       cc.user_no, cc.createDate, cc.modiDate, cc.isDeleted,
+       cc.nickname, cc.image_url, cc.user_id, cc.parent_user_id,
+       COUNT(cl.user_no) AS like_count,
+       GROUP_CONCAT(DISTINCT cf.comments_file_path ORDER BY cf.upload_date SEPARATOR ', ') AS file_paths
+FROM CommentCTE cc
+LEFT JOIN comment_likes cl ON cc.comment_id = cl.comment_id
+LEFT JOIN comments_files cf ON cc.comment_id = cf.comment_id
+GROUP BY cc.comment_id, cc.post_id, cc.parent_comment_id, cc.comment_text,
+         cc.user_no, cc.createDate, cc.modiDate, cc.isDeleted, cc.nickname, cc.image_url, cc.user_id, cc.parent_user_id
+ORDER BY cc.createDate ASC;
+
+SELECT password FROM Password WHERE user_no = 1;
+
+SELECT log_id, login_time, login_status FROM LoginLog WHERE user_id = 1 ORDER BY log_id DESC;
