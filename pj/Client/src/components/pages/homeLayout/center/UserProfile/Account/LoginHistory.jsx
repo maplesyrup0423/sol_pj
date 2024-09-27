@@ -1,14 +1,35 @@
 import { useNavigate } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import "./LoginHistory.css";
+import { useState, useEffect, useContext } from "react";
+import api from "../../../../../auth/api";
+import { AuthContext } from "../../../../../../Context/AuthContext";
 
 function LoginHistory() {
+  const [data, setData] = useState([]);
+  const { userInfo } = useContext(AuthContext);
   const navigate = useNavigate();
   const handleBack = () => {
     navigate(-1); //뒤로가기
   };
-  const login_status = "SUCCESS";
-  const login_status2 = "FAIL"; // 이건 css 보기 예시용이고 실제로는 반복돌릴거임
+
+  const fetchLoginLogs = async () => {
+    try {
+      const response = await api.post("/api/loginLog");
+      setData(response.data);
+    } catch (error) {
+      if (error.response) {
+        console.error("오류:", error.response.data.message);
+      } else {
+        console.error("서버에 요청하는 중 오류 발생:", error.message);
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchLoginLogs();
+  }, [userInfo]);
+
   return (
     <>
       <div className="Account-header">
@@ -18,29 +39,25 @@ function LoginHistory() {
         <span>로그인 기록</span>
       </div>
       <div className="LoginHistory-body">
-        <div className="LoginHistory-detail">
-          <p>2024. 9. 26. 오후 10:15:22</p>
-          <p
-            style={{
-              color: login_status === "SUCCESS" ? "#255df7" : "#f72b25",
-            }}
-          >
-            {login_status}
-          </p>
-        </div>
-        {/* 이건 css 보기 예시용이고 실제로는 반복돌릴거임 */}
-        <div className="LoginHistory-detail">
-          <p>2024. 9. 26. 오후 10:15:22</p>
-          <p
-            style={{
-              color: login_status2 === "SUCCESS" ? "#255df7" : "#f72b25",
-            }}
-          >
-            {login_status2}
-          </p>
-        </div>
+        {data.length > 0 ? (
+          data.map((d) => (
+            <div key={d.id} className="LoginHistory-detail">
+              <span>{d.login_time}</span>
+              <span
+                style={{
+                  color: d.login_status === "SUCCESS" ? "#255df7" : "#f72b25",
+                }}
+              >
+                {d.login_status}
+              </span>
+            </div>
+          ))
+        ) : (
+          <span className="data-placeholder">로그가 없습니다.</span>
+        )}
       </div>
     </>
   );
 }
+
 export default LoginHistory;
