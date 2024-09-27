@@ -5,6 +5,11 @@
     align-items: center;
 }
 
+.searching_back {
+    border-bottom: 1px solid whitesmoke;
+    height: 60px;
+}
+
 .searching_content,
 .searching_user {
     width: 50%;
