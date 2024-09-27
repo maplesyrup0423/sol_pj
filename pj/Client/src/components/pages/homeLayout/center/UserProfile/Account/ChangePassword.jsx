@@ -1,9 +1,10 @@
 import "./ChangePassword.css";
 import { useNavigate } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import BasicButton from "../../../../../utills/buttons/BasicButton";
 import api from "../../../../../auth/api";
+import { AuthContext } from "../../../../../../Context/AuthContext";
 
 function ChangePassword() {
   const navigate = useNavigate();
@@ -12,8 +13,7 @@ function ChangePassword() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordMismatch, setPasswordMismatch] = useState(false); // 비밀번호 불일치 상태 추가
   const [errorMessage, setErrorMessage] = useState(null); // 서버 오류 메시지 상태 추가
-  const [successMessage, setSuccessMessage] = useState(null); // 성공 메시지 상태 추가
-
+  const { logout } = useContext(AuthContext);
   const handleBack = () => {
     navigate(-1); //뒤로가기
   };
@@ -29,9 +29,10 @@ function ChangePassword() {
       });
 
       if (response.status === 200) {
-        setSuccessMessage(response.data.message);
         setErrorMessage(null);
-        //todo 비밀번호 변경 성공 시 처리 로직- 로그아웃 시키고 로그인창으로 보내기
+
+        await logout(); // 로그아웃 함수 호출
+        navigate("/login"); // 로그인 페이지로 리다이렉트
       } else {
         setErrorMessage(response.data.message); // 서버에서 받은 오류 메시지 표시
       }
@@ -67,7 +68,8 @@ function ChangePassword() {
               onChange={(e) => setCurrentPassword(e.target.value)}
               required
             />
-            {errorMessage && <p className="error-message">{errorMessage}</p>}
+            {/*서버 에러 메세지 */}
+            {errorMessage && <p className="pw-error-message">{errorMessage}</p>}
           </div>
 
           <div className={`input-group ${newPassword ? "active" : ""}`}>
@@ -96,14 +98,16 @@ function ChangePassword() {
               }}
               required
             />
+            {newPassword !== "" &&
+              confirmPassword !== "" &&
+              (passwordMismatch ? (
+                <p className="pw-error-message">
+                  비밀번호가 일치하지 않습니다.
+                </p>
+              ) : (
+                <p className="pw-ok-message">비밀번호가 일치합니다.</p>
+              ))}
           </div>
-          {newPassword !== "" &&
-            confirmPassword !== "" &&
-            (passwordMismatch ? (
-              <p className="pw-error-message">비밀번호가 일치하지 않습니다.</p>
-            ) : (
-              <p className="pw-ok-message">비밀번호가 일치합니다.</p>
-            ))}
 
           <p className="info">비밀번호를 변경시 자동으로 로그아웃됩니다.</p>
 
@@ -121,9 +125,6 @@ function ChangePassword() {
             btnText="저장"
             type="submit"
           />
-          {successMessage && (
-            <p className="success-message">{successMessage}</p>
-          )}
         </form>
       </div>
     </>
