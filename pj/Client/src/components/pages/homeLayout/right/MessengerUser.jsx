@@ -21,7 +21,9 @@ function MessengerUser({ ...chat }) {
             <div className="messengerName">{chat.room_name}</div>
           </td>
           <td rowSpan={2} className="messengerNumberBox">
-            <div className="messengerNumber">{chat.unread_count}</div>
+            {chat.unread_count > 0 && (
+              <div className="messengerNumber">{chat.unread_count}</div>
+            )}
           </td>
           {/*알림갯수 */}
         </tr>
