@@ -111,3 +111,6 @@ app.use(commentRoutes(conn));
 
 const searchRoutes = require("./controllers/search");
 app.use(searchRoutes(conn));
+
+const accountRoutes = require("./controllers/account");
+app.use(accountRoutes(conn));
