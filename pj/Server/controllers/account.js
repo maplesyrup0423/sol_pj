@@ -60,21 +60,52 @@ module.exports = function (conn) {
   });
 
   router.post("/api/loginLog", decodeToken(), async (req, res) => {
-    const userNo = req.user_no; // decodeToken에서 얻은 user_no
+    const userNo = req.user_no;
 
     try {
-      // 1. 로그인 로그를 가져오는 쿼리
-      const [loginLogs] = await conn.query(
-        "SELECT log_id, login_time, login_status FROM LoginLog WHERE user_id = ? ORDER BY log_id DESC",
-        [userId]
-      );
+      // 1. user_no로 user_id를 조회하는 쿼리
+      const userRows = await new Promise((resolve, reject) => {
+        conn.query(
+          "SELECT user_id FROM User WHERE user_no = ?",
+          [userNo],
+          (err, rows) => {
+            if (err) {
+              return reject(err);
+            }
+            resolve(rows);
+          }
+        );
+      });
 
-      // 2. 로그가 없을 경우 처리
+      // 2. user_id가 없을 경우 처리
+      if (userRows.length === 0) {
+        return res
+          .status(404)
+          .json({ message: "해당 사용자를 찾을 수 없습니다." });
+      }
+
+      const userId = userRows[0].user_id; // user_id를 userId 변수에 저장
+
+      // 3. user_id로 로그인 로그를 가져오는 쿼리
+      const loginLogs = await new Promise((resolve, reject) => {
+        conn.query(
+          "SELECT log_id, login_time, login_status FROM LoginLog WHERE user_id = ? ORDER BY log_id DESC",
+          [userId],
+          (err, rows) => {
+            if (err) {
+              return reject(err);
+            }
+            resolve(rows);
+          }
+        );
+      });
+
+      // 4. 로그인 로그가 없을 경우 처리
       if (loginLogs.length === 0) {
         return res.status(404).json({ message: "로그인 로그가 없습니다." });
       }
 
-      // 3. 로그인 로그 응답
+      // 5. 로그인 로그 응답
       res.status(200).json({ loginLogs });
     } catch (error) {
       console.error(error);
