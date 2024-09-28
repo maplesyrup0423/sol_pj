@@ -16,7 +16,7 @@ function LoginHistory() {
   const fetchLoginLogs = async () => {
     try {
       const response = await api.post("/api/loginLog");
-      setData(response.data);
+      setData(response.data.loginLogs);
     } catch (error) {
       if (error.response) {
         console.error("오류:", error.response.data.message);
