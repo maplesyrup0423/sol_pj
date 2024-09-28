@@ -29,7 +29,26 @@ function LoginHistory() {
   useEffect(() => {
     fetchLoginLogs();
   }, [userInfo]);
+  // ↓↓↓↓↓↓↓↓↓↓DATETIME 관련 코드
+  // 날짜 시간 포맷팅 함수
+  const formatDate = (datetime) => {
+    const date = new Date(datetime);
 
+    const options = {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+      hour12: true,
+      timeZone: "Asia/Seoul",
+    };
+
+    const formatter = new Intl.DateTimeFormat("ko-KR", options);
+    return formatter.format(date);
+  };
+  // ↑↑↑↑↑↑↑↑↑↑DATETIME 관련 코드 끝
   return (
     <>
       <div className="Account-header">
@@ -42,7 +61,7 @@ function LoginHistory() {
         {data.length > 0 ? (
           data.map((d) => (
             <div key={d.id} className="LoginHistory-detail">
-              <span>{d.login_time}</span>
+              <span>{formatDate(d.login_time)}</span>
               <span
                 style={{
                   color: d.login_status === "SUCCESS" ? "#255df7" : "#f72b25",
