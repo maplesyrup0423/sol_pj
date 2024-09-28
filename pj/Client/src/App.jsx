@@ -22,6 +22,10 @@ import SearchPage from "./components/pages/homeLayout/center/feed/SearchPage";
 import Account from "./components/pages/homeLayout/center/UserProfile/Account/Account";
 import ChangePassword from "./components/pages/homeLayout/center/UserProfile/Account/ChangePassword";
 import LoginHistory from "./components/pages/homeLayout/center/UserProfile/Account/LoginHistory";
+import TermsOfService from "./components/pages/homeLayout/center/Policy/TermsOfService";
+import CookiePolicy from "./components/pages/homeLayout/center/Policy/CookiePolicy";
+import PrivacyPolicy from "./components/pages/homeLayout/center/Policy/PrivacyPolicy";
+import DeveloperInfo from "./components/pages/homeLayout/center/Policy/DeveloperInfo";
 
 function App() {
   const router = createBrowserRouter([
@@ -38,6 +42,7 @@ function App() {
           element: (
             <PrivateRoute>
               <FeedMain />
+              {/*로그인 시 처음 보일 피드메인 */}
             </PrivateRoute>
           ),
         },
@@ -46,6 +51,7 @@ function App() {
           element: (
             <PrivateRoute>
               <FeedMain />
+              {/*각 게시판 선택 시 보일 피드메인 */}
             </PrivateRoute>
           ),
         },
@@ -78,6 +84,7 @@ function App() {
           element: (
             <PrivateRoute>
               <Account />
+              {/* 계정설정 */}
             </PrivateRoute>
           ),
         },
@@ -86,6 +93,7 @@ function App() {
           element: (
             <PrivateRoute>
               <ChangePassword />
+              {/* 비밀번호 변경 */}
             </PrivateRoute>
           ),
         },
@@ -94,6 +102,7 @@ function App() {
           element: (
             <PrivateRoute>
               <LoginHistory />
+              {/* 로그인 기록 */}
             </PrivateRoute>
           ),
         },
@@ -118,6 +127,7 @@ function App() {
           element: (
             <PrivateRoute>
               <BookmarkView />
+              {/* 북마크 */}
             </PrivateRoute>
           ),
         },
@@ -134,6 +144,7 @@ function App() {
           element: (
             <PrivateRoute>
               <FeedDetail />
+              {/* 피드 상세페이지 */}
             </PrivateRoute>
           ),
         },
@@ -142,6 +153,42 @@ function App() {
           element: (
             <PrivateRoute>
               <SearchPage />
+            </PrivateRoute>
+          ),
+        },
+        {
+          path: "/Policy/TermsOfService",
+          element: (
+            <PrivateRoute>
+              <TermsOfService />
+              {/* 이용약관 */}
+            </PrivateRoute>
+          ),
+        },
+        {
+          path: "/Policy/CookiePolicy",
+          element: (
+            <PrivateRoute>
+              <CookiePolicy />
+              {/* 쿠키정책 */}
+            </PrivateRoute>
+          ),
+        },
+        {
+          path: "/Policy/PrivacyPolicy",
+          element: (
+            <PrivateRoute>
+              <PrivacyPolicy />
+              {/* 개인정보 처리방침 */}
+            </PrivateRoute>
+          ),
+        },
+        {
+          path: "/DeveloperInfo",
+          element: (
+            <PrivateRoute>
+              <DeveloperInfo />
+              {/* 개발자 정보 */}
             </PrivateRoute>
           ),
         },

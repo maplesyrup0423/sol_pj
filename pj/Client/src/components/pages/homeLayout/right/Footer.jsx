@@ -1,19 +1,26 @@
+import { NavLink } from "react-router-dom";
 import "./Footer.css";
 
 function Footer() {
-    return (
-        <div className="footer">
-            <div className="footer-terms">
-                <a href="">이용약관</a>
-            </div>
-            <div className="footer-policy">
-                <a href="">개인정보처리방침</a>
-            </div>
-            <div className="footer-cookie">
-                <a href="">쿠키정책</a>
-            </div>
-        </div>
-    );
+  return (
+    <div className="footer">
+      <NavLink to="/Policy/TermsOfService">
+        <span>이용약관</span>
+      </NavLink>
+      <span> · </span>
+      <NavLink to="/Policy/PrivacyPolicy">
+        <span>개인정보 처리방침</span>
+      </NavLink>
+      <span> · </span>
+      <NavLink to="/Policy/CookiePolicy">
+        <span>쿠키정책</span>
+      </NavLink>
+      <span> · </span>
+      <NavLink to="/DeveloperInfo">
+        <span>개발자</span>
+      </NavLink>
+    </div>
+  );
 }
 
 export default Footer;

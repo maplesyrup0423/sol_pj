@@ -10,4 +10,6 @@
 .footer a {
   color: white; /* 원하는 색상으로 변경 */
   text-decoration: none; /* 밑줄 제거 */
+  font-size: 10px;
+  color: gray;
 }

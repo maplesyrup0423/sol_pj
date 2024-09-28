@@ -103,7 +103,7 @@ function LeftNav({ userInfo }) {
                     <button onClick={handleLogout}>로그아웃</button>
                   </li>
                   <li>
-                    <button onClick={handleAccount}>계정설정</button>
+                    <button onClick={handleAccount}>계정관리</button>
                   </li>
                 </ul>
               </div>
