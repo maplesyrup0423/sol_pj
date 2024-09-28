@@ -1,45 +1,51 @@
 .searchBox {
-    width: 300px;
-    height: 40px;
-    line-height: 40px;
-    display: flex;
-    background-color: gray;
-    border-radius: 50px;
+  width: 250px;
+  height: 40px;
+  background-color: rgb(48, 48, 48);
+  border-radius: 50px;
+  border: 1px solid rgb(48, 48, 48);
+  display: flex;
+  align-items: center;
 }
 
 .searchInput {
-    border: none;
-    width: 250px;
-    height: 30px;
-    text-indent: 30px;
-    color: #fae100;
-    background-color: transparent;
-    margin-left: -30px;
-    z-index: 20;
-    margin-top: 5px;
+  border: none;
+  width: 250px;
+  height: 30px;
+  color: white;
+  background-color: transparent;
+  flex: 1;
 }
 
 .searchInput::placeholder {
-    color: #fae100;
+  color: gray;
 }
 
 input.searchInput:focus {
-    outline: none;
+  outline: none;
 }
 
 .searchButton {
-    border: none;
-    width: 35px;
-    height: 32px;
-    background-color: transparent;
-    margin-left: 10px;
-    line-height: 35px;
-    z-index: 30;
+  border: none;
+  width: 20px;
+  height: 20px;
+  margin: 1px 8px;
+  background-color: transparent;
+  display: flex; /* Flexbox 사용 */
+  justify-content: center; /* 가로 가운데 정렬 */
+  align-items: center; /* 세로 가운데 정렬 */
+  padding: 0;
 }
 
-.searchButton_icon{
-    width: 25px;
-    height: 25px;
-    margin-top: 2px;
-    color: #fae100;
+.searchButton_icon {
+  width: 20px;
+  height: 20px;
+  color: gray;
+}
+.searchBox:focus-within {
+  background-color: black;
+  border: 1px solid #ffcd19;
+}
+.searchBox:focus-within .searchButton_icon {
+  color: #ffcd19;
 }

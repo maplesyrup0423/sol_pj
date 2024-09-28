@@ -4,6 +4,7 @@
   height: 50px;
   align-items: center; /* 수직 가운데 정렬 */
   padding: 10px;
+  min-width: 570px;
 }
 .Account-btn {
   display: flex;

@@ -22,11 +22,14 @@ import SearchPage from "./components/pages/homeLayout/center/feed/SearchPage";
 import Account from "./components/pages/homeLayout/center/UserProfile/Account/Account";
 import ChangePassword from "./components/pages/homeLayout/center/UserProfile/Account/ChangePassword";
 import LoginHistory from "./components/pages/homeLayout/center/UserProfile/Account/LoginHistory";
+
 import DeactivateAccount from "./components/pages/homeLayout/center/UserProfile/Account/DeactivateAccount";
+
 
 function App() {
     const router = createBrowserRouter([
         {
+
             path: "/",
             element: (
                 <PrivateRoute>
@@ -159,16 +162,19 @@ function App() {
         {
             path: "/login",
             element: <LoginPage />,
+
         },
         // {
         //     path: "/intro",
         //     element: <IntroPage />,
         // },
         {
+
             path: "/signup",
             element: <SignUp />,
         },
     ]);
+
 
     return (
         <AuthProvider>
