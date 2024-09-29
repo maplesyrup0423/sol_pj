@@ -56,19 +56,11 @@
 
 .editProfile {
   display: flex;
-  border: 3px solid #ffcd19;
   border-radius: 50px;
   width: 150px;
   height: 50px;
   justify-content: center;
   align-items: center;
-}
-
-.bBtn {
-  font-size: 24px;
-  color: #ffcd19;
-  background-color: inherit;
-  border: none;
 }
 
 .switch {
@@ -100,6 +92,8 @@
 .editBtn {
   background-color: inherit;
   border: none;
+  width: 100%;
+  padding: 0px;
 }
 
 /* .backArrow {
