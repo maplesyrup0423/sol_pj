@@ -230,11 +230,13 @@ function Writing({
       });
 
       //글 등록시 알림 보내기 기능
-      await createNotification(
-        userInfo.user_no,
-        `${userInfo.nickname}님이 새 글을 올렸습니다.`,
-        "new_post"
-      );
+      if (isEditMode === false && postID === null) {
+        await createNotification(
+          userInfo.user_no,
+          `${userInfo.nickname}님이 새 글을 올렸습니다.`,
+          "new_post"
+        );
+      }
 
       refreshData(); // 글목록 갱신
       setPostContent(""); // textarea값 초기화
@@ -270,6 +272,7 @@ function Writing({
   if (parent_comment_id !== null) {
     reply = "replyWrite";
     fileId = "parent_comment_id" + parent_comment_id;
+    placeholderText = "답글을 작성해주세요.";
   } else if (comment_id !== null) {
     fileId = "comment_id" + comment_id;
     placeholderText = "댓글을 작성해주세요.";

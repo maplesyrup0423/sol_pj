@@ -46,9 +46,11 @@ function Notice({ user_no }) {
           </div>
           <div className="alert_text">알림</div>
         </NavLink>
-        <div className="alert_number">
-          <span>{unreadCount}</span>
-        </div>
+        {unreadCount > 0 && (
+          <div className="alert_number">
+            <span>{unreadCount}</span>
+          </div>
+        )}
       </div>
       <NavLink
         to={`/Bookmark`}
