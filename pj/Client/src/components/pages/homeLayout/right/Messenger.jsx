@@ -8,7 +8,7 @@ import { AuthContext } from "../../../../Context/AuthContext";
 
 function Messenger() {
   const { userInfo } = useContext(AuthContext);
-  const { roomId: activeRoomId } = useParams(); // URL에서 현재 활성화된 방 ID를 가져옵니다
+  const { roomId: activeRoomId } = useParams();
   const [chatList, setChatList] = useState([]);
   const [socket, setSocket] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -44,10 +44,7 @@ function Messenger() {
     (updatedChatList) => {
       const updatedList = updatedChatList.map((chat) => ({
         ...chat,
-        room_name:
-          chat.room_name === userInfo.nickname
-            ? chat.last_sender
-            : chat.room_name,
+        room_name: chat.opponent_nickname,
         last_date: formatLastDate(chat.last_date),
         unread_count:
           chat.room_id.toString() === activeRoomId ? 0 : chat.unread_count,
@@ -55,7 +52,7 @@ function Messenger() {
       setChatList(updatedList);
       setIsLoading(false);
     },
-    [userInfo.nickname, formatLastDate, activeRoomId]
+    [formatLastDate, activeRoomId]
   );
 
   const handleNewMessage = useCallback(
@@ -80,10 +77,8 @@ function Messenger() {
             last_date: formattedDate,
             last_chat: data.last_message.message_content,
             last_sender: data.last_message.nickname,
-            room_name:
-              updatedList[existingChatIndex].room_name === userInfo.nickname
-                ? data.last_message.nickname
-                : updatedList[existingChatIndex].room_name,
+            room_name: updatedList[existingChatIndex].opponent_nickname,
+            image_url: updatedList[existingChatIndex].opponent_image_url,
           };
           return updatedList;
         } else {
@@ -91,14 +86,12 @@ function Messenger() {
             ...prevList,
             {
               room_id: roomId,
-              room_name:
-                userInfo.nickname === data.last_message.nickname
-                  ? data.room_name
-                  : data.last_message.nickname,
+              room_name: data.opponent_nickname,
               unread_count: isSender || isActiveRoom ? 0 : 1,
               last_date: formattedDate,
               last_chat: data.last_message.message_content,
               last_sender: data.last_message.nickname,
+              image_url: data.opponent_image_url,
             },
           ];
         }
@@ -175,7 +168,11 @@ function Messenger() {
               key={chat.room_id}
               className="Link-hover"
             >
-              <MessengerUser room_name={displayName} {...chat} />
+              <MessengerUser
+                room_name={displayName}
+                {...chat}
+                image_url={chat.opponent_image_url}
+              />
             </Link>
           );
         })
