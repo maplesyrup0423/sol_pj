@@ -77,7 +77,8 @@ module.exports = (conn) => {
 SELECT c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
        c.user_no, c.createDate, c.modiDate, c.isDeleted, 
        COUNT(cl.user_no) AS like_count, u.nickname, u.image_url,
-       u_main.user_id AS user_id, -- 본인 user_id 가져오기
+       u_main.user_id AS user_id, -- 본인 user_id 가져오기,
+       u.introduce,
        GROUP_CONCAT(DISTINCT cf.comments_file_path ORDER BY cf.upload_date SEPARATOR ', ') AS file_paths
 FROM comments c
 LEFT JOIN comment_likes cl ON c.comment_id = cl.comment_id

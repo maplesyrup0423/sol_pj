@@ -10,6 +10,7 @@ import FeedMoreBtn from "./FeedMoreBtn";
 import api from "../../../../auth/api";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { MdOutlineKeyboardArrowUp } from "react-icons/md";
+import { NavLink } from "react-router-dom";
 
 function Comments(props) {
   const { userInfo } = useContext(AuthContext);
@@ -94,18 +95,30 @@ function Comments(props) {
         }}
       >
         <div className="FeedComment_head">
-          <div className="FeedComment_head-left">
-            <div className="FeedComment_profile">
-              <ProfileImg image_url={props.image_url} />
-            </div>
+          <NavLink
+            to={`/${props.user_id}`}
+            className="Nav"
+            state={{
+              nickname: props.nickname,
+              user_id: props.user_id,
+              user_no: props.user_no,
+              image_url: props.image_url,
+              introduce: props.introduce,
+            }}
+          >
+            <div className="FeedComment_head-left">
+              <div className="FeedComment_profile">
+                <ProfileImg image_url={props.image_url} />
+              </div>
 
-            <div className="FeedComment_body">
-              <div className="FeedComment_up">
-                <div className="FeedComment_name">{props.nickname}</div>
-                <div className="FeedComment_id"> @{props.user_id}</div>
+              <div className="FeedComment_body">
+                <div className="FeedComment_up">
+                  <div className="FeedComment_name">{props.nickname}</div>
+                  <div className="FeedComment_id"> @{props.user_id}</div>
+                </div>
               </div>
             </div>
-          </div>
+          </NavLink>
           {/* 더보기 버튼 */}
           {userInfo.user_no === props.user_no && (
             <FeedMoreBtn

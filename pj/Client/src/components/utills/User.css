@@ -1,0 +1,29 @@
+.User-card {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background: #000000;
+  border-bottom: 1px solid gray;
+}
+
+.User-img {
+  margin-right: 10px;
+}
+
+.User-info {
+  flex: 1;
+}
+
+.User-name {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.User-id {
+  color: #888;
+}
+
+.User-card:hover {
+  background-color: #313131;
+  transition: 0.3s;
+}
