@@ -44,6 +44,7 @@ const FollowButton = ({ userInfo, followingNo, initialIsFollowing }) => {
             setIsFollowing(false);
             await getFollowers(followerNo);
           }
+          setBtnText("팔로우");
         });
       } else {
         followUser(followerNo, followingNo);
