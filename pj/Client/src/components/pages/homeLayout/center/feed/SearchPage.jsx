@@ -6,7 +6,6 @@ import { AuthContext } from "../../../../../Context/AuthContext";
 import api from "../../../../auth/api";
 import { IoMdArrowRoundBack } from "react-icons/io";
 
-
 function SearchPage() {
   const { searchKeyword } = useParams();
   const { userInfo } = useContext(AuthContext); //로그인한 유저 정보
@@ -48,7 +47,14 @@ function SearchPage() {
         {data.length > 0 && userInfo !== null ? (
           <>
             {data.map((p) => (
-              <Feeds key={p.post_id} {...p} />
+              <Feeds
+                key={p.post_id}
+                boardId={p.board_info_id}
+                loginUser_no={userInfo.user_no}
+                postId={p.post_id}
+                refreshData={fetchData}
+                {...p}
+              />
             ))}
             <div className="scroll-observer"></div>
           </>
@@ -56,11 +62,7 @@ function SearchPage() {
           <span className="data-placeholder">게시글이 없습니다.</span>
         )}
       </div>
-
-
     </div>
-
-
   );
 }
 export default SearchPage;
