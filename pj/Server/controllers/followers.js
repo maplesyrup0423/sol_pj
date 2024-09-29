@@ -15,8 +15,8 @@ module.exports = (conn) => {
 
     const followerQuery = `SELECT 
             u.user_no,
-            u.user_id AS following_id,
-            up.nickname AS following_nickname,
+            u.user_id ,
+            up.nickname ,
             up.image_url ,
             up.introduce 
         FROM 
