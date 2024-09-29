@@ -112,8 +112,8 @@ function UserProfile() {
                 <div className="editProfile">
                   <button onClick={openModal} className="editBtn">
                     <BasicButton
-                      btnSize="largeButton"
-                      btnColor="inheritButton"
+                      btnSize="bigButton"
+                      btnColor="blackButton"
                       btnText="프로필수정"
                     />
                   </button>
