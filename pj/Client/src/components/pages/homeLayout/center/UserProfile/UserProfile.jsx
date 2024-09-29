@@ -8,7 +8,11 @@ import Feeds from "../feed/Feeds";
 import "./UserProfile.css";
 import MyProfile from "./EditProfile";
 import FollowButton from "../../../../utills/buttons/FollowButton";
-import { checkFollowStatus } from "../../../../utills/FollowService";
+import {
+  checkFollowStatus,
+  getFollowers,
+} from "../../../../utills/FollowService";
+import User from "../../../../utills/User";
 
 function UserProfile() {
   const { userInfo } = useContext(AuthContext);
@@ -20,6 +24,8 @@ function UserProfile() {
   const [comments, setComments] = useState([]); // 댓글 상태 추가
   const [isModalOpen, setModalOpen] = useState(false);
   const [initialIsFollowing, setInitialIsFollowing] = useState(false); // 초기 팔로우 여부 변수
+  const [follows, setFollows] = useState([]); // 팔로우 리스트 상태 추가
+
   const fetchPosts = async () => {
     try {
       const userNo = bUserInfo ? bUserInfo.user_no : userInfo.user_no;
@@ -39,16 +45,27 @@ function UserProfile() {
       console.error("댓글 가져오기 오류:", error);
     }
   };
+
+  const fetchFollows = async () => {
+    const userNo = bUserInfo ? bUserInfo.user_no : userInfo.user_no;
+    const list = await getFollowers(userNo);
+    setFollows(list);
+    console.log(follows);
+  };
+
   useEffect(() => {
     if ((userInfo || bUserInfo) && activeTab === "posts") {
       fetchPosts();
     } else if ((userInfo || bUserInfo) && activeTab === "comments") {
       fetchComments(); // comments 탭일 때 댓글 가져오기
+    } else if ((userInfo || bUserInfo) && activeTab === "follows") {
+      fetchFollows(); // follows 탭일 때 팔로우 리스트 가져오기
     }
   }, [userInfo, bUserInfo, activeTab]);
 
   const showPosts = () => setActiveTab("posts");
   const showComments = () => setActiveTab("comments");
+  const showFollows = () => setActiveTab("follows");
 
   const displayedUserInfo = bUserInfo || userInfo;
   const isUserInfoAvailable = displayedUserInfo && displayedUserInfo.nickname;
@@ -140,6 +157,14 @@ function UserProfile() {
           >
             댓글
           </div>
+          <div
+            className={`switch-follows ${
+              activeTab === "follows" ? "active" : ""
+            }`}
+            onClick={showFollows}
+          >
+            팔로잉
+          </div>
         </div>
         <div className="list">
           <div className="content">
@@ -158,7 +183,7 @@ function UserProfile() {
                     />
                   ))
                 ) : (
-                  <h1>게시글이 없습니다.</h1>
+                  <span className="data-placeholder">게시글이 없습니다.</span>
                 )}
               </div>
             )}
@@ -177,7 +202,22 @@ function UserProfile() {
                     />
                   ))
                 ) : (
-                  <h1>댓글이 없습니다.</h1>
+                  <span className="data-placeholder">댓글이 없습니다.</span>
+                )}
+              </div>
+            )}
+            {activeTab === "follows" && (
+              <div className="follows">
+                {follows.length > 0 ? (
+                  follows.map((f) => (
+                    <div key={f.following_id}>
+                      <User {...f} />
+                    </div>
+                  ))
+                ) : (
+                  <span className="data-placeholder">
+                    팔로우한 사람이 없습니다.
+                  </span>
                 )}
               </div>
             )}

@@ -2,6 +2,7 @@
   display: flex;
   align-items: center;
   border-bottom: 1px solid #595959;
+  min-width: 570px;
 }
 
 .backArrow {
@@ -21,7 +22,9 @@
   padding: 40px 20px 20px 20px;
   align-items: center;
 }
-
+.userPic {
+  margin-right: 15px;
+}
 .pic {
   width: 120px;
   height: 120px;
@@ -39,7 +42,7 @@
 }
 
 .Info {
-  width: 300px;
+  width: 240px;
   flex: 1;
   margin-right: 0;
 }
@@ -75,7 +78,8 @@
 }
 
 .switch-posts,
-.switch-comments {
+.switch-comments,
+.switch-follows {
   flex: 1;
   text-align: center;
   text-decoration: none;
@@ -83,7 +87,8 @@
 }
 
 .switch-posts:hover,
-.switch-comments:hover {
+.switch-comments:hover,
+.switch-follows:hover {
   color: #ffcd19;
   cursor: pointer;
   transition: 0.5s;
