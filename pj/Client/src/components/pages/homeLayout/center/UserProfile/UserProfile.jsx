@@ -20,29 +20,26 @@ function UserProfile() {
   const [comments, setComments] = useState([]); // 댓글 상태 추가
   const [isModalOpen, setModalOpen] = useState(false);
   const [initialIsFollowing, setInitialIsFollowing] = useState(false); // 초기 팔로우 여부 변수
-
+  const fetchPosts = async () => {
+    try {
+      const userNo = bUserInfo ? bUserInfo.user_no : userInfo.user_no;
+      const response = await api.post(`/userPosts/${userNo}`);
+      setPosts(response.data);
+    } catch (error) {
+      console.error("게시글 가져오기 오류:", error);
+    }
+  };
+  const fetchComments = async () => {
+    try {
+      const userNo = bUserInfo ? bUserInfo.user_no : userInfo.user_no;
+      const response = await api.post(`/comments/${userNo}`);
+      console.log("댓글 데이터:", response.data); // 추가된 로그
+      setComments(response.data);
+    } catch (error) {
+      console.error("댓글 가져오기 오류:", error);
+    }
+  };
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const userNo = bUserInfo ? bUserInfo.user_no : userInfo.user_no;
-        const response = await api.post(`/userPosts/${userNo}`);
-        setPosts(response.data);
-      } catch (error) {
-        console.error("게시글 가져오기 오류:", error);
-      }
-    };
-
-    const fetchComments = async () => {
-      try {
-        const userNo = bUserInfo ? bUserInfo.user_no : userInfo.user_no;
-        const response = await api.post(`/comments/${userNo}`);
-        console.log("댓글 데이터:", response.data); // 추가된 로그
-        setComments(response.data);
-      } catch (error) {
-        console.error("댓글 가져오기 오류:", error);
-      }
-    };
-
     if ((userInfo || bUserInfo) && activeTab === "posts") {
       fetchPosts();
     } else if ((userInfo || bUserInfo) && activeTab === "comments") {
@@ -79,7 +76,6 @@ function UserProfile() {
 
     getFollowStatus(); // 비동기 함수 호출
   }, [bUserInfo, userInfo]);
-
   return (
     <>
       <main>
@@ -157,6 +153,7 @@ function UserProfile() {
                       postId={p.post_id}
                       boardId={p.board_info_id}
                       userInfo={bUserInfo || userInfo}
+                      refreshData={fetchPosts}
                       {...p}
                     />
                   ))
@@ -175,6 +172,7 @@ function UserProfile() {
                       postId={c.post_id} // 필요에 따라 postId를 설정
                       boardId={c.board_info_id} // 필요에 따라 boardId를 설정
                       userInfo={c} // 댓글 사용자 정보를 전달
+                      refreshData={fetchComments}
                       {...c}
                     />
                   ))
