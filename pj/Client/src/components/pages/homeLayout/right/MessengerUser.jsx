@@ -1,6 +1,8 @@
 import "./MessengerUser.css";
 
 function MessengerUser({ ...chat }) {
+  const baseUrl = import.meta.env.VITE_BASE_URL;
+
   return (
     <div className="messengerUser">
       {/* messengerTable 부분 테이블 태그로 만들어져 있는데
@@ -14,7 +16,11 @@ function MessengerUser({ ...chat }) {
         <tr>
           <td rowSpan={2}>
             <div className="messengerImageBox">
-              <img className="messengerImage" src="" alt="" />
+              <img
+                className="messengerImage"
+                src={`${baseUrl}/images/uploads/${chat.opponent_image_url}`}
+                alt=""
+              />
             </div>
           </td>
           <td>

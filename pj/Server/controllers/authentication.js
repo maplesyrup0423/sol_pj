@@ -41,6 +41,13 @@ module.exports = function (conn) {
 
         const user = results[0];
 
+        const logQuery = `INSERT INTO LoginLog (user_id, login_time, login_status) VALUES (?, NOW(), 'SUCCESS')`;
+        conn.query(logQuery, [user.user_id], (logErr) => {
+          if (logErr) {
+            console.error("로그인 성공 로그 기록 오류:", logErr);
+          }
+        });
+
         const accessToken = jwt.sign(
           { user_id: user.user_id, user_no: user.user_no },
           process.env.access_secret,
@@ -92,12 +99,6 @@ module.exports = function (conn) {
               refreshToken = tokenResults[0].token;
 
               // 로그인 성공 로그 기록
-              const logQuery = `INSERT INTO LoginLog (user_id, login_time, login_status) VALUES (?, NOW(), 'SUCCESS')`;
-              conn.query(logQuery, [user.user_id], (logErr) => {
-                if (logErr) {
-                  console.error("로그인 성공 로그 기록 오류:", logErr);
-                }
-              });
 
               sendResponse(res, user, accessToken, refreshToken);
             }

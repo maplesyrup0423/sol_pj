@@ -154,6 +154,25 @@ function setupChatModule(app, io, conn) {
       });
     });
   }
+  // 상대방 프로필 정보 가져오기
+  function getOpponentProfile(room_id, user_no) {
+    return new Promise((resolve, reject) => {
+      const query = `
+      SELECT up.nickname, up.image_url
+      FROM ChatRoomUser cru
+      JOIN UserProfile up ON cru.user_no = up.user_no
+      WHERE cru.room_id = ? AND cru.user_no != ?
+      LIMIT 1
+    `;
+      conn.query(query, [room_id, user_no], (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results[0]);
+        }
+      });
+    });
+  }
 
   // Socket.IO 이벤트 설정
   io.on("connection", (socket) => {
@@ -351,6 +370,10 @@ function setupChatModule(app, io, conn) {
               room.last_active_at
             );
             const latestMessage = await getLatestMessage(room.room_id);
+            const opponentProfile = await getOpponentProfile(
+              room.room_id,
+              user_no
+            );
             return {
               room_id: room.room_id,
               room_name: room.room_name,
@@ -358,6 +381,8 @@ function setupChatModule(app, io, conn) {
               last_date: latestMessage ? latestMessage.created_at : null,
               last_chat: latestMessage ? latestMessage.message_content : null,
               last_sender: latestMessage ? latestMessage.nickname : null,
+              opponent_nickname: opponentProfile.nickname,
+              opponent_image_url: opponentProfile.image_url,
             };
           })
         );
