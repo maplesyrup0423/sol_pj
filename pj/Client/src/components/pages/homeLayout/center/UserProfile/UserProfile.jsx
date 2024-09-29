@@ -152,6 +152,7 @@ function UserProfile() {
                 {posts.length > 0 ? (
                   posts.map((p) => (
                     <Feeds
+                      loginUser_no={userInfo.user_no}
                       key={p.post_id}
                       postId={p.post_id}
                       boardId={p.board_info_id}
@@ -169,6 +170,7 @@ function UserProfile() {
                 {comments.length > 0 ? (
                   comments.map((c) => (
                     <Feeds
+                      loginUser_no={userInfo.user_no}
                       key={c.comment_id}
                       postId={c.post_id} // 필요에 따라 postId를 설정
                       boardId={c.board_info_id} // 필요에 따라 boardId를 설정

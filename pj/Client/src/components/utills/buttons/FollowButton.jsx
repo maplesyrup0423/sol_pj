@@ -32,12 +32,12 @@ const FollowButton = ({ userInfo, followingNo, initialIsFollowing }) => {
     try {
       if (isFollowing) {
         Swal.fire({
-          title: "팔로우 취소",
-          text: "팔로우를 취소하시겠습니까?",
+          title: "언팔로우 하시겠습니까?",
+          text: "이 사용자의 게시물은 더 이상 알림으로 오지 않습니다.",
           icon: "question",
-          confirmButtonText: "예",
+          confirmButtonText: "언팔로우",
           showCancelButton: true,
-          cancelButtonText: "아니오",
+          cancelButtonText: "취소",
         }).then(async (result) => {
           if (result.isConfirmed) {
             unfollowUser(followerNo, followingNo);
