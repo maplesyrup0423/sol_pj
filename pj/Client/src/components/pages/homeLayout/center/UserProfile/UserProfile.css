@@ -4,7 +4,9 @@
   border-bottom: 1px solid #595959;
   min-width: 570px;
 }
-
+.up-active {
+  color: #ffcd19 !important;
+}
 .backArrow {
   position: fixed;
   top: 0;

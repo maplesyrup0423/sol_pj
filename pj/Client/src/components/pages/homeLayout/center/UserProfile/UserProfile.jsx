@@ -144,14 +144,16 @@ function UserProfile() {
         </div>
         <div className="switch">
           <div
-            className={`switch-posts ${activeTab === "posts" ? "active" : ""}`}
+            className={`switch-posts ${
+              activeTab === "posts" ? "up-active" : ""
+            }`}
             onClick={showPosts}
           >
             게시글
           </div>
           <div
             className={`switch-comments ${
-              activeTab === "comments" ? "active" : ""
+              activeTab === "comments" ? "up-active" : ""
             }`}
             onClick={showComments}
           >
@@ -159,7 +161,7 @@ function UserProfile() {
           </div>
           <div
             className={`switch-follows ${
-              activeTab === "follows" ? "active" : ""
+              activeTab === "follows" ? "up-active" : ""
             }`}
             onClick={showFollows}
           >
