@@ -22,6 +22,7 @@ function User(props) {
         <div className="User-info">
           <div className="User-name">{props.nickname}</div>
           <div className="User-id">@{props.user_id}</div>
+          <div className="User-introduce">{props.introduce}</div>
         </div>
       </div>
     </NavLink>

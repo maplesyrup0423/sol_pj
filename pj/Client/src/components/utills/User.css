@@ -5,9 +5,12 @@
   background: #000000;
   border-bottom: 1px solid gray;
 }
+.User-card:hover {
+  background-color: #313131;
+}
 
 .User-img {
-  margin-right: 10px;
+  margin-right: 15px;
 }
 
 .User-info {
@@ -21,9 +24,5 @@
 
 .User-id {
   color: #888;
-}
-
-.User-card:hover {
-  background-color: #313131;
-  transition: 0.3s;
+  margin-bottom: 4px;
 }
