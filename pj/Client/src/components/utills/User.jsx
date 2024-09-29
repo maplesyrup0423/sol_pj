@@ -8,8 +8,8 @@ function User(props) {
       to={`/${props.user_id}`}
       className="Nav"
       state={{
-        nickname: props.following_nickname,
-        user_id: props.following_id,
+        nickname: props.nickname,
+        user_id: props.user_id,
         user_no: props.user_no,
         image_url: props.image_url,
         introduce: props.introduce,
@@ -20,8 +20,8 @@ function User(props) {
           <ProfileImg image_url={props.image_url} />
         </div>
         <div className="User-info">
-          <div className="User-name">{props.following_nickname}</div>
-          <div className="User-id">@{props.following_id}</div>
+          <div className="User-name">{props.nickname}</div>
+          <div className="User-id">@{props.user_id}</div>
         </div>
       </div>
     </NavLink>
