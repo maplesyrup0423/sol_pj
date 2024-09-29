@@ -21,7 +21,8 @@ module.exports = (conn) => {
       LEFT JOIN post_likes l ON p.post_id = l.post_id
       LEFT JOIN comments c ON p.post_id = c.post_id
       WHERE p.isDeleted = 0 AND p.post_text LIKE ?
-      GROUP BY p.post_id, p.post_text, p.user_no, p.createDate, p.modiDate, p.views, u.user_id, up.nickname, up.image_url;
+      GROUP BY p.post_id, p.post_text, p.user_no, p.createDate, p.modiDate, p.views, u.user_id, up.nickname, up.image_url
+      ORDER BY p.createDate DESC;
     `;
 
     conn.query(query, [formattedKeyword], (err, rows, fields) => {
