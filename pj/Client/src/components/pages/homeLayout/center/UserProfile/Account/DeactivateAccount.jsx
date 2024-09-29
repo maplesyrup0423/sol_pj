@@ -4,6 +4,8 @@ import ProfileCard from "../../../left/ProfileCard";
 import "./DeactivateAccount.css";
 import { useNavigate } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
+import { deactivateAccount } from "../../../../../utills/DeactivateService";
+import Swal from "sweetalert2";
 
 function DeactivateAccount() {
     const { userInfo } = useContext(AuthContext);
@@ -20,6 +22,19 @@ function DeactivateAccount() {
     };
     const handleOnSubmit = (e) => {
         e.preventDefault();
+        const deactivate = async () => {
+            await deactivateAccount(userInfo);
+        };
+        deactivate();
+        Swal.fire({
+            title: "비활성화",
+            text: "비활성화 되었습니다.",
+            icon: "success",
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                navigate("/login");
+            }
+        });
     };
     return (
         <div className="deactivateBox">
