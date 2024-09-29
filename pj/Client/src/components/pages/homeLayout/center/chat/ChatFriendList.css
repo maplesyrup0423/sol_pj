@@ -1,17 +1,24 @@
 .friendList {
-    color: white;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    justify-content: flex-start;
+  color: white;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-width: 570px;
 }
 .friendItem {
-    width: 50%;
-    border: 1px solid #f3f3f3;
-    border-radius: 24px;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    color: white;
+  display: flex;
+  align-items: center;
+  color: white;
+}
+.friendItem .User-card {
+  width: 100%;
+}
+.ChatFriendList-header {
+  border-bottom: 1px solid white;
+  display: flex;
+  height: 50px;
+  align-items: center;
+  padding: 10px;
+  min-width: 570px;
 }
