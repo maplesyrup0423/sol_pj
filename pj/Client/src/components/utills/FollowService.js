@@ -6,7 +6,7 @@ export const checkFollowStatus = async (followerNo, followingNo) => {
         const response = await api.get("/isFollowing", {
             params: { followerNo, followingNo },
         });
-        console.log("체크팔로우 함수 진입 : ", response.data);
+        //console.log("체크팔로우 함수 진입 : ", response.data);
         return response.data.isFollowing; // 팔로우 상태 반환
     } catch (error) {
         console.error("팔로우 상태를 가져오는 중 오류 발생:", error);

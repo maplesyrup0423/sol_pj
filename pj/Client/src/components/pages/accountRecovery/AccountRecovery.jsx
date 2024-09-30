@@ -1,6 +1,7 @@
 import { useState } from "react";
 import api from "../../auth/api";
 import "./AccountRecovery.css";
+import BasicButton from "../../utills/buttons/BasicButton";
 
 const AccountRecovery = () => {
     const [user_id, setUser_id] = useState("");
@@ -36,8 +37,15 @@ const AccountRecovery = () => {
                 value={user_id}
                 onChange={(e) => setUser_id(e.target.value)}
                 placeholder="아이디"
+                className="re-input"
             />
-            <button onClick={handleRecoverAccount}>계정 복구</button>
+            <BasicButton
+                btnColor={"yellowButton"}
+                btnText={"계정 복구"}
+                btnSize={"mediumButton"}
+                action={handleRecoverAccount}
+            />
+            {/* <button onClick={handleRecoverAccount}>111</button> */}
             {error && <p style={{ color: "red" }}>{error}</p>}
             {successMessage && (
                 <p style={{ color: "green" }}>{successMessage}</p>

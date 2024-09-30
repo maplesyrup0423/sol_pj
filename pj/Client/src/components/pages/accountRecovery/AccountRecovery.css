@@ -13,3 +13,9 @@
     color: aliceblue;
     gap: 50px;
 }
+
+.re-input {
+    width: 250px;
+    height: 50px;
+    border-radius: 10px;
+}
