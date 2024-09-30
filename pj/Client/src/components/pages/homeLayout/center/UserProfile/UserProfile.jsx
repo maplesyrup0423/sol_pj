@@ -122,7 +122,7 @@ function UserProfile() {
             </div>
             <div className="edit">
               {displayedUserInfo &&
-              displayedUserInfo.nickname === userInfo.nickname ? (
+              displayedUserInfo.user_no === userInfo.user_no ? (
                 <div className="editProfile">
                   <button onClick={openModal} className="editBtn">
                     <BasicButton
