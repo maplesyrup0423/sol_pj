@@ -50,8 +50,7 @@ module.exports = function (conn) {
                 if (user.status === "dormant") {
                     return res.status(403).json({
                         success: false,
-                        message:
-                            "계정이 휴면 상태입니다. 계정을 활성화하려면 고객 센터에 문의하세요.",
+                        message: "계정이 휴면 상태입니다.",
                     });
                 }
 

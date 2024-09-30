@@ -12,7 +12,6 @@ export const AuthProvider = ({ children }) => {
     const [userInfo, setUserInfo] = useState(null);
     const [loading, setLoading] = useState(true); // 로딩 상태 추가
     const [activeRoom, setActiveRoom] = useState(null); // activeRoom 상태 추가
-
     useEffect(() => {
         const initializeAuth = async () => {
             const storedToken = localStorage.getItem("accessToken");
@@ -61,9 +60,23 @@ export const AuthProvider = ({ children }) => {
             localStorage.setItem("accessToken", accessToken);
             setAccessToken(accessToken);
             setUserInfo(user);
+            return response;
         } catch (error) {
-            console.error("Login error:", error);
-            throw new Error("로그인 실패");
+            if (error.response) {
+                // 서버에서 반환한 상태 코드와 메시지 확인
+                if (error.response.status === 403) {
+                    // 403 에러 처리: 휴면 계정 상태
+                    return error.response;
+                } else {
+                    // 다른 상태 코드에 대한 일반 오류 처리
+                    console.error("Login error:", error.response.data.message);
+                    alert(error.response.data.message || "로그인 실패");
+                }
+            } else {
+                // 서버로부터 응답이 없거나 네트워크 오류
+                console.error("Login error:", error);
+                alert("서버와 연결할 수 없습니다. 나중에 다시 시도하세요.");
+            }
         }
     };
 
