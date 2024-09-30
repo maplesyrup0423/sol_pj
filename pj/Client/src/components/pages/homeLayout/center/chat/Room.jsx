@@ -166,7 +166,11 @@ function Room() {
             text={msg.message_content}
             nickname={msg.nickname}
             createdAt={msg.created_at}
-            image_url={`${baseUrl}/images/uploads/${msg.image_url}`}
+            image_url={
+              msg.image_url
+                ? `${baseUrl}/images/uploads/${msg.image_url}`
+                : `${baseUrl}/images/uploads/default-profile.png`
+            }
           />
         ))}
       </div>
