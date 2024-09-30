@@ -1,0 +1,35 @@
+.deactiveBtn {
+    width: 100%;
+    height: 80px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    outline: none;
+    color: rgb(255, 83, 83);
+}
+.deactiveBtn:hover {
+    background-color: #924d4d9d;
+}
+.pwInputBox {
+    height: 80px;
+    border: 1px solid #f3f3f3;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+.pwInputBox input {
+    border-radius: 10px;
+    background-color: black;
+    width: 100%;
+    height: 50px;
+    color: white;
+}
+.pwInputBox input:hover {
+    border: 3px solid #ffcd19;
+}
+.deactivateSubmit button {
+    border-radius: 10px;
+}

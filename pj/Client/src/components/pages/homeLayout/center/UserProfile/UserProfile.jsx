@@ -1,127 +1,234 @@
 import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../../../../Context/AuthContext";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import BackArrow from "../../../../utills/buttons/BackArrow";
 import BasicButton from "../../../../utills/buttons/BasicButton";
+import api from "../../../../auth/api";
+import Feeds from "../feed/Feeds";
 import "./UserProfile.css";
+import MyProfile from "./EditProfile";
+import FollowButton from "../../../../utills/buttons/FollowButton";
+import {
+  checkFollowStatus,
+  getFollowers,
+} from "../../../../utills/FollowService";
+import User from "../../../../utills/User";
 
 function UserProfile() {
   const { userInfo } = useContext(AuthContext);
+  const location = useLocation();
+  const bUserInfo = location.state || null;
   const [activeTab, setActiveTab] = useState("posts");
   const baseUrl = import.meta.env.VITE_BASE_URL;
+  const [posts, setPosts] = useState([]);
+  const [comments, setComments] = useState([]); // 댓글 상태 추가
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [initialIsFollowing, setInitialIsFollowing] = useState(false); // 초기 팔로우 여부 변수
+  const [follows, setFollows] = useState([]); // 팔로우 리스트 상태 추가
+
+  const fetchPosts = async () => {
+    try {
+      const userNo = bUserInfo ? bUserInfo.user_no : userInfo.user_no;
+      const response = await api.post(`/userPosts/${userNo}`);
+      setPosts(response.data);
+    } catch (error) {
+      console.error("게시글 가져오기 오류:", error);
+    }
+  };
+  const fetchComments = async () => {
+    try {
+      const userNo = bUserInfo ? bUserInfo.user_no : userInfo.user_no;
+      const response = await api.post(`/comments/${userNo}`);
+      console.log("댓글 데이터:", response.data); // 추가된 로그
+      setComments(response.data);
+    } catch (error) {
+      console.error("댓글 가져오기 오류:", error);
+    }
+  };
+
+  const fetchFollows = async () => {
+    const userNo = bUserInfo ? bUserInfo.user_no : userInfo.user_no;
+    const list = await getFollowers(userNo);
+    setFollows(list);
+    console.log(follows);
+  };
 
   useEffect(() => {
-    if (userInfo) {
-      console.log("userInfo:", userInfo);
-      console.log("image_url:", userInfo.image_url);
+    if ((userInfo || bUserInfo) && activeTab === "posts") {
+      fetchPosts();
+    } else if ((userInfo || bUserInfo) && activeTab === "comments") {
+      fetchComments(); // comments 탭일 때 댓글 가져오기
+    } else if ((userInfo || bUserInfo) && activeTab === "follows") {
+      fetchFollows(); // follows 탭일 때 팔로우 리스트 가져오기
     }
-  }, [userInfo]);
+  }, [userInfo, bUserInfo, activeTab]);
 
-  const showPosts = () => {
-    setActiveTab("posts");
-  };
+  const showPosts = () => setActiveTab("posts");
+  const showComments = () => setActiveTab("comments");
+  const showFollows = () => setActiveTab("follows");
 
-  const showComments = () => {
-    setActiveTab("comments");
-  };
+  const displayedUserInfo = bUserInfo || userInfo;
+  const isUserInfoAvailable = displayedUserInfo && displayedUserInfo.nickname;
+  const imageUrl =
+    displayedUserInfo.image_url !== null
+      ? `${baseUrl}/images/uploads/${displayedUserInfo.image_url}`
+      : `${baseUrl}/images/uploads/default-profile.png`;
 
-  const isUserInfoAvailable = userInfo && userInfo.nickname;
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
 
-  // 서버에서 제공하는 이미지 경로와 image_url을 조합
-  const imageUrl = isUserInfoAvailable
-    ? `${baseUrl}/images/uploads/${userInfo.image_url}` // 이미지 URL
-    : `${baseUrl}/images/default-profile.jpg`; // 기본 이미지 경로
+  useEffect(() => {
+    console.log("bUserInfo.nickname:", bUserInfo?.nickname);
+    console.log("userInfo.nickname:", userInfo.nickname);
 
+    //초기 팔로우 값 받아오는 함수
+    const getFollowStatus = async () => {
+      if (userInfo && bUserInfo) {
+        const isfollowing = await checkFollowStatus(
+          userInfo.user_no,
+          bUserInfo.user_no
+        );
+        setInitialIsFollowing(isfollowing);
+      }
+    };
+
+    getFollowStatus(); // 비동기 함수 호출
+  }, [bUserInfo, userInfo]);
   return (
     <>
-      <header className="profileHeader">
-        <div className="backArrow">
-          <NavLink to="/post/1">
-            <BackArrow />
-          </NavLink>
-        </div>
-        <div className="userInfo1">
-          {isUserInfoAvailable ? (
-            <>
-              <div className="name">{userInfo.nickname}</div>
-              <div className="nickName">@{userInfo.user_id}</div>
-            </>
-          ) : (
-            <div>Loading...</div>
-          )}
-        </div>
-      </header>
       <main>
         <div className="userContainer">
+          <div className="backArrow">
+            <NavLink to="/post/1">
+              <BackArrow />
+            </NavLink>
+          </div>
           <div className="userPic">
             <div className="pic">
-              <img
-                src={imageUrl} // 이미지 URL 사용
-                alt="프로필 이미지"
-                className="proImg"
-              />
+              <img src={imageUrl} alt="프로필 이미지" className="proImg" />
             </div>
           </div>
           <div className="userInfo">
             <div className="Info">
               {isUserInfoAvailable ? (
                 <>
-                  <div className="name">{userInfo.nickname}</div>
-                  <div className="nickName">@{userInfo.user_id}</div>
-                  <div className="introduce">{userInfo.introduce}</div>
+                  <div className="name">{displayedUserInfo.nickname}</div>
+                  <div className="nickName">@{displayedUserInfo.user_id}</div>
+                  <div className="introduce">{displayedUserInfo.introduce}</div>
                 </>
               ) : (
-                <div>Loading...</div>
+                <div>프로필을 작성하세요</div>
               )}
             </div>
             <div className="edit">
-              <div className="editProfile">
-                <NavLink
-                  to="/editProfile"
-                  state={{
-                    user_no: isUserInfoAvailable ? userInfo.user_no : null,
-                    nickname: isUserInfoAvailable ? userInfo.nickname : "",
-                    image_url: isUserInfoAvailable ? userInfo.image_url : "",
-                    user_id: isUserInfoAvailable ? userInfo.user_id : "",
-                    introduce: isUserInfoAvailable ? userInfo.introduce : "",
-                  }}
-                >
-                  <BasicButton
-                    btnSize="largeButton"
-                    btnColor="inheritButton"
-                    btnText="프로필수정"
-                  />
-                </NavLink>
-              </div>
+              {displayedUserInfo &&
+              displayedUserInfo.user_no === userInfo.user_no ? (
+                <div className="editProfile">
+                  <button onClick={openModal} className="editBtn">
+                    <BasicButton
+                      btnSize="bigButton"
+                      btnColor="blackButton"
+                      btnText="프로필수정"
+                    />
+                  </button>
+                </div>
+              ) : (
+                //팔로우 버튼 추가
+                <FollowButton
+                  userInfo={userInfo}
+                  followingNo={displayedUserInfo.user_no}
+                  initialIsFollowing={initialIsFollowing}
+                />
+              )}
             </div>
           </div>
         </div>
         <div className="switch">
           <div
-            className={`switch-posts ${activeTab === "posts" ? "active" : ""}`}
+            className={`switch-posts ${
+              activeTab === "posts" ? "up-active" : ""
+            }`}
             onClick={showPosts}
           >
             게시글
           </div>
           <div
             className={`switch-comments ${
-              activeTab === "comments" ? "active" : ""
+              activeTab === "comments" ? "up-active" : ""
             }`}
             onClick={showComments}
           >
             댓글
           </div>
+          <div
+            className={`switch-follows ${
+              activeTab === "follows" ? "up-active" : ""
+            }`}
+            onClick={showFollows}
+          >
+            팔로잉
+          </div>
         </div>
         <div className="list">
           <div className="content">
             {activeTab === "posts" && (
-              <div className="posts">게시글 누르면 이게 나옴</div>
+              <div className="posts">
+                {posts.length > 0 ? (
+                  posts.map((p) => (
+                    <Feeds
+                      loginUser_no={userInfo.user_no}
+                      key={p.post_id}
+                      postId={p.post_id}
+                      boardId={p.board_info_id}
+                      userInfo={bUserInfo || userInfo}
+                      refreshData={fetchPosts}
+                      {...p}
+                    />
+                  ))
+                ) : (
+                  <span className="data-placeholder">게시글이 없습니다.</span>
+                )}
+              </div>
             )}
             {activeTab === "comments" && (
-              <div className="comments">댓글 누르면 이게 나옴</div>
+              <div className="comments">
+                {comments.length > 0 ? (
+                  comments.map((c) => (
+                    <Feeds
+                      loginUser_no={userInfo.user_no}
+                      key={c.comment_id}
+                      postId={c.post_id} // 필요에 따라 postId를 설정
+                      boardId={c.board_info_id} // 필요에 따라 boardId를 설정
+                      userInfo={c} // 댓글 사용자 정보를 전달
+                      refreshData={fetchComments}
+                      {...c}
+                    />
+                  ))
+                ) : (
+                  <span className="data-placeholder">댓글이 없습니다.</span>
+                )}
+              </div>
+            )}
+            {activeTab === "follows" && (
+              <div className="follows">
+                {follows.length > 0 ? (
+                  follows.map((f) => (
+                    <div key={f.following_id}>
+                      <User {...f} />
+                    </div>
+                  ))
+                ) : (
+                  <span className="data-placeholder">
+                    팔로우한 사람이 없습니다.
+                  </span>
+                )}
+              </div>
             )}
           </div>
         </div>
+        {isModalOpen && (
+          <MyProfile closeModal={closeModal} userInfo={displayedUserInfo} />
+        )}
       </main>
     </>
   );

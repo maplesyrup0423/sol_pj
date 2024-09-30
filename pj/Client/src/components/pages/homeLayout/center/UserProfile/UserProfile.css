@@ -2,10 +2,15 @@
   display: flex;
   align-items: center;
   border-bottom: 1px solid #595959;
+  min-width: 570px;
 }
-
+.up-active {
+  color: #ffcd19 !important;
+}
 .backArrow {
-  width: 50px;
+  position: fixed;
+  top: 0;
+  margin-top: 10px;
 }
 
 .nickName {
@@ -16,10 +21,12 @@
   width: 100%;
   display: flex;
   margin-bottom: 60px;
-  padding: 20px;
+  padding: 40px 20px 20px 20px;
   align-items: center;
 }
-
+.userPic {
+  margin-right: 15px;
+}
 .pic {
   width: 120px;
   height: 120px;
@@ -37,7 +44,7 @@
 }
 
 .Info {
-  width: 300px;
+  width: 240px;
   flex: 1;
   margin-right: 0;
 }
@@ -54,20 +61,11 @@
 
 .editProfile {
   display: flex;
-  border: 3px solid #ffcd19;
   border-radius: 50px;
   width: 150px;
   height: 50px;
-
   justify-content: center;
   align-items: center;
-}
-
-.bBtn {
-  font-size: 24px;
-  color: #ffcd19;
-  background-color: inherit;
-  border: none;
 }
 
 .switch {
@@ -82,7 +80,8 @@
 }
 
 .switch-posts,
-.switch-comments {
+.switch-comments,
+.switch-follows {
   flex: 1;
   text-align: center;
   text-decoration: none;
@@ -90,7 +89,21 @@
 }
 
 .switch-posts:hover,
-.switch-comments:hover {
+.switch-comments:hover,
+.switch-follows:hover {
   color: #ffcd19;
   cursor: pointer;
+  transition: 0.5s;
 }
+
+.editBtn {
+  background-color: inherit;
+  border: none;
+  width: 100%;
+  padding: 0px;
+}
+
+/* .backArrow {
+  padding-top: 10px;
+  padding-left: 10px;
+} */

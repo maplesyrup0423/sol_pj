@@ -1,0 +1,77 @@
+.FeedComment_contents {
+  width: 100%;
+  border-bottom: 1px solid gray;
+}
+.FeedComment_head {
+  display: flex;
+  height: 70px;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+  padding: 5px;
+}
+.FeedComment_head-left {
+  display: flex; /* 왼쪽 부분의 요소들을 가로로 정렬 */
+  align-items: center; /* 수직 중앙 정렬 */
+}
+
+.FeedComment_profile {
+  margin-left: 10px;
+}
+
+.FeedComment_body {
+  margin-left: 15px;
+}
+.FeedComment_up {
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+
+.FeedComment_name {
+  font-weight: bold;
+}
+
+.FeedComment_id {
+  margin-left: 5px;
+  opacity: 50%;
+  font-size: 10pt;
+}
+
+.FeedComment_down {
+  width: 570px;
+}
+
+.FeedComment_comment {
+  padding: 0px 10px;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+}
+.FeedComment_comment span {
+  color: #ffcd19;
+}
+
+.FeedComment_foot {
+  display: flex;
+  width: 100%;
+  align-items: center; /* 세로 중앙 정렬 */
+  font-size: 20px;
+}
+
+.FeedComment_heart,
+.FeedComment_reply {
+  margin-left: 15px;
+}
+
+.FeedComment_date {
+  margin: 0px 15px;
+  color: gray;
+}
+
+.FeedComment_button {
+  margin: 5px;
+}
+
+.FeedComments_button {
+  margin: 5px;
+}

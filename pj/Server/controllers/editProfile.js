@@ -1,4 +1,3 @@
-// controllers/editProfile.js
 const express = require("express");
 const multer = require("multer");
 const path = require("path");
@@ -26,7 +25,6 @@ module.exports = function (conn) {
     decodeToken(),
     upload.single("image"),
     async (req, res) => {
-      console.log("Received request:", req.body);
       const { nickname, introduce } = req.body;
       const user_no = req.user_no; // user_no를 req에서 가져옵니다.
 
@@ -49,7 +47,9 @@ module.exports = function (conn) {
         // 2. 프로필 정보 업데이트
         const updateProfile = `
           UPDATE UserProfile
-          SET nickname = ?, introduce = ?, image_url = ?
+          SET nickname = ?,
+              introduce = ?,
+              image_url = ?
           WHERE user_no = ?
         `;
 

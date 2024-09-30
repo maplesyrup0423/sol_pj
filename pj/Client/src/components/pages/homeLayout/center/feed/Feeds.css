@@ -6,22 +6,22 @@
   box-sizing: border-box;
   border-bottom: 1px solid #595959;
   color: white;
+  text-decoration: none;
 }
-.moreA {
-  text-decoration: none; /* 링크의 밑줄 제거 */
-  color: inherit; /* 링크의 색상 제거 */
+.headerContainer {
+  display: flex;
+  justify-content: space-between;
 }
-.feed-image {
-  width: 500px;
-  text-align: center;
-  margin: 5px;
+
+.Nav {
+  text-decoration: none;
+  color: white;
+  transition: 0.3s;
 }
-.feedImg1 {
-  width: 470px;
-  height: 320px;
-  border-radius: 30px;
-  object-fit: cover;
+.Nav:hover {
+  color: #979797;
 }
+
 .feed-header {
   display: flex;
   justify-content: space-between;
@@ -34,14 +34,11 @@
 }
 .user-id {
   margin-left: 5px;
+  color: gray;
 }
 .user-name {
   font-weight: bold;
   margin-left: 5px;
-}
-.moreA {
-  display: flex;
-  align-items: center;
 }
 
 .feed-actions {
@@ -56,6 +53,15 @@
 .feed-text-container {
   width: 550px;
 }
+#feedTextShort {
+  display: -webkit-box; /* 웹킷 기반 브라우저용 */
+  -webkit-box-orient: vertical; /* 웹킷 기반 브라우저용 */
+  -webkit-line-clamp: 3; /* 줄 수 제한 */
+  overflow: hidden; /* 초과 텍스트 숨기기 */
+  text-overflow: ellipsis;
+  position: relative;
+}
+
 .feed-text {
   margin-bottom: 15px;
   font-size: 20px;
@@ -66,4 +72,20 @@
   display: flex;
   height: 100%;
   align-items: center;
+}
+
+.feed_click {
+  color: aliceblue;
+  text-decoration-line: none;
+}
+
+.feed-CreationDate span {
+  color: gray;
+}
+.FeedImages-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }

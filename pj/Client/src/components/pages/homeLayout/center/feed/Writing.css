@@ -4,8 +4,14 @@
   gap: 10px;
   padding: 10px;
   border-bottom: 1px solid white;
+  width: 100%;
+  background-color: black;
 }
-
+#replyWrite {
+  margin-left: 10%;
+  width: 90%;
+  background-color: #131313;
+}
 .write-row {
   display: flex;
   align-items: flex-start;
@@ -22,7 +28,7 @@
 .textarea-container textarea {
   width: 100%;
   resize: none;
-  background-color: black;
+  background-color: transparent;
   border: none;
   color: white;
   overflow: hidden;
@@ -40,17 +46,16 @@
   font-size: 16px; /* 원하는 글자 크기로 설정 */
   font-weight: bold; /* 필요에 따라 글꼴 두께도 조정 가능 */
 }
-
-#file {
+.file-input {
   display: none;
 }
-
 .file-BsImages {
   color: #ffcd19;
   font-size: 40px;
   padding: 5px;
   border-radius: 5px;
 }
+
 .file-BsImages:hover {
   background-color: rgb(98, 98, 98);
 }

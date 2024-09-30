@@ -1,29 +1,36 @@
-import { useState, useEffect, useRef } from "react";
-import { useLocation } from "react-router-dom";
+import { useContext, useState, useRef } from "react";
+import { AuthContext } from "../../../../../Context/AuthContext";
 import "./EditProfile.css";
 import Savebtn from "../../../../utills/buttons/Savebtn";
 import Closebtn from "../../../../utills/buttons/Closebtn";
 import api from "../../../../../components/auth/api";
 import Swal from "sweetalert2";
-import { NavLink } from "react-router-dom";
 
-function MyProfile() {
-  const location = useLocation();
-  const { user_no, nickname, image_url, user_id, introduce } =
-    location.state || {};
+function MyProfile({ closeModal }) {
+  const { userInfo } = useContext(AuthContext);
+  const baseUrl = import.meta.env.VITE_BASE_URL;
 
-  const [userInfo, setUser] = useState({
-    nickname: nickname || "",
-    image_url: image_url || "",
-    introduce: introduce || "",
+  const [userProfile, setUserProfile] = useState({
+    nickname: userInfo.nickname || "",
+    introduce: userInfo.introduce || "",
   });
-  const [previewImageUrl, setPreviewImageUrl] = useState(""); // 추가: 미리보기 이미지 URL 상태
+  const [previewImageUrl, setPreviewImageUrl] = useState(
+    userInfo.image_url
+      ? `${baseUrl}/images/uploads/${userInfo.image_url}`
+      : `${baseUrl}/images/uploads/default-profile.png`
+  );
 
   const fileInputRef = useRef(null);
 
+  // 닉네임 유효성 검사 함수
+  const isNicknameValid = (nickname) => {
+    const regex = /^[a-zA-Z가-힣0-9]{1,12}$/;
+    return regex.test(nickname);
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setUser((prevState) => ({
+    setUserProfile((prevState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -32,14 +39,13 @@ function MyProfile() {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // 이미지 파일인지 확인
       if (file.type.startsWith("image/")) {
-        const imageUrl = URL.createObjectURL(file); // 선택한 파일의 미리보기 URL 생성
-        setUser((prevState) => ({
+        const imageUrl = URL.createObjectURL(file);
+        setUserProfile((prevState) => ({
           ...prevState,
           image_url: imageUrl,
         }));
-        setPreviewImageUrl(imageUrl); // 미리보기 URL 상태 업데이트
+        setPreviewImageUrl(imageUrl);
       } else {
         Swal.fire({
           icon: "error",
@@ -53,10 +59,20 @@ function MyProfile() {
   const handleSaveProfile = async (e) => {
     e.preventDefault();
 
+    // 닉네임 유효성 검사 추가
+    if (!isNicknameValid(userProfile.nickname)) {
+      Swal.fire({
+        icon: "error",
+        title: "오류",
+        text: "닉네임은 한글, 영어 대소문자로 1~12자 이내여야 합니다.",
+      });
+      return; // 닉네임이 유효하지 않으면 서버로 요청하지 않음
+    }
+
     const formData = new FormData();
-    formData.append("nickname", userInfo.nickname);
-    formData.append("introduce", userInfo.introduce);
-    formData.append("user_no", user_no);
+    formData.append("nickname", userProfile.nickname);
+    formData.append("introduce", userProfile.introduce);
+    formData.append("user_no", userInfo.user_no);
 
     if (fileInputRef.current.files[0]) {
       formData.append("image", fileInputRef.current.files[0]);
@@ -71,14 +87,13 @@ function MyProfile() {
 
       if (response && response.data) {
         const { message, error } = response.data;
-        if (message && message === "프로필 수정 성공!") {
+        if (message === "프로필 수정 성공!") {
           Swal.fire({
             icon: "success",
             title: "성공",
             text: "프로필이 성공적으로 수정되었습니다.",
           }).then(() => {
-            // 페이지를 새로고침합니다.
-            window.location.reload();
+            window.location.reload(); // 페이지 새로고침
           });
         } else {
           Swal.fire({
@@ -107,74 +122,25 @@ function MyProfile() {
     }
   };
 
-  useEffect(() => {
-    // 서버에서 유저 정보를 가져오는 함수
-    const fetchUserProfile = async () => {
-      try {
-        const response = await api.post("/user-info"); // 유저 정보를 가져오는 엔드포인트로 수정
-        const data = response.data;
-
-        if (data.success) {
-          const baseImageUrl = `${
-            import.meta.env.VITE_BASE_URL
-          }/images/uploads/`; // 기본 이미지 URL
-
-          setUser({
-            nickname: data.user.nickname || "",
-            image_url: data.user.image_url
-              ? `${baseImageUrl}${data.user.image_url}`
-              : "/default-profile.png", // 기본 이미지 경로
-            introduce: data.user.introduce || "자기소개가 없습니다.",
-          });
-
-          // 서버에서 받은 이미지 URL로 미리보기 URL 설정
-          setPreviewImageUrl(
-            data.user.image_url
-              ? `${baseImageUrl}${data.user.image_url}`
-              : "/default-profile.png"
-          );
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: "오류",
-            text: `유저 정보를 가져올 수 없습니다. 오류 메시지: ${data.message}`,
-          });
-        }
-      } catch (error) {
-        console.error("유저 정보를 가져오는 중 오류 발생:", error);
-        Swal.fire({
-          icon: "error",
-          title: "오류",
-          text: "서버와의 통신 오류가 발생했습니다.",
-        });
-      }
-    };
-
-    // user_id가 있을 때만 서버에서 데이터를 가져옵니다.
-    if (user_id) {
-      fetchUserProfile();
-    }
-  }, [user_id]);
-
   return (
-    <>
-      <div className="profileCard">
-        <header>
-          <div className="quitBox">
-            <NavLink to="/myPage">
-              <Closebtn />
-            </NavLink>
-          </div>
-          <span>프로필 수정</span>
-        </header>
-        <div className="cardMain">
+    <div className="modalOverlay">
+      <div className="modalContent">
+        <div className="profileCard">
+          <header>
+            <div className="quitBox">
+              <button onClick={closeModal} className="closeBtn">
+                <Closebtn />
+              </button>
+            </div>
+            <span>프로필 수정</span>
+          </header>
           <form onSubmit={handleSaveProfile}>
             <div className="main1">
               <div className="gallery">
                 <figure>
                   <img
                     className="userImage"
-                    src={previewImageUrl || "/default-profile.png"} // 수정된 이미지 미리보기 URL
+                    src={previewImageUrl}
                     alt="userImage"
                   />
                   <figcaption onClick={() => fileInputRef.current.click()}>
@@ -189,14 +155,14 @@ function MyProfile() {
                 </figure>
               </div>
               <div className="nameContent">
-                <div className="nameHeader">이름</div>
+                <div className="nameHeader">닉네임</div>
                 <input
                   type="text"
                   id="userName"
                   name="nickname"
-                  value={userInfo.nickname}
+                  value={userProfile.nickname}
                   onChange={handleInputChange}
-                  placeholder="이름을 입력하세요"
+                  placeholder="닉네임을 입력하세요"
                 />
               </div>
             </div>
@@ -206,19 +172,19 @@ function MyProfile() {
               <textarea
                 id="introduce"
                 name="introduce"
-                value={userInfo.introduce}
+                value={userProfile.introduce}
                 onChange={handleInputChange}
                 placeholder="자기소개를 입력하세요"
               />
             </div>
 
-            <button type="submit" className="save">
+            <button type="submit" className="saveBtn">
               <Savebtn btnText="저장" />
             </button>
           </form>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

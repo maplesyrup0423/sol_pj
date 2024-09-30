@@ -1,0 +1,32 @@
+.searching_top {
+    display: flex;
+    width: 100%;
+    height: 60px;
+    align-items: center;
+}
+
+.searching_back {
+    border-bottom: 1px solid whitesmoke;
+    height: 60px;
+}
+
+.searching_content,
+.searching_user {
+    width: 50%;
+    height: 100%;
+    text-align: center;
+    line-height: 60px;
+    border-bottom: 1px solid whitesmoke;
+}
+
+.searching_content:hover,
+.searching_user:hover {
+    cursor: pointer;
+}
+
+.searching_content.active,
+.searching_user.active {
+    color: #fae100;
+    font-weight: bold;
+    border-bottom: 3px solid #fae100;
+}

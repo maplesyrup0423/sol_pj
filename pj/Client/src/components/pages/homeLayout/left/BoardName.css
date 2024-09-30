@@ -1,6 +1,7 @@
 .gameContainer {
   vertical-align: middle;
   display: flex;
+  padding: 5px;
 }
 
 .gameImg > img {
@@ -17,4 +18,8 @@
   width: 180px;
   height: 40px;
   line-height: 40px;
+}
+.BoardName-hover:hover {
+  background-color: #313131;
+  border-radius: 10px;
 }

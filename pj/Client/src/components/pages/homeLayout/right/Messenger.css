@@ -1,6 +1,34 @@
 .messenger {
-    width: 250px;
-    border: 1px solid whitesmoke;
-    border-radius: 30px;
-    padding: 15px;
+  width: 250px;
+  border: 1px solid whitesmoke;
+  border-radius: 30px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  /* 요소들을 수직으로 배치 */
+  align-items: center;
+}
+
+.addMessengerbtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  margin-top: auto;
+  /* 버튼을 박스 하단으로 밀어냄 */
+}
+.messenger a {
+  text-decoration: none; /* 밑줄 제거 */
+  color: white;
+}
+.newChatRoom {
+  display: flex;
+  align-items: center; /* 세로 중앙 정렬 */
+  justify-content: center; /* 가로 중앙 정렬 */
+  gap: 10px;
+  padding: 10px;
+}
+.Link-hover:hover {
+  background-color: #313131;
+  border-radius: 10px;
 }

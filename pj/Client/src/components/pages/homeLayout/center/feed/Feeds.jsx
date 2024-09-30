@@ -1,114 +1,137 @@
 import "./Feeds.css";
-import { IoIosMore } from "react-icons/io";
-import { AiFillHeart } from "react-icons/ai";
-import { AiOutlineHeart } from "react-icons/ai";
 import { IoChatbubbleOutline } from "react-icons/io5";
-import { FaRegBookmark } from "react-icons/fa";
-import { FaBookmark } from "react-icons/fa";
 import ProfileImg from "../../../../utills/ProfileImg";
-import ImageViewer from "./ImageViewer";
-import { useState } from "react";
-import Carousel from "react-bootstrap/Carousel";
 import { NavLink } from "react-router-dom";
+import FeedImages from "./FeedImages";
+import Like from "./Like";
+import Bookmark from "./Bookmark";
+import BoardImg from "./BoardImg";
+import FeedMoreBtn from "./FeedMoreBtn";
 
 function Feeds(props) {
   const { boardId, postId } = props;
-  const baseUrl = import.meta.env.VITE_BASE_URL;
-  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const images = props.file_paths ? props.file_paths.split(", ") : [];
+  // ↓↓↓↓↓↓↓↓↓↓게시글 줄임 확인 코드
+  let Expanded;
+  if (props.Expanded === undefined) {
+    Expanded = "feedTextShort";
+    //feedTextShort일 경우 post_text를 3줄로 표기
+  } else {
+    Expanded = "";
+  }
+  // ↑↑↑↑↑↑↑↑↑↑게시글 줄임 확인 코드
 
-  const openModal = (index) => {
-    setSelectedImageIndex(index);
-    setIsModalOpen(true);
+  // ↓↓↓↓↓↓↓↓↓↓DATETIME 관련 코드
+  // 날짜 시간 포맷팅 함수
+  const formatDate = (datetime) => {
+    const date = new Date(datetime);
+
+    const options = {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+      timeZone: "Asia/Seoul",
+    };
+
+    const formatter = new Intl.DateTimeFormat("ko-KR", options);
+    return formatter.format(date);
   };
+  // 등록일
+  const formatCreateDate = formatDate(props.createDate);
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedImageIndex(null);
-  };
+  // 수정일
+  const formatModiDate = props.modiDate
+    ? formatDate(props.modiDate) + " (수정됨)"
+    : "";
 
+  // ↑↑↑↑↑↑↑↑↑↑DATETIME 관련 코드 끝
 
   return (
     <div className="feed-container">
-      <div className="feed-header">
-        {/* 피드 헤더 */}
-        <div className="user-info">
-          <ProfileImg image_url={props.image_url} />
-          <span className="user-name">{props.nickname}</span>
-          <span className="user-id">@{props.user_id}</span>
-        </div>
-        <a className="moreA" href=" ">
-          <IoIosMore />
-        </a>
-      </div>
-
-      <div className="feed-image">
-        {/* 피드이미지 */}
-        {images.length > 0 &&
-          (images.length === 1 ? (
-            <img
-              src={`${baseUrl}/images/uploads_feed/${images[0]}`}
-              alt={`Post ${props.post_id} image 1`}
-              className="feedImg1"
-              onClick={() => openModal(0)} // 이미지 클릭 시 모달 열기
-            />
-          ) : (
-            <Carousel interval={null}>
-              {images.map((filePath, index) => (
-                <Carousel.Item key={index}>
-                  <img
-                    src={`${baseUrl}/images/uploads_feed/${filePath}`}
-                    alt={`Post ${props.post_id} image ${index + 1}`}
-                    className="feedImg1"
-                    onClick={() => openModal(index)} // 이미지 클릭 시 모달 열기
-                  />
-                </Carousel.Item>
-              ))}
-            </Carousel>
-          ))}
-
-        {/* 모달 컴포넌트 */}
-        {isModalOpen && selectedImageIndex !== null && (
-          <ImageViewer
-            images={images}
-            currentIndex={selectedImageIndex}
-            onClose={closeModal}
-            onChangeImage={(index) => setSelectedImageIndex(index)}
-          />
-        )}
-      </div>
-
-        <NavLink to={`/post/${boardId}/${postId}`} className="feed_click">
-          <div className="feed-text-container">
-            <div className="feed-text">
-              {/* 피드텍스트 */}
-              <h5>{props.post_text}</h5>
+      <div className="headerContainer">
+        <NavLink
+          to={`/${props.user_id}`}
+          className="Nav"
+          state={{
+            nickname: props.nickname,
+            user_id: props.user_id,
+            user_no: props.user_no, // user_no 추가
+            image_url: props.image_url,
+            introduce: props.introduce,
+          }}
+        >
+          <div className="feed-header">
+            <div className="user-info">
+              <ProfileImg image_url={props.image_url} />
+              <span className="user-name">{props.nickname}</span>
+              <span className="user-id">@{props.user_id}</span>
             </div>
-          </div>
-          <div className="feed-CreationDate">
-            {/* 작성일/조회수 등 상세 정보 */}
-            <span> {props.createDate}</span>
-            <span> 조회수 {props.views}</span>
+            {props.board_img === undefined ? (
+              <BoardImg boardId={boardId} />
+            ) : (
+              ""
+            )}
           </div>
         </NavLink>
 
+        {/* 더보기 버튼 */}
+        {props.loginUser_no === props.user_no && (
+          <FeedMoreBtn
+            postId={postId}
+            post_text={props.post_text}
+            post_file_paths={props.file_paths}
+            loginUser_no={props.loginUser_no}
+            user_no={props.user_no}
+            refreshData={props.refreshData}
+            boardId={boardId}
+          />
+        )}
+      </div>
+      {/* 이미지 모달/캐로셀 컴포넌트 */}
+      <FeedImages file_paths={props.file_paths} post_id={props.post_id} />
+
+      <NavLink to={`/post/${boardId}/${postId}`} className="feed_click">
+        <div className="feed-text-container">
+          <div className="feed-text" id={Expanded}>
+            {/* 피드텍스트 */}
+            <h5>{props.post_text}</h5>
+          </div>
+        </div>
+        <div className="feed-CreationDate">
+          {/* 작성일/조회수 등 상세 정보 */}
+          {props.modiDate === null ? (
+            <span> {formatCreateDate}</span>
+          ) : (
+            <span> {formatModiDate}</span>
+          )}
+
+          <span> 조회수 {new Intl.NumberFormat().format(props.views)}</span>
+        </div>
+      </NavLink>
 
       <div className="feed-actions">
         <div className="like-comment">
           {/* 좋아요 댓글등 왼쪽 부분 */}
           {/* 좋아요는 로그인한 사람에 따라 하트가 달라짐 */}
-          <AiFillHeart size="30" />
-          <AiOutlineHeart size="30" />
-          <span> &nbsp;{props.like_count} &nbsp; </span>
+          <Like
+            postId={postId}
+            loginUser_no={props.loginUser_no}
+            user_no={props.user_no}
+            like_count={props.like_count}
+          />
           <IoChatbubbleOutline size="30" />
           <span> &nbsp;{props.comment_count} </span>
         </div>
         <div className="share-icons">
           {/* 공유 등 오른쪽 부분 */}
-          <FaRegBookmark size="30" />
-          <FaBookmark size="30" />
+          <Bookmark
+            postId={postId}
+            loginUser_no={props.loginUser_no}
+            refreshData={props.refreshData}
+          />
         </div>
       </div>
     </div>

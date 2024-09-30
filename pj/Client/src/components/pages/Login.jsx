@@ -4,6 +4,7 @@ import { FaUser, FaLock } from "react-icons/fa";
 import { AuthContext } from "../../Context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import "./Login.css";
+import Swal from "sweetalert2";
 
 function LoginPage() {
     const { login } = useContext(AuthContext);
@@ -14,10 +15,22 @@ function LoginPage() {
     const handleLogin = async (event) => {
         event.preventDefault();
         try {
-            await login(username, password);
-            // 로그인 성공 시 리디렉션
-            navigate("/");
+            const response = await login(username, password);
+            //console.log("login.jsx 진입1 : " + response.status);
+            if (response.status === 403) {
+                Swal.fire({
+                    text: "비활성화된 계정입니다.",
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        navigate("/accountRecovery");
+                    }
+                });
+            } else {
+                // 로그인 성공 시 리디렉션
+                navigate("/");
+            }
         } catch (error) {
+            //console.log("login.jsx 진입2 : " + error);
             alert("로그인 실패: " + error.message);
         }
     };

@@ -11,6 +11,7 @@ function BoardName(props) {
     <li key={props.board_info_id}>
       <NavLink
         to={`/post/${props.board_info_id}`}
+        className="BoardName-hover"
         style={({ isActive }) => ({
           fontWeight: isActive ? "bold" : "normal", // 활성화된 링크에 스타일 적용
           color: isActive ? "#ffcd19" : "white", // 선택된 링크의 색상
@@ -20,7 +21,7 @@ function BoardName(props) {
       >
         <div className="gameContainer">
           <div className="gameInfo gameImg">
-            <img src={props.board_img} alt="" />
+            <img src={props.board_img} alt="게시판이미지" />
           </div>
           <div className="gameInfo gameTitle">
             &nbsp; {props.board_info_name}

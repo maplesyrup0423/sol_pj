@@ -9,7 +9,7 @@ import { AuthContext } from "../../../../Context/AuthContext";
 function LeftNav({ userInfo }) {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const dropdownRef = useRef(null);
-  const { logout } = useContext(AuthContext); // AuthContext에서 logout 함수 가져오기
+  const { logout, userInfo: authUserInfo } = useContext(AuthContext); // AuthContext에서 logout 함수 가져오기
   const navigate = useNavigate(); // 페이지 리다이렉트를 위한 navigate 훅
 
   const handleMoreClick = (event) => {
@@ -51,7 +51,8 @@ function LeftNav({ userInfo }) {
   };
 
   const handleProfileCardClick = () => {
-    window.location.href = "/myPage"; // 새로 고침 후 페이지 이동
+    const username = authUserInfo.user_id;
+    window.location.href = `/${username}`; // 새로 고침 후 페이지 이동
   };
 
   return (
@@ -70,7 +71,13 @@ function LeftNav({ userInfo }) {
             </button>
           </div>
         </li>
-        <li>{userInfo ? <BoardInfo user_no={userInfo.user_no} /> : ""}</li>
+        <li>
+          {userInfo ? (
+            <BoardInfo user_no={userInfo.user_no} />
+          ) : (
+            <span className="data-placeholder">로그인후 이용하세요.</span>
+          )}
+        </li>
 
         <li id="ProfileCard_li">
           <div onClick={handleProfileCardClick} className="profile-button">
@@ -83,7 +90,7 @@ function LeftNav({ userInfo }) {
               />
             ) : (
               <h5>
-                <Link to={"/login"}>로그인 해주세욤</Link>
+                <span className="data-placeholder">로그인후 이용하세요.</span>
               </h5>
             )}
           </div>
@@ -96,7 +103,7 @@ function LeftNav({ userInfo }) {
                     <button onClick={handleLogout}>로그아웃</button>
                   </li>
                   <li>
-                    <button onClick={handleAccount}>계정설정</button>
+                    <button onClick={handleAccount}>계정관리</button>
                   </li>
                 </ul>
               </div>
