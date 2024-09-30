@@ -69,9 +69,10 @@ function UserProfile() {
 
   const displayedUserInfo = bUserInfo || userInfo;
   const isUserInfoAvailable = displayedUserInfo && displayedUserInfo.nickname;
-  const imageUrl = isUserInfoAvailable
-    ? `${baseUrl}/images/uploads/${displayedUserInfo.image_url}`
-    : `${baseUrl}/images/default-profile.jpg`;
+  const imageUrl =
+    displayedUserInfo.image_url !== null
+      ? `${baseUrl}/images/uploads/${displayedUserInfo.image_url}`
+      : `${baseUrl}/images/uploads/default-profile.png`;
 
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
@@ -116,7 +117,7 @@ function UserProfile() {
                   <div className="introduce">{displayedUserInfo.introduce}</div>
                 </>
               ) : (
-                <div>Loading...</div>
+                <div>프로필을 작성하세요</div>
               )}
             </div>
             <div className="edit">
