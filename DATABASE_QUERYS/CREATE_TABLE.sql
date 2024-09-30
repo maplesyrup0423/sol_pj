@@ -76,9 +76,11 @@ CREATE TABLE slumberUser (
    sl_user_id   varchar(128)   NULL,
    PRIMARY KEY (sl_user_no)
 );
+ALTER TABLE slumberUser ADD status ENUM('active', 'dormant', 'withdrawn') DEFAULT 'active';
+
 
 CREATE TABLE slumberUserProfile (
-   sl_profile_no   int   NOT NULL,
+   sl_profile_no   int   NOT NULL AUTO_INCREMENT,
    sl_user_no   int   NOT NULL,
    sl_nickname   varchar(50)   NULL,
    sl_image_url   varchar(128)   NULL,
@@ -88,7 +90,7 @@ CREATE TABLE slumberUserProfile (
 );
 
 CREATE TABLE slumberUserAuthentic (
-   sl_auth_no   int   NOT NULL,
+   sl_auth_no   int   NOT NULL AUTO_INCREMENT,
    sl_user_no   int   NOT NULL,
    sl_gender   int   NULL,
    sl_phone   varchar(128)   NULL,
@@ -101,7 +103,7 @@ CREATE TABLE slumberUserAuthentic (
 );
 
 CREATE TABLE slumberUserPassword (
-   sl_password_no   int   NOT NULL,
+   sl_password_no   int   NOT NULL AUTO_INCREMENT,
    sl_user_no   int   NOT NULL,
    sl_salt   varchar(128)   NULL,
    sl_password   varchar(128)   NULL,
@@ -111,7 +113,7 @@ CREATE TABLE slumberUserPassword (
 );
 
 CREATE TABLE withdrawalUserlog (
-   wu_log_no   int   NOT NULL,
+   wu_log_no   int   NOT NULL AUTO_INCREMENT,
    ci   varchar(128)   NULL,
    wu_status_code   int   NULL,
    wu_reason   varchar(128)   NULL,

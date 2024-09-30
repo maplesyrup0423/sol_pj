@@ -27,202 +27,207 @@ import TermsOfService from "./components/pages/homeLayout/center/Policy/TermsOfS
 import CookiePolicy from "./components/pages/homeLayout/center/Policy/CookiePolicy";
 import PrivacyPolicy from "./components/pages/homeLayout/center/Policy/PrivacyPolicy";
 import DeveloperInfo from "./components/pages/homeLayout/center/Policy/DeveloperInfo";
+import AccountRecovery from "./components/pages/accountRecovery/AccountRecovery";
 
 function App() {
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      element: (
-        <PrivateRoute>
-          <HomePage />
-        </PrivateRoute>
-      ),
-      children: [
+    const router = createBrowserRouter([
         {
-          path: "/",
-          element: (
-            <PrivateRoute>
-              <FeedMain />
-            </PrivateRoute>
-          ),
+            path: "/",
+            element: (
+                <PrivateRoute>
+                    <HomePage />
+                </PrivateRoute>
+            ),
+            children: [
+                {
+                    path: "/",
+                    element: (
+                        <PrivateRoute>
+                            <FeedMain />
+                        </PrivateRoute>
+                    ),
+                },
+                {
+                    path: "/post/:boardId",
+                    element: (
+                        <PrivateRoute>
+                            <FeedMain />
+                            {/* 게시판 선택시 보일 피드메인 */}
+                        </PrivateRoute>
+                    ),
+                },
+                {
+                    path: "/:username",
+                    element: (
+                        <PrivateRoute>
+                            <UserProfile />
+                        </PrivateRoute>
+                    ),
+                },
+                // {
+                //   path: "/editProfile",
+                //   element: (
+                //     <PrivateRoute>
+                //       <MyProfile />
+                //     </PrivateRoute>
+                //   ),
+                // },
+                {
+                    path: "/followers",
+                    element: (
+                        <PrivateRoute>
+                            <Followers />
+                        </PrivateRoute>
+                    ),
+                },
+                {
+                    path: "/account",
+                    element: (
+                        <PrivateRoute>
+                            <Account />
+                            {/* 계정관리페이지 */}
+                        </PrivateRoute>
+                    ),
+                },
+                {
+                    path: "/ChangePassword",
+                    element: (
+                        <PrivateRoute>
+                            <ChangePassword />
+                            {/* 비밀번호변경페이지 */}
+                        </PrivateRoute>
+                    ),
+                },
+                {
+                    path: "/LoginHistory",
+                    element: (
+                        <PrivateRoute>
+                            <LoginHistory />
+                            {/* 로그인기록 페이지 */}
+                        </PrivateRoute>
+                    ),
+                },
+                {
+                    path: "/DeactivateAccount",
+                    element: (
+                        <PrivateRoute>
+                            <DeactivateAccount />
+                        </PrivateRoute>
+                    ),
+                },
+                {
+                    path: "/room/:roomId",
+                    element: (
+                        <PrivateRoute>
+                            <Room />
+                        </PrivateRoute>
+                    ),
+                },
+                {
+                    path: "/chatFriendList",
+                    element: (
+                        <PrivateRoute>
+                            <ChatFriendList />
+                        </PrivateRoute>
+                    ),
+                },
+                {
+                    path: "/Bookmark",
+                    element: (
+                        <PrivateRoute>
+                            <BookmarkView />
+                            {/* 북마크 */}
+                        </PrivateRoute>
+                    ),
+                },
+                {
+                    path: "/myNotifications",
+                    element: (
+                        <PrivateRoute>
+                            <MyNotifications />
+                        </PrivateRoute>
+                    ),
+                },
+                {
+                    path: "/post/:boardId/:postId",
+                    element: (
+                        <PrivateRoute>
+                            <FeedDetail />
+                            {/* 피드상세페이지 */}
+                        </PrivateRoute>
+                    ),
+                },
+                {
+                    path: "/search/:searchKeyword",
+                    element: (
+                        <PrivateRoute>
+                            <SearchPage />
+                        </PrivateRoute>
+                    ),
+                },
+                {
+                    path: "/Policy/TermsOfService",
+                    element: (
+                        <PrivateRoute>
+                            <TermsOfService />
+                            {/* 이용약관 */}
+                        </PrivateRoute>
+                    ),
+                },
+                {
+                    path: "/Policy/CookiePolicy",
+                    element: (
+                        <PrivateRoute>
+                            <CookiePolicy />
+                            {/* 쿠키정책 */}
+                        </PrivateRoute>
+                    ),
+                },
+                {
+                    path: "/Policy/PrivacyPolicy",
+                    element: (
+                        <PrivateRoute>
+                            <PrivacyPolicy />
+                            {/* 개인정보 처리방침 */}
+                        </PrivateRoute>
+                    ),
+                },
+                {
+                    path: "/DeveloperInfo",
+                    element: (
+                        <PrivateRoute>
+                            <DeveloperInfo />
+                            {/* 개발자 정보 */}
+                        </PrivateRoute>
+                    ),
+                },
+            ],
         },
         {
-          path: "/post/:boardId",
-          element: (
-            <PrivateRoute>
-              <FeedMain />
-              {/* 게시판 선택시 보일 피드메인 */}
-            </PrivateRoute>
-          ),
-        },
-        {
-          path: "/:username",
-          element: (
-            <PrivateRoute>
-              <UserProfile />
-            </PrivateRoute>
-          ),
+            path: "/login",
+            element: <LoginPage />,
         },
         // {
-        //   path: "/editProfile",
-        //   element: (
-        //     <PrivateRoute>
-        //       <MyProfile />
-        //     </PrivateRoute>
-        //   ),
+        //     path: "/intro",
+        //     element: <IntroPage />,
         // },
         {
-          path: "/followers",
-          element: (
-            <PrivateRoute>
-              <Followers />
-            </PrivateRoute>
-          ),
+            path: "/signup",
+            element: <SignUp />,
         },
         {
-          path: "/account",
-          element: (
-            <PrivateRoute>
-              <Account />
-              {/* 계정관리페이지 */}
-            </PrivateRoute>
-          ),
+            path: "/accountRecovery",
+            element: <AccountRecovery />,
         },
-        {
-          path: "/ChangePassword",
-          element: (
-            <PrivateRoute>
-              <ChangePassword />
-              {/* 비밀번호변경페이지 */}
-            </PrivateRoute>
-          ),
-        },
-        {
-          path: "/LoginHistory",
-          element: (
-            <PrivateRoute>
-              <LoginHistory />
-              {/* 로그인기록 페이지 */}
-            </PrivateRoute>
-          ),
-        },
-        {
-          path: "/DeactivateAccount",
-          element: (
-            <PrivateRoute>
-              <DeactivateAccount />
-            </PrivateRoute>
-          ),
-        },
-        {
-          path: "/room/:roomId",
-          element: (
-            <PrivateRoute>
-              <Room />
-            </PrivateRoute>
-          ),
-        },
-        {
-          path: "/chatFriendList",
-          element: (
-            <PrivateRoute>
-              <ChatFriendList />
-            </PrivateRoute>
-          ),
-        },
-        {
-          path: "/Bookmark",
-          element: (
-            <PrivateRoute>
-              <BookmarkView />
-              {/* 북마크 */}
-            </PrivateRoute>
-          ),
-        },
-        {
-          path: "/myNotifications",
-          element: (
-            <PrivateRoute>
-              <MyNotifications />
-            </PrivateRoute>
-          ),
-        },
-        {
-          path: "/post/:boardId/:postId",
-          element: (
-            <PrivateRoute>
-              <FeedDetail />
-              {/* 피드상세페이지 */}
-            </PrivateRoute>
-          ),
-        },
-        {
-          path: "/search/:searchKeyword",
-          element: (
-            <PrivateRoute>
-              <SearchPage />
-            </PrivateRoute>
-          ),
-        },
-        {
-          path: "/Policy/TermsOfService",
-          element: (
-            <PrivateRoute>
-              <TermsOfService />
-              {/* 이용약관 */}
-            </PrivateRoute>
-          ),
-        },
-        {
-          path: "/Policy/CookiePolicy",
-          element: (
-            <PrivateRoute>
-              <CookiePolicy />
-              {/* 쿠키정책 */}
-            </PrivateRoute>
-          ),
-        },
-        {
-          path: "/Policy/PrivacyPolicy",
-          element: (
-            <PrivateRoute>
-              <PrivacyPolicy />
-              {/* 개인정보 처리방침 */}
-            </PrivateRoute>
-          ),
-        },
-        {
-          path: "/DeveloperInfo",
-          element: (
-            <PrivateRoute>
-              <DeveloperInfo />
-              {/* 개발자 정보 */}
-            </PrivateRoute>
-          ),
-        },
-      ],
-    },
-    {
-      path: "/login",
-      element: <LoginPage />,
-    },
-    // {
-    //     path: "/intro",
-    //     element: <IntroPage />,
-    // },
-    {
-      path: "/signup",
-      element: <SignUp />,
-    },
-  ]);
+    ]);
 
-  return (
-    <AuthProvider>
-      <NotificationProvider>
-        <RouterProvider router={router} />
-      </NotificationProvider>
-    </AuthProvider>
-  );
+    return (
+        <AuthProvider>
+            <NotificationProvider>
+                <RouterProvider router={router} />
+            </NotificationProvider>
+        </AuthProvider>
+    );
 }
 
 export default App;
