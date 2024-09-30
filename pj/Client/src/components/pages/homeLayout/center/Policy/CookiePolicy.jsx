@@ -17,7 +17,7 @@ function CookiePolicy() {
       </div>
       <div className="Policy-body">
         <div className="Policy-title">1. 쿠키의 사용 목적</div>
-        <p>sol903는 서비스 제공과 사용자 경험 개선을 위해 쿠키를 사용합니다.</p>
+        <p>sol는 서비스 제공과 사용자 경험 개선을 위해 쿠키를 사용합니다.</p>
 
         <div className="Policy-title">2. 쿠키의 종류</div>
         <ul>

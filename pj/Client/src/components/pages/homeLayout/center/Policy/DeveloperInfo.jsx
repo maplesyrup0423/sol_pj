@@ -13,17 +13,17 @@ function DeveloperInfo() {
     {
       name: "김한결",
       email: "",
-      github: "https://github.com/",
+      github: "https://github.com/khkhk1",
     },
     {
       name: "맹일진",
-      email: "",
-      github: "https://github.com/",
+      email: "xxzz9978@naver.com",
+      github: "https://github.com/xxzz9978",
     },
     {
       name: "박주영",
       email: "",
-      github: "https://github.com/",
+      github: "https://github.com/Chemineau890",
     },
     {
       name: "임예진",
@@ -33,7 +33,7 @@ function DeveloperInfo() {
     {
       name: "임요한",
       email: "",
-      github: "https://github.com/",
+      github: "https://github.com/LimJ2023",
     },
   ];
   return (
