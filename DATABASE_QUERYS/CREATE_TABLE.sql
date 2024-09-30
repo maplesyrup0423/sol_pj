@@ -255,9 +255,6 @@ CREATE TABLE ChatRoom (
 );
 
 CREATE TABLE ChatRoomUser (
-
-    id BIGINT UNSIGNED  PRIMARY KEY,
-
     room_id BIGINT UNSIGNED NOT NULL,
     user_no INT NOT NULL,
     role ENUM('admin', 'member') DEFAULT 'member',
