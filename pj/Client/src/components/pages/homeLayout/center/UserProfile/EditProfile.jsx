@@ -17,7 +17,7 @@ function MyProfile({ closeModal }) {
   const [previewImageUrl, setPreviewImageUrl] = useState(
     userInfo.image_url
       ? `${baseUrl}/images/uploads/${userInfo.image_url}`
-      : "/default-profile.png"
+      : `${baseUrl}/images/uploads/default-profile.png`
   );
 
   const fileInputRef = useRef(null);
