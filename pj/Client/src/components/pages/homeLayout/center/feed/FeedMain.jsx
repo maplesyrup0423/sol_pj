@@ -37,10 +37,7 @@ function FeedMain() {
         }
       } else {
         setDefaultBoardId(1); // 데이터가 없는 경우 1로 설정
-        // URL에 기본 게시판 ID로 리디렉션
-        if (!paramBoardId) {
-          navigate(`/post/${defaultBoardId}`, { replace: true });
-        }
+        navigate(`/post/1`, { replace: true });
       }
     } catch (err) {
       console.error("Error fetching board info:", err);
