@@ -6,6 +6,7 @@
   border-bottom: 1px solid white;
   width: 100%;
   background-color: black;
+  min-width: 570px;
 }
 #replyWrite {
   margin-left: 10%;
