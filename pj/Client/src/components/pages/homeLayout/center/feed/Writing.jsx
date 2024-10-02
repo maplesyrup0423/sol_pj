@@ -72,6 +72,7 @@ function Writing({
     setContent(textarea.value);
     setPostContent(textarea.value); // 사용자 입력 값
   };
+
   // textarea 높이 자동 조정 함수
   const adjustTextareaHeight = (textarea) => {
     textarea.style.height = "auto"; // 초기화
@@ -81,10 +82,9 @@ function Writing({
   // useEffect 추가
   useEffect(() => {
     if (isEditMode && existingPostContent) {
-      const textareas = document.querySelectorAll("textarea");
-      const lastTextarea = textareas[textareas.length - 1];
-      lastTextarea.value = existingPostContent; // 기존 내용 설정
-      adjustTextareaHeight(lastTextarea); // 높이 조정
+      const textarea = document.querySelector("#WritingModal");
+      textarea.value = existingPostContent; // 기존 내용 설정
+      adjustTextareaHeight(textarea); // 높이 조정
     }
   }, [existingPostContent, isEditMode]);
 
@@ -320,6 +320,7 @@ function Writing({
               name="postContent"
               rows={2}
               placeholder={`${placeholderText}`}
+              id={onClose !== null ? "WritingModal" : undefined}
             />
           </div>
         </div>
