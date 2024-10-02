@@ -81,9 +81,10 @@ function Writing({
   // useEffect 추가
   useEffect(() => {
     if (isEditMode && existingPostContent) {
-      const textarea = document.querySelector("textarea");
-      textarea.value = existingPostContent; // 기존 내용 설정
-      adjustTextareaHeight(textarea); // 높이 조정
+      const textareas = document.querySelectorAll("textarea");
+      const lastTextarea = textareas[textareas.length - 1];
+      lastTextarea.value = existingPostContent; // 기존 내용 설정
+      adjustTextareaHeight(lastTextarea); // 높이 조정
     }
   }, [existingPostContent, isEditMode]);
 
