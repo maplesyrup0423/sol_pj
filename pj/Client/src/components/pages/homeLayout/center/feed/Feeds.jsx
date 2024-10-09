@@ -10,7 +10,19 @@ import FeedMoreBtn from "./FeedMoreBtn";
 
 function Feeds(props) {
   const { boardId, postId } = props;
-
+  // ↓↓↓↓↓↓↓↓↓↓KBM 표기 코드
+  function formatViews(views) {
+    if (views >= 1000000000) {
+      return (views / 1000000000).toFixed(1) + "B"; // 십억 단위 (b)
+    } else if (views >= 1000000) {
+      return (views / 1000000).toFixed(1) + "M"; // 백만 단위 (m)
+    } else if (views >= 1000) {
+      return (views / 1000).toFixed(1) + "K"; // 천 단위 (k)
+    } else {
+      return views.toString(); // 천 미만은 그대로
+    }
+  }
+  // ↑↑↑↑↑↑↑↑↑↑KBM 표기 코드
   // ↓↓↓↓↓↓↓↓↓↓게시글 줄임 확인 코드
   let Expanded;
   if (props.Expanded === undefined) {
@@ -108,7 +120,7 @@ function Feeds(props) {
             <span> {formatModiDate}</span>
           )}
 
-          <span> 조회수 {new Intl.NumberFormat().format(props.views)}</span>
+          <span> 조회수 {formatViews(props.views)}</span>
         </div>
       </NavLink>
 
