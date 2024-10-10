@@ -76,8 +76,9 @@ module.exports = (conn) => {
     let query = `
 SELECT c.comment_id, c.post_id, c.parent_comment_id, c.comment_text,
        c.user_no, c.createDate, c.modiDate, c.isDeleted, 
-       COUNT(cl.user_no) AS like_count, u.nickname, u.image_url,
-       u_main.user_id AS user_id, -- 본인 user_id 가져오기,
+       IFNULL(COUNT(cl.user_no), 0) AS like_count, -- 기본값 0으로 설정
+       u.nickname, u.image_url,
+       u_main.user_id AS user_id, -- 본인 user_id 가져오기
        u.introduce,
        GROUP_CONCAT(DISTINCT cf.comments_file_path ORDER BY cf.upload_date SEPARATOR ', ') AS file_paths
 FROM comments c
@@ -135,7 +136,7 @@ ORDER BY c.createDate ASC
 SELECT cc.comment_id, cc.post_id, cc.parent_comment_id, cc.comment_text,
        cc.user_no, cc.createDate, cc.modiDate, cc.isDeleted,
        cc.nickname, cc.image_url, cc.user_id, cc.parent_user_id,
-       COUNT(cl.user_no) AS like_count,
+       IFNULL(COUNT(cl.user_no), 0) AS like_count, -- 기본값 0으로 설정
        GROUP_CONCAT(DISTINCT cf.comments_file_path ORDER BY cf.upload_date SEPARATOR ', ') AS file_paths,
        (SELECT COUNT(*) FROM CommentCTE ccte WHERE ccte.parent_comment_id = cc.comment_id) AS reply_count
 FROM CommentCTE cc
@@ -144,6 +145,7 @@ LEFT JOIN comments_files cf ON cc.comment_id = cf.comment_id
 GROUP BY cc.comment_id, cc.post_id, cc.parent_comment_id, cc.comment_text,
          cc.user_no, cc.createDate, cc.modiDate, cc.isDeleted, cc.nickname, cc.image_url, cc.user_id, cc.parent_user_id
 ORDER BY cc.createDate ASC
+
 
     `;
     conn.query(query, [postId, parentCommentId], (err, rows, fields) => {

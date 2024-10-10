@@ -39,7 +39,9 @@
 }
 
 .FeedComment_down {
-  width: 570px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
 }
 
 .FeedComment_comment {

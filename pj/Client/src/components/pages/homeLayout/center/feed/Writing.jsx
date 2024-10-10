@@ -70,8 +70,24 @@ function Writing({
     textarea.style.height = "auto"; // 높이를 자동으로 조정
     textarea.style.height = textarea.scrollHeight + "px"; // 내용에 맞춰 높이 설정
     setContent(textarea.value);
-    setPostContent(event.target.value); //사용자 입력 값
+    setPostContent(textarea.value); // 사용자 입력 값
   };
+
+  // textarea 높이 자동 조정 함수
+  const adjustTextareaHeight = (textarea) => {
+    textarea.style.height = "auto"; // 초기화
+    textarea.style.height = textarea.scrollHeight + "px"; // 내용에 맞게 설정
+  };
+
+  // useEffect 추가
+  useEffect(() => {
+    if (isEditMode && existingPostContent) {
+      const textarea = document.querySelector("#WritingModal");
+      textarea.value = existingPostContent; // 기존 내용 설정
+      adjustTextareaHeight(textarea); // 높이 조정
+    }
+  }, [existingPostContent, isEditMode]);
+
   // 이미지 파일 선택 처리
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
@@ -304,6 +320,7 @@ function Writing({
               name="postContent"
               rows={2}
               placeholder={`${placeholderText}`}
+              id={onClose !== null ? "WritingModal" : undefined}
             />
           </div>
         </div>

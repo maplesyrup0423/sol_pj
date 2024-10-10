@@ -10,7 +10,19 @@ import FeedMoreBtn from "./FeedMoreBtn";
 
 function Feeds(props) {
   const { boardId, postId } = props;
-
+  // ↓↓↓↓↓↓↓↓↓↓KBM 표기 코드
+  function formatViews(views) {
+    if (views >= 1000000000) {
+      return (views / 1000000000).toFixed(1) + "B"; // 십억 단위 (b)
+    } else if (views >= 1000000) {
+      return (views / 1000000).toFixed(1) + "M"; // 백만 단위 (m)
+    } else if (views >= 1000) {
+      return (views / 1000).toFixed(1) + "K"; // 천 단위 (k)
+    } else {
+      return views.toString(); // 천 미만은 그대로
+    }
+  }
+  // ↑↑↑↑↑↑↑↑↑↑KBM 표기 코드
   // ↓↓↓↓↓↓↓↓↓↓게시글 줄임 확인 코드
   let Expanded;
   if (props.Expanded === undefined) {
@@ -78,17 +90,16 @@ function Feeds(props) {
         </NavLink>
 
         {/* 더보기 버튼 */}
-        {props.loginUser_no === props.user_no && (
-          <FeedMoreBtn
-            postId={postId}
-            post_text={props.post_text}
-            post_file_paths={props.file_paths}
-            loginUser_no={props.loginUser_no}
-            user_no={props.user_no}
-            refreshData={props.refreshData}
-            boardId={boardId}
-          />
-        )}
+
+        <FeedMoreBtn
+          postId={postId}
+          post_text={props.post_text}
+          post_file_paths={props.file_paths}
+          loginUser_no={props.loginUser_no}
+          user_no={props.user_no}
+          refreshData={props.refreshData}
+          boardId={boardId}
+        />
       </div>
       {/* 이미지 모달/캐로셀 컴포넌트 */}
       <FeedImages file_paths={props.file_paths} post_id={props.post_id} />
@@ -108,7 +119,7 @@ function Feeds(props) {
             <span> {formatModiDate}</span>
           )}
 
-          <span> 조회수 {new Intl.NumberFormat().format(props.views)}</span>
+          <span> 조회수 {formatViews(props.views)}</span>
         </div>
       </NavLink>
 
@@ -118,6 +129,7 @@ function Feeds(props) {
           {/* 좋아요는 로그인한 사람에 따라 하트가 달라짐 */}
           <Like
             postId={postId}
+            comment_id={null}
             loginUser_no={props.loginUser_no}
             user_no={props.user_no}
             like_count={props.like_count}

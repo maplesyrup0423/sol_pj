@@ -151,14 +151,51 @@ module.exports = (conn) => {
           const existingImageArray = Array.isArray(existingImages)
             ? existingImages
             : [existingImages]; // 기존 이미지가 배열인지 확인
-
+          console.log("existingImages", existingImages);
           // 기존 이미지 중 삭제된 이미지를 DB에서 제거
-          const deleteImagesQuery =
-            "DELETE FROM post_files WHERE post_id = ? AND file_path NOT IN (?)";
-          conn.query(
-            deleteImagesQuery,
-            [post_id, existingImageArray],
-            (err) => {
+          if (existingImages !== undefined) {
+            const deleteImagesQuery =
+              "DELETE FROM post_files WHERE post_id = ? AND file_path NOT IN (?)";
+            conn.query(
+              deleteImagesQuery,
+              [post_id, existingImageArray],
+              (err) => {
+                if (err) {
+                  console.error("Existing image deletion error:", err);
+                  return res
+                    .status(500)
+                    .send("기존 이미지 삭제에 실패했습니다.");
+                }
+
+                // 새롭게 추가된 이미지 파일 처리
+                if (req.files && req.files.length > 0) {
+                  const newImageInserts = req.files.map((file) => [
+                    post_id,
+                    file.filename,
+                  ]);
+
+                  const insertImagesQuery =
+                    "INSERT INTO post_files (post_id, file_path) VALUES ?";
+                  conn.query(insertImagesQuery, [newImageInserts], (err) => {
+                    if (err) {
+                      console.error("Image insertion error:", err);
+                      return res
+                        .status(500)
+                        .send("새 이미지 추가에 실패했습니다.");
+                    }
+
+                    res.send("게시글과 이미지가 성공적으로 수정되었습니다.");
+                  });
+                } else {
+                  // 이미지가 없는 경우
+                  res.send("게시글이 성공적으로 수정되었습니다.");
+                }
+              }
+            );
+          } else {
+            const query = `DELETE FROM post_files WHERE post_id = ?`;
+            console.log("else");
+            conn.query(query, [post_id], (err) => {
               if (err) {
                 console.error("Existing image deletion error:", err);
                 return res.status(500).send("기존 이미지 삭제에 실패했습니다.");
@@ -187,11 +224,42 @@ module.exports = (conn) => {
                 // 이미지가 없는 경우
                 res.send("게시글이 성공적으로 수정되었습니다.");
               }
-            }
-          );
+            });
+          }
         }
       );
     }
   );
+  //------------------------------------------------------------------
+  //게시글 신고
+
+  router.post("/api/report", decodeToken(), (req, res) => {
+    const { postId, user_no, reportReason, otherReason } = req.body;
+
+    // 데이터 유효성 검사
+    if (!postId || !reportReason || !user_no) {
+      return res
+        .status(400)
+        .send("게시글 ID, 신고 사유, 사용자 ID는 필수 항목입니다.");
+    }
+
+    // 신고 내용 DB에 삽입
+    const insertQuery = `
+      INSERT INTO reported_posts (post_id, user_no, report_reason, other_reason)
+      VALUES (?, ?, ?, ?)`;
+
+    conn.query(
+      insertQuery,
+      [postId, user_no, reportReason, otherReason || null],
+      (err, result) => {
+        if (err) {
+          console.error("신고 등록 오류:", err);
+          return res.status(500).send("신고 접수 중 오류가 발생했습니다.");
+        }
+        res.status(201).send("신고가 성공적으로 접수되었습니다.");
+      }
+    );
+  });
+
   return router; // 라우터 반환
 };
