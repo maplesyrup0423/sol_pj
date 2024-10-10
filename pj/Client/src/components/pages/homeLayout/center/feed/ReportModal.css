@@ -1,0 +1,35 @@
+/* ReportModal.css */
+.custom-modal .modal-content {
+  background-color: black; /* 배경색 검정 */
+  color: white; /* 글씨 흰색 */
+}
+
+.custom-modal .modal-header,
+.custom-modal .modal-footer {
+  border: none; /* 경계선 제거 */
+}
+
+.custom-modal .form-control {
+  background-color: #333; /* 입력 필드 배경색 */
+  color: white; /* 입력 필드 글씨 */
+  border-color: #ffcd19; /* 입력 필드 테두리 색상 */
+}
+
+.custom-modal .btn-primary {
+  background-color: #ffcd19; /* 버튼 배경색 */
+  border-color: #ffcd19;
+}
+
+.custom-modal .btn-secondary {
+  background-color: #555; /* 취소 버튼 배경색 */
+  border-color: #555;
+}
+/* 모달의 X 버튼 색상을 흰색으로 변경 */
+.custom-modal .modal-header .btn-close {
+  background-color: white;
+  opacity: 1; /* 버튼이 더 뚜렷하게 보이도록 설정 */
+}
+.custom-modal .form-control::placeholder {
+  color: white;
+  opacity: 0.7; /* 텍스트 투명도 조정 (선택 사항) */
+}

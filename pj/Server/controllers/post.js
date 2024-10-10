@@ -230,5 +230,36 @@ module.exports = (conn) => {
       );
     }
   );
+  //------------------------------------------------------------------
+  //게시글 신고
+
+  router.post("/api/report", decodeToken(), (req, res) => {
+    const { postId, user_no, reportReason, otherReason } = req.body;
+
+    // 데이터 유효성 검사
+    if (!postId || !reportReason || !user_no) {
+      return res
+        .status(400)
+        .send("게시글 ID, 신고 사유, 사용자 ID는 필수 항목입니다.");
+    }
+
+    // 신고 내용 DB에 삽입
+    const insertQuery = `
+      INSERT INTO reported_posts (post_id, user_no, report_reason, other_reason)
+      VALUES (?, ?, ?, ?)`;
+
+    conn.query(
+      insertQuery,
+      [postId, user_no, reportReason, otherReason || null],
+      (err, result) => {
+        if (err) {
+          console.error("신고 등록 오류:", err);
+          return res.status(500).send("신고 접수 중 오류가 발생했습니다.");
+        }
+        res.status(201).send("신고가 성공적으로 접수되었습니다.");
+      }
+    );
+  });
+
   return router; // 라우터 반환
 };

@@ -7,12 +7,14 @@ import WritingModal from "./WritingModal";
 import { useContext } from "react";
 import { AuthContext } from "../../../../../Context/AuthContext";
 import Swal from "sweetalert2";
+import ReportModal from "./ReportModal ";
 
 function FeedMoreBtn(props) {
   const { userInfo } = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [images, setImages] = useState([]);
   const [text, setText] = useState([]);
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false); // 신고 모달 상태
 
   const handlePostDelete = async () => {
     const result = await Swal.fire({
@@ -65,6 +67,13 @@ function FeedMoreBtn(props) {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+  const openReportModal = () => {
+    setIsReportModalOpen(true);
+  };
+
+  const closeReportModal = () => {
+    setIsReportModalOpen(false);
+  };
 
   return (
     <div className="feed-more">
@@ -93,7 +102,7 @@ function FeedMoreBtn(props) {
               <Dropdown.Item onClick={handlePostDelete}>삭제</Dropdown.Item>
             </>
           ) : (
-            <Dropdown.Item href="#report">신고하기</Dropdown.Item>
+            <Dropdown.Item onClick={openReportModal}>신고하기</Dropdown.Item>
           )}
         </Dropdown.Menu>
       </Dropdown>
@@ -108,6 +117,13 @@ function FeedMoreBtn(props) {
           existingPostContent={text}
           existingImages={images}
           comment_id={props.comment_id}
+        />
+      )}
+      {isReportModalOpen && (
+        <ReportModal
+          postId={props.postId}
+          onClose={closeReportModal}
+          userInfo={userInfo}
         />
       )}
     </div>
