@@ -129,6 +129,7 @@ function Feeds(props) {
           {/* 좋아요는 로그인한 사람에 따라 하트가 달라짐 */}
           <Like
             postId={postId}
+            comment_id={null}
             loginUser_no={props.loginUser_no}
             user_no={props.user_no}
             like_count={props.like_count}

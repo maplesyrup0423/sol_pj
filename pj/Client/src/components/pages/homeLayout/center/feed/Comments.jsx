@@ -11,6 +11,7 @@ import api from "../../../../auth/api";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { MdOutlineKeyboardArrowUp } from "react-icons/md";
 import { NavLink } from "react-router-dom";
+import Like from "./Like";
 
 function Comments(props) {
   const { userInfo } = useContext(AuthContext);
@@ -83,6 +84,7 @@ function Comments(props) {
       </>
     );
   }
+
   return (
     <div className="Comments-Container">
       <div
@@ -146,6 +148,12 @@ function Comments(props) {
             )}
             {props.comment_text}
           </div>
+          <Like
+            comment_id={props.comment_id}
+            loginUser_no={userInfo.user_no}
+            user_no={props.user_no}
+            like_count={props.like_count}
+          />
         </div>
 
         <div className="FeedComment_foot">

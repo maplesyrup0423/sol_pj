@@ -40,6 +40,8 @@
 
 .FeedComment_down {
   width: 100%;
+  display: flex;
+  justify-content: space-between;
 }
 
 .FeedComment_comment {
