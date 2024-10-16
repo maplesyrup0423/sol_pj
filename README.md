@@ -20,15 +20,38 @@ Sol 프로젝트는 **소셜 네트워킹 서비스(SNS)** 형식을 채택하�
 - **배포**: (배포하지 않음)
 
 ## 실행 방법
+
 1. **리포지토리 클론**
+   ```bash
+   git clone https://github.com/maplesyrup0423/sol_pj
+   cd sol_pj/pj
+   ```
 
-2. **DB 설정**
+2. **Node.js 설치**
+   - [Node.js 공식 웹사이트](https://nodejs.org/)에서 Node.js를 다운로드하고 설치합니다.
 
-3. ```bash
-   cd pj
+3. **의존성 설치**
+   - 백엔드 디렉토리로 이동하여 의존성을 설치합니다.
+   ```bash
+   cd Client
+   npm install
+   ```
+
+   - 프론트엔드 디렉토리로 이동하여 의존성을 설치합니다.
+   ```bash
+   cd Server
+   npm install
+   ```
+
+4. **DB/환경변수 설정**
+   - MySQL을 설치하고 데이터베이스를 설정합니다.
+   - `.env` 파일을 설정합니다.
+   - 파일 내용은 문의하시면 안내해 드립니다.
+
+5. **실행**
+   ```bash
    npm run start
    ```
-4. **환경변수 설정 .env 파일 내용 문의**
 
 ## DB 자료 등 문의 임예진 maplesyrup0423@naver.com
 
